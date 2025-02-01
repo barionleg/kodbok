@@ -2,6 +2,9 @@
 
 military medical sugery
 
+![image](https://github.com/user-attachments/assets/324f5603-3092-4052-b068-6d4bc0cbc924)
+
+
 Военный энциклопедический лексикон: Том XIV.
 
 Всего томов 14 
