@@ -13,8 +13,37 @@
 СПб.: издание А.Ф. Девриена, 1903
 Количество страниц: XVI, 365, [3] с., ил., табл.
 
+![image](https://github.com/user-attachments/assets/840a3535-b332-4653-8078-8a565dded612)
+
+
 ©: Это произведение перешло в общественное достояние. Произведение написано автором, умершим более семидесяти лет назад, и опубликовано прижизненно, либо посмертно, но с момента публикации также прошло более семидесяти лет. Оно может свободно использоваться любым лицом без чьего-либо согласия или разрешения и без выплаты авторского вознаграждения.
 
-## Но кроме этого я публикую книги и изначально принадлижащийе моя семя От семья моего нåтес₾авебბи [ნათესავები ღРубЛиЯÅRილ] нотØÅ℞©lub's изначально, так что никаких сомнении о genetic sequencing & dNA bArcoding or ДвÅРкодung ... о суб нуклеарной телепортации просто хочу этО вспамнить вместе с *gРузиЯми из ГРузuR*
+## Но кроме этого я публикую книги и изначально принадлижащийе моя семя От семья моего нåтес₾авебბи [ნათესავები ღРубЛиЯÅRილ] нотØÅ℞©lub's изначально, так что никаких сомнении о [genetic sequencing](https://sv.wikipedia.org/wiki/DNA-sekvensering) & [dNA bArcoding](https://en.wikipedia.org/wiki/DNA_barcoding) or [ДвÅРкодung](https://ru.wikipedia.org/wiki/Баркодирование_ДНК) ... о суб нуклеарной телепортации просто хочу этО вспамнить вместе с *gРузиЯми из ГРузuR*
+
+ი.ბ. ©lub = и.б. ©КЛuб
+
+[![image](https://github.com/user-attachments/assets/9a8e5a1f-db75-43a2-b769-f1e335c36dae)
+](https://www.britannica.com/science/DNA-sequencing)
+
+[![image](https://github.com/user-attachments/assets/38c08725-9f5b-4a53-ac8e-20af71c58b11)
+](https://en.wikipedia.org/wiki/DNA_barcoding#/media/File:16S_region_variability.jpg)
+
+Схематическое изображение праймеров и целевой области, продемонстрированное на гене 16S рРНК в Pseudomonas . В качестве праймеров обычно выбирают короткие консервативные последовательности с низкой изменчивостью, которые, таким образом, могут амплифицировать большинство или все виды в выбранной целевой группе. Праймеры используются для амплификации высокоизменчивой целевой области между двумя праймерами, которая затем используется для дискриминации видов. Изменено из »Variable Copy Number, Intra-Genomic Heterogeneities and Lateral Transfers of the 16S rRNA Gene in Pseudomonas« Бодилис, Жослен; Нсиге-Мейло, Сандрин; Безори, Людовик; Quillet, Laurent, используется по лицензии CC BY, доступно по адресу: https://www.researchgate.net/figure/Hypervariable-regions-within-the-16S-rRNA-gene-in-Pseudomonas-The-plotted-line-reflects_fig2_224832532.
+
+
+[u℞psalla](https://en.wikipedia.org/wiki/DNA_barcoding#/media/File:HiSeq_sequencers_at_SciLifeLab_in_Uppsala.jpg)  
+
+[![image](https://github.com/user-attachments/assets/fb180b0a-4a45-48c7-b020-4abb7e8f0261)
+](https://en.wikipedia.org/wiki/DNA_barcoding#/media/File:DNA-strekkoding_av_julemat_-_DNA_barcoding_of_Christmas_food_(16008786266).jpg)
+
+Штрихкодирование — это инструмент, подтверждающий качество продуктов питания. Здесь ДНК из традиционных норвежских рождественских блюд извлекается в молекулярной систематической лаборатории в Музее университета NTNU.
+
+
+
+[![image](https://github.com/user-attachments/assets/884e42f1-677e-4e08-b6f6-abe7a143a1d5)
+](https://en.wikipedia.org/wiki/DNA_barcoding#/media/File:Megabarcoding.png)
+
+Рабочий процесс мегабаркодирования
+
 
 ი.ბ. ©lub = и.б. ©КЛuб
