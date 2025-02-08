@@ -1,3 +1,6 @@
+# https://barionleg.github.io/kodbok/djur/moo.html
+
+# https://barionleg.github.io/kodbok/djur/moo_Chirvinskiy_N_P_Obschee_zhivotnovodstvo_moo.pdf
 
 ![image](https://github.com/user-attachments/assets/315822c7-4d78-4b69-945a-d543c0119448)
 
