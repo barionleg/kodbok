@@ -9,7 +9,7 @@
 
 ### Theatrum mundi et temporis 
 
-#### EARLY PHYSIC BOOK
+#### EARLY PHYSIC BOOK   1589
 
 
 C:\Users\..\Pictures\Theatrum mundi et temporis GALLUCCI Giovanni Paolo Edité par Giovanni Battista Somasco Venice 1588 ETAT  GOOD COUVERTURE RIGIDE Mettre de côté Vendeur Sokol Books Ltd ABA ILAB London Royaume Uni Vendeur AbeBooks
