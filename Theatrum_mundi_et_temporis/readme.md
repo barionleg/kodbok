@@ -9,7 +9,7 @@
 
 #### Theatrum mundi et temporis
 
-[Theatrum mundi et temporis](https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg)
+![Theatrum mundi et temporis](https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg)
 
 https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg
 
