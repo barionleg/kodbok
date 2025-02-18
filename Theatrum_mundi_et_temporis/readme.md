@@ -1,6 +1,6 @@
 # Theatrum mundi et temporis at [WEBARCHIVE](https://archive.org/details/ARes52515/page/n5/mode/2up)
 
-#### .Pdf
+#### [.Pdf](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515.pdf)
 
 #### .html
 
