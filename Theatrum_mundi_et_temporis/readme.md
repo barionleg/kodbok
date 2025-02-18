@@ -9,6 +9,9 @@
 
 #### Theatrum mundi et temporis
 
+фреска в ранних народных винститутах и верстах какбы ранных твАРТ, где как на множистве экранах предстовляли разныэ научнэиииииииииииииииииииииииииииииииииииииииииииииииппппппппппппппппппппппппппппппппппппппппппппппппппп 
+научниие передачи знания кккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккк
+
 ![Theatrum mundi et temporis](https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg)
 
 https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg
@@ -19,6 +22,6 @@ https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_
 
 особенно ценились музыкальные уникальные т.с. привозные ДВАРгОНАuтиЛЮСЬOmm ... 
 
-20250218 
+20250218 посвещаеться как и матери М.В. ОтАРАШВИЛИ 𝅘𝅥𝅮♭ARgAWVELIДЗЕ, так и мурмур илижек ОтОттО ЛИЗА М. и другой так сказать бабушка, каторая наверно пишеться как ВАВУШКА но не хочу обидеть ни ВОВУ не БОБА, по ЭтОму назову её МÖтМОт ЖЕНЯ М. 
 
 наммеR Я ем ман 
