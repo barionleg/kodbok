@@ -1,5 +1,10 @@
 # Theatrum mundi et temporis at [WEBARCHIVE](https://archive.org/details/ARes52515/page/n5/mode/2up)
 
+OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТАЛ; vilket stämmer ej! det bli  И_ÅТTА_J menas oPpAS JL ... i princip när vi kikkar på det movieproduktion eller wissenschaft varken så kallad stipendier eller pasobier = РАССОбЬИЭР, då allt leder till ДВАРдОВЫЙ СКРЕМЛЁВ на ДВАРгПРЕКРАСТНОЙ ПРЛОШАДИ PLACE, где стойт и мой ДჼРÅЛÄС читаеться ДАБРОЛЕС ... 
+
+... А банальная радруга ЭКА, хоть кузина и поддругом 
+    дасст или не дасст u₽pdate, Это ей решать в Пиздесзять ... 
+
 #### [.Pdf](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515.pdf)
 
 #### .[html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_hocr.html)
