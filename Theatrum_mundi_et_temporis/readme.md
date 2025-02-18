@@ -9,6 +9,8 @@
 
 #### Theatrum mundi et temporis
 
+C:\Users\..\Pictures\Theatrum mundi et temporis GALLUCCI Giovanni Paolo Edité par Giovanni Battista Somasco Venice 1588 ETAT  GOOD COUVERTURE RIGIDE Mettre de côté Vendeur Sokol Books Ltd ABA ILAB London Royaume Uni Vendeur AbeBooks
+
 фреска в ранних народных винститутах и верстах какбы ранных твАРТ, где как на множистве экранах предстовляли разныэ научнэиииииииииииииииииииииииииииииииииииииииииииииииппппппппппппппппппппппппппппппппппппппппппппппппппп 
 научниие передачи знания кккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккккк
 
