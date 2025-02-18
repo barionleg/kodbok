@@ -2,6 +2,6 @@
 
 #### [.Pdf](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515.pdf)
 
-#### .html
+#### .[html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_hocr.html)
 
 #### .text
