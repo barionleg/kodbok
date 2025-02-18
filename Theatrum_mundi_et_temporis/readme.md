@@ -7,6 +7,10 @@
 #### [.text](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_djvu.htm)
 
 
+#### [Theatrum mundi et temporis
+](https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg
+)
+
 https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/Theatrum_mundi_et_temporis/Theatrum_mundi.jpg
 
 интересен подход времменно поставленного теhнико гуманитарного бота, катОрый воспринял сценарийй шикиPEძиР От для ши ИКИ ПЕДИЯТР, 
