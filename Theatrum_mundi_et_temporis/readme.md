@@ -4,4 +4,6 @@
 
 #### .[html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_hocr.html)
 
-#### .text
+#### [.text](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_djvu.htm)
+
+
