@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Обзор</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.serverconfig.html" title="Глава 6. Настройка сервера" />
+    <link rel="prev" href="svn.serverconfig.html" title="Глава 6. Настройка сервера" />
+    <link rel="next" href="svn.serverconfig.netmodel.html" title="Сетевая модель" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Обзор</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.serverconfig.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 6. Настройка сервера</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.serverconfig.netmodel.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.serverconfig.overview"></a>Обзор</h2>
+          </div>
+        </div>
+      </div>
+      <p>Subversion был разработан с использованием абстрактного
+      сетевого уровня. Это означает, что на программном уровне для
+      доступа к хранилищу может быть использован любой тип сервера,
+      а <span class="quote">«<span class="quote">клиентский API для доступа к хранилищу</span>»</span> дает
+      программистам возможность создавать плагины, которые будут
+      взаимодействовать с соответствующим сетевым протоколом.
+      Теоретически, Subversion может использовать неограниченное
+      количество сетевых реализаций. Практически же, на данный момент
+      есть только два сервера.</p>
+      <p>Apache — наиболее популярный web-сервер; при использовании
+      модуля <span class="command"><strong>mod_dav_svn</strong></span> Apache получает возможность
+      доступа к хранилищу, а так же делает его доступным для клиентов,
+      используя протокол WebDAV/DeltaV, который является расширением
+      HTTP. В другом углу ринга — <span class="command"><strong>svnserve</strong></span>
+      — небольшой, самостоятельный сервер, использующий для связи
+      с клиентами собственный протокол.
+      В <a class="xref" href="svn.serverconfig.overview.html#svn.serverconfig.overview.tbl-1" title="Таблица 6.1. Сравнение серверов">Таблица 6.1, «Сравнение серверов»</a> дано сравнение этих
+      двух серверов.</p>
+      <div class="table">
+        <a id="svn.serverconfig.overview.tbl-1"></a>
+        <p class="title">
+          <strong>Таблица 6.1. Сравнение серверов</strong>
+        </p>
+        <div class="table-contents">
+          <table class="table" summary="Сравнение серверов" border="1">
+            <colgroup>
+              <col />
+              <col />
+              <col />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Возможность</th>
+                <th>Apache + mod_dav_svn</th>
+                <th>svnserve</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Настройки установления личности</td>
+                <td>стандартное установление личности средствами HTTP(S),
+              сертификаты X.509, LDAP, NTLM, а также другие механизмы,
+              доступные для использования в Apache</td>
+                <td>CRAM-MD5 или SSH</td>
+              </tr>
+              <tr>
+                <td>Настройки пользовательских учетных записей</td>
+                <td>внутренний файл 'users'</td>
+                <td>внутренний файл 'users' или использование существующих
+              системных (SSH) учетных записей</td>
+              </tr>
+              <tr>
+                <td>Настройки прав доступа</td>
+                <td>доступ на чтение/запись устанавливается сразу на всё
+              хранилище, или настраивается по-каталогово</td>
+                <td>доступ на чтение/запись устанавливается сразу на всё
+              хранилище, или настраивается по-каталогово</td>
+              </tr>
+              <tr>
+                <td>Шифрование</td>
+                <td>через SSL (опционально)</td>
+                <td>через SSH-туннель (опционально)</td>
+              </tr>
+              <tr>
+                <td>Ведение журнала</td>
+                <td>полноценный журнал Apache с записями о каждом HTTP запросе,
+	      с возможностью <span class="quote">«<span class="quote">высокоуровневого</span>»</span> учета любых
+              операций клиента</td>
+                <td>нет журнала</td>
+              </tr>
+              <tr>
+                <td>Интероперабельность</td>
+                <td>частично, используя другие WevDAV-клиенты</td>
+                <td>только для svn клиентов</td>
+              </tr>
+              <tr>
+                <td>Просмотр через веб</td>
+                <td>ограниченная встроенная поддержка, или использование
+              программ сторонних разработчиков, таких, как ViewVS</td>
+                <td>только при помощи программ сторонних разработчиков, таких,
+              как ViewVS</td>
+              </tr>
+              <tr>
+                <td>Скорость</td>
+                <td>более низкая</td>
+                <td>более высокая</td>
+              </tr>
+              <tr>
+                <td>Начальная установка</td>
+                <td>несколько сложная</td>
+                <td>достаточно простая</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <br class="table-break" />
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.overview.apache"></a>Http-сервер Apache</h3>
+            </div>
+          </div>
+        </div>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">Как это работает:</span>
+            </dt>
+            <dd>
+              <p>Установите и настройте сервер Apache 2.0, затем
+	      активируйте модуль сервера subversion. Клиенты будут
+	      обращаться к серверу через HTTP или HTTPS, используя
+	      протокол WebDAV.</p>
+            </dd>
+            <dt>
+              <span class="term">Преимущества данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Subversion может использовать любой из
+		механизмов аутентификации, интегрированный в Apache.
+		</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Нет нужды создавать учётные записи на
+		сервере.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Ведение логов средствами Apache.
+		</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Возможность шифровать трафик с помощью
+		SSL.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Если компьютер или сеть защищены
+		брандмауэром, порты HTTP(S) обычно
+		открыты.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Встроенный просмотр хранилища через
+		веб-обозреватель.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Хранилище может быть смонтировано как
+		сетевой диск. (Смотрите <a class="xref" href="svn.webdav.autoversioning.html" title="Autoversioning">«Autoversioning»</a>.)</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+            <dt>
+              <span class="term">Недостатки данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Скорость заметно ниже, чем при использовании
+		svnserve.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Первичная настройка более
+		 комплексная.</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.overview.svnserve"></a>Сервер <span class="command"><strong>svnserve</strong></span></h3>
+            </div>
+          </div>
+        </div>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">Как он работает:</span>
+            </dt>
+            <dd>
+              <p>"Лёгкий" процесс, который может работать как
+	      самостоятельно, так и "по вызову" inetd. Аутентификация
+              происходит по алгоритму CRAM-MD5. Используется свой
+              протокол.</p>
+            </dd>
+            <dt>
+              <span class="term">Преимущества данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Быстрая и лёгкая установка.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Сетевой протокол более продвинутый и
+              работает ощутимо быстрее, чем WebDAV.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Нет необходимости создавать на сервере
+              дополнительные учётные записи.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Пароль не передаётся по сети.</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+            <dt>
+              <span class="term">Недостатки данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Протокол не поддерживает
+              шифрование.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Доступен только один метод
+              аутентификации.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Пароль хранится на сервере открытым
+              текстом.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Логи не ведутся, даже лог
+              ошибок.</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.overview.svn-ssh"></a><span class="command"><strong>svnserve</strong></span> через SSH</h3>
+            </div>
+          </div>
+        </div>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">Как он работает:</span>
+            </dt>
+            <dd>
+              <p>Клиент подключается к серверу с помощью SSH, используя
+              системную учётную запись. При этом на сервере запускается
+              временный процесс <span class="command"><strong>svnserve</strong></span>. Он работает
+              с хранилищем, обменивается данными с клиентом через
+              SSH-туннель, после чего, при закрытии SSH-сессии,
+              завершается. (При этом методе в системе не будет постоянно
+              запущенных процессов <span class="command"><strong>svnserve</strong></span>).</p>
+            </dd>
+            <dt>
+              <span class="term">Преимущества данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Используемый stateful-протокол значительно
+              быстрее, чем WebDAV.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Удобство использования существующих учётных
+              записей и пользовательской инфраструктуры.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Весь сетевой траффик
+              шифруется.</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+            <dt>
+              <span class="term">Недостатки данного варианта:</span>
+            </dt>
+            <dd>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: disc; ">
+                  <li class="listitem">
+                    <p>Выбор одного метода идентификации</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Журнал не ведется вообще, даже
+		записи об ошибках.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Требует от пользователей принадлежности
+		к одной группе или использования общего
+		ключа ssh.</p>
+                  </li>
+                  <li class="listitem">
+                    <p>Может привести к проблемам с
+		правами.</p>
+                  </li>
+                </ul>
+              </div>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.overview.choosing-a-server"></a>Выбор лучшей конфигурации сервера</h3>
+            </div>
+          </div>
+        </div>
+        <p>Итак, какой сервер лучше использовать? Какой из них лучше?</p>
+        <p>Конечно, на этот вопрос нет точного ответа. Каждая команда
+	имеет свои потребности, и каждый сервер предоставляет свой набор
+	возможностей. Сам проект Subversion не предпочитает какой-то один
+	сервер и не представляет один из них как более
+	<span class="quote">«<span class="quote">официальный</span>»</span>.</p>
+        <p>Для небольшой команды, которая хочет начать использовать
+	сервер Subversion, авторы этой книги рекомендуют простую установку
+	<span class="command"><strong>svnserve</strong></span>; он прост в настройке и требует
+	минимальных усилий на поддержку. Помните, что вы всегда можете
+	перейти на более комплексное решение, когда ваши потребности
+	вырастут.</p>
+        <p>Вот несколько общих рекомендаций, основанных на многолетнем
+	опыте поддержки пользователей:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>If you're trying to set up the simplest possible
+            server for your group, then a
+            vanilla <span class="command"><strong>svnserve</strong></span> installation is the
+            easiest, fastest route.  Note, however, that your
+            repository data will be transmitted in the clear over the
+            network.  If your deployment is entirely within your
+            company's LAN or VPN, this isn't an issue.  If the
+            repository is exposed to the wide-open internet, then you
+            might want to make sure the repository's contents aren't
+            sensitive (e.g. it contains only open-source code.)</p>
+            </li>
+            <li class="listitem">
+              <p>If you need to integrate with existing identity
+            systems (LDAP, Active Directory, NTLM, X.509, etc.), then
+            an Apache-based server is your only real option.
+            Similarly, if you absolutely need server-side logs of
+            either server errors or client activities, then an
+            Apache-based server is required.</p>
+            </li>
+            <li class="listitem">
+              <p>If you've decided to use either Apache or stock
+             <span class="command"><strong>svnserve</strong></span>, create a
+             single <code class="literal">svn</code> user on your system, and
+             run either Apache or svnserve as that user.  Be sure to
+             make the repository directory wholly owned by
+             the <code class="literal">svn</code> user as well.  These keeps the
+             repository data nicely siloed and protected by operating
+             system filesystem permissions, changeable by only the
+             Subverion server process itself.</p>
+            </li>
+            <li class="listitem">
+              <p>If you have an existing infrastructure heavily based
+            on SSH accounts, and if your users already have system
+            accounts on your server machine, then it makes sense to
+            deploy an svnserve-over-ssh solution.  Otherwise, we don't
+            recommend this option to the general public.  It's
+            generally considered safer to have your users access the
+            repository via (imaginary) accounts managed
+            by <span class="command"><strong>svnserve</strong></span> or Apache, rather than by
+            full-blown system accounts.  If your deep desire for
+            encrypted communication still draws you to this option, we
+            recommend using Apache with SSL instead.</p>
+            </li>
+            <li class="listitem">
+              <p>Do <span class="emphasis"><em>not</em></span> be seduced by the simple
+            idea of having all of your users access a repository
+            directly via <code class="literal">file:///</code> URLs.  Even if
+            the repository is readily available to everyone via
+            network share, this is a bad idea.  It removes any layers
+            of protection between the users and the repository: users
+            can accidentally (or intentionally) corrupt the repository
+            database, it becomes hard to take the repository 'offline'
+            for inspection or upgrade, and it can lead to a mess of
+            file-permissions problems (see
+            <a class="xref" href="svn.serverconfig.multimethod.html" title="Supporting Multiple Repository Access Methods">«Supporting Multiple Repository Access Methods»</a>.)  Note
+            that this is also one of the reasons we warn against
+            accessing repositories via <code class="literal">svn+ssh://</code>
+            URLs — from a security standpoint, it's effectively
+            the same as local users accessing
+            via <code class="literal">file:///</code>, and can entail all the
+            same problems if the administrator isn't careful.)</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.serverconfig.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.serverconfig.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.serverconfig.netmodel.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Глава 6. Настройка сервера </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Сетевая модель</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

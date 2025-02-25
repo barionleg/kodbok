@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Создание рабочей копии</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion" />
+    <link rel="prev" href="svn.tour.revs.html" title="Путешествие во времени вместе с Subversion" />
+    <link rel="next" href="svn.tour.cycle.html" title="Простейший рабочий цикл" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Создание рабочей копии</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.tour.revs.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 2. Экскурсия по Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.tour.cycle.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.tour.initial"></a>Создание рабочей копии</h2>
+          </div>
+        </div>
+      </div>
+      <p>Как правило, работа с хранилищем Subversion начинается с
+      <em class="firstterm">создания рабочей копии</em> проекта.
+      При создании рабочей копии на локальной машине создается копия
+      хранилища. Эта копия содержит <code class="literal">HEAD</code> (последнюю
+      правку) хранилища, указанного вами в командной строке:</p>
+      <pre class="screen">
+$ svn checkout http://svn.collab.net/repos/svn/trunk
+A  trunk/subversion.dsw
+A  trunk/svn_check.dsp
+A  trunk/COMMITTERS
+A  trunk/configure.in
+A  trunk/IDEAS
+…
+Checked out revision 2499.
+</pre>
+      <div class="sidebar">
+        <div class="titlepage">
+          <div>
+            <div>
+              <p class="title">
+                <strong></strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>Subversion очень старается не ограничивать количество типов данных,
+        которые можно поместить под контроль системы. Содержимое файлов и
+        значения свойств хранятся и передаются в бинарном формате.
+        О том, как объяснить Subversion, что для отдельного файла
+        <span class="quote">«<span class="quote">текстовые</span>»</span> операции не имеют смысла, вы узнаете в разделе
+        <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.mime-type" title="Тип содержимого файла">«Тип содержимого файла»</a>. Однако есть
+        ситуации, когда Subversion накладывает некоторые ограничения на хранимую
+        информацию.</p>
+        <p>Внутри Subversion определенная информация — например,
+        имена свойств, пути и лог-сообщения — обрабатывается как текст
+        в кодировке UTF-8. Однако это вовсе не означает обязательного
+        использования UTF-8 при работе с Subversion. В случае если
+        преобразования между UTF-8 и локальной кодировкой на компьютере
+        могут быть выполнены (что справедливо для большинства испульзуемых
+        сегодня кодировок), как правило, Subversion-клиент выполняет эти
+        преобразования легко и прозрачно для пользователя.
+      </p>
+        <p>Кроме того, имена путей при WebDAV-транзакциях используются как
+        значения XML-атрибутов, так же как и в некоторых собственных файлах
+        Subversion. Это означает, что при указании путей могут
+        использоваться только корректные для XML (1.0) символы. Также при 
+        указании путей Subversion запрещает использовать символы TAB, CR 
+        и LF, чтобы они не повреждали файлы различий и не искажали вывод 
+        таких команд как <a class="xref" href="svn.ref.svn.c.log.html" title="svn log">svn log</a> или <a class="xref" href="svn.ref.svn.c.status.html" title="svn status">svn status</a>.</p>
+        <p>Вам может показаться, что нужно помнить очень много
+        всего, однако на практике эти ограничения не вызывают 
+        сложностей. Если ваши локальные установки совместимы с UTF-8 и 
+        вы не используете специальных символов при указании путей, то
+        проблем при работе с Subversion у вас не возникнет. Клиент для 
+        командной строки немного в этом помогает — он автоматически 
+        корректирует недопустимые символы, встречающиеся в набранных URL,
+        <span class="quote">«<span class="quote">юридически правильными</span>»</span> версиями для внутреннего 
+        использования.</p>
+        <p>Кроме этого, опытные пользователи Subversion разработали 
+        набор правил хорошего тона для организации структуры хранилища.
+        Хотя эти правила и не являются такими же строгими требованиями, как 
+        описанный выше синтаксис, они помогают при выполнении типовых 
+        задач. Используемая по тексту книги часть пути
+        <code class="literal">/trunk</code> является одним из таких правил; 
+        подробнее об этой и других подобных рекомендациях мы поговорим в
+        <a class="xref" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние">Глава 4, <em>Ветвление и слияние</em></a>.</p>
+      </div>
+      <p>Хотя в приведенном примере рабочая копия создается на
+      основе корневого каталога, вы можете легко создать рабочую копию на
+      основе подкаталога любой степени вложенности, указав при
+      создании рабочей копии подкаталог в URL:</p>
+      <pre class="screen">
+$ svn checkout http://svn.collab.net/repos/svn/trunk/doc/book/tools
+A  tools/readme-dblite.html
+A  tools/fo-stylesheet.xsl
+A  tools/svnbook.el
+A  tools/dtd
+A  tools/dtd/dblite.dtd
+…
+Checked out revision 2499.
+</pre>
+      <p>Так как Subversion использует модель
+      <span class="quote">«<span class="quote">копирование-изменение-слияние</span>»</span> вместо модели
+      <span class="quote">«<span class="quote">блокирование-изменение-разблокирование</span>»</span> (см.
+      <a class="xref" href="svn.basic.html" title="Глава 1. Фундаментальные понятия">Глава 1, <em>Фундаментальные понятия</em></a>), вы уже можете начинать вносить
+      изменения в файлы и каталоги своей рабочей копии. Ваша рабочая
+      копия ничем не отличается от любого другого набора файлов в вашей
+      системе. Вы можете редактировать и менять их, перемещать, вы даже
+      можете полностью удалить рабочую копию и забыть о ней.</p>
+      <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Note">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Примечание]" src="images/note.png" />
+            </td>
+            <th align="left">Примечание</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>Несмотря на то, что рабочая копия выглядит <span class="quote">«<span class="quote">как и любой
+          другой набор файлов в вашей системе</span>»</span>, необходимо ставить 
+          Subversion в известность в том случае, если вы собираетесь что-либо 
+          реорганизовывать в рабочей копии. Если вы хотите скопировать или 
+          переместить элемент в рабочей копии, вы должны использовать команду 
+          <span class="command"><strong>svn copy</strong></span> или <span class="command"><strong>svn move</strong></span> вместо 
+          аналогичных команд операционной системы. Мы еще обсудим их в этой
+          главе более подробно.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <p>Исключение составляют случаи, когда вы готовы зафиксировать новый
+      файл или каталог, либо внести изменения в один из существующих файлов 
+      или каталогов. Эти операции не требуют дополнительного уведомления
+      сервера Subversion.</p>
+      <div class="sidebar">
+        <div class="titlepage">
+          <div>
+            <div>
+              <p class="title">
+                <strong>А как насчет каталога <code class="filename">.svn</code>?</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>Каждый каталог в рабочей копии содержит служебную
+        область — подкаталог с названием <code class="filename">.svn</code>.
+        Обычно команды, используемые для вывода содержимого каталогов, не
+        показывают этот подкаталог, но тем не менее, он играет очень важную 
+        роль. Что бы вы ни делали, не удаляйте и не меняйте ничего в
+        служебной области! Subversion использует ее при управлении
+        рабочей копией.</p>
+      </div>
+      <p>Хотя вы, конечно, можете создать рабочую копию,
+      указав в качестве единственного аргумента URL хранилища, вы можете
+      также указать после него каталог. Тогда ваша рабочая копия
+      будет находиться в новом каталоге с указанным вами именем.
+      Например:</p>
+      <pre class="screen">
+$ svn checkout http://svn.collab.net/repos/svn/trunk subv
+A  subv/subversion.dsw
+A  subv/svn_check.dsp
+A  subv/COMMITTERS
+A  subv/configure.in
+A  subv/IDEAS
+…
+Checked out revision 2499.
+</pre>
+      <p>Эта команда создаст рабочую копию в каталоге с именем
+      <code class="literal">subv</code>, вместо каталога <code class="literal">trunk</code>
+      как мы делали раньше.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.tour.revs.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.tour.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.tour.cycle.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Путешествие во времени вместе с Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Простейший рабочий цикл</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

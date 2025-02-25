@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Анализ истории</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion" />
+    <link rel="prev" href="svn.tour.cycle.html" title="Простейший рабочий цикл" />
+    <link rel="next" href="svn.tour.other.html" title="Другие полезные команды" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Анализ истории</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.tour.cycle.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 2. Экскурсия по Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.tour.other.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.tour.history"></a>Анализ истории</h2>
+          </div>
+        </div>
+      </div>
+      <p>Как мы уже говорили, хранилище похоже на машину времени.
+      Оно хранит запись о любом когда-либо зафиксированном изменении
+      и позволяет вам просмотреть его хронологию путем анализа
+      предыдущих версий файлов и каталогов, а также 
+      присоединенных к ним метаданных. Одной командой Subversion
+      вы можете создать рабочую копию (или восстановить существующую)
+      точно в том виде, в каком она была в любой момент времени или 
+      после фиксации правки с указанным номером. Однако, иногда вам 
+      просто нужно <span class="emphasis"><em>заглянуть</em></span> в прошлое, но не 
+      <span class="emphasis"><em>возвращаться</em></span> в него.</p>
+      <p>Существует несколько команд, которые могут предоставить вам 
+      хронологическую информацию из хранилища:</p>
+      <div class="variablelist">
+        <dl class="variablelist">
+          <dt>
+            <span class="term">
+              <span class="command">
+                <strong>svn log</strong>
+              </span>
+            </span>
+          </dt>
+          <dd>
+            <p>Показывает вам развернутую информацию: лог-сообщения,
+            присоединенные к правкам, с указанием даты изменений и их
+            авторов, а также изменения путей к файлам в каждой правке.</p>
+          </dd>
+          <dt>
+            <span class="term">
+              <span class="command">
+                <strong>svn diff</strong>
+              </span>
+            </span>
+          </dt>
+          <dd>
+            <p>Показывает подробности того, как изменился файл 
+              с течением времени.</p>
+          </dd>
+          <dt>
+            <span class="term">
+              <span class="command">
+                <strong>svn cat</strong>
+              </span>
+            </span>
+          </dt>
+          <dd>
+            <p>Эта команда используется для получения отдельного файла
+              в том виде, в каком он был в конкретной ревизии и вывода его
+              на экран.</p>
+          </dd>
+          <dt>
+            <span class="term">
+              <span class="command">
+                <strong>svn list</strong>
+              </span>
+            </span>
+          </dt>
+          <dd>
+            <p>Показывает список файлов в каталоге для любой указанной
+              правки.</p>
+          </dd>
+        </dl>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title">
+                <a id="svn.tour.history.log"></a>
+                <span class="command">
+                  <strong>svn log</strong>
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <p>Для того, чтобы найти информацию о хронологии файла
+        или каталога, воспользуйтесь командой <span class="command"><strong>svn log</strong></span>.
+        <span class="command"><strong>svn log</strong></span> показывает информацию о том, кто изменял
+        файл или каталог, в какой правке это произошло, дату и время правки
+        и присоединенное к фиксации лог-сообщение, если оно доступно.</p>
+        <pre class="screen">
+$ svn log
+------------------------------------------------------------------------
+r3 | sally | Mon, 15 Jul 2002 18:03:46 -0500 | 1 line
+
+Added include lines and corrected # of cheese slices.
+------------------------------------------------------------------------
+r2 | harry | Mon, 15 Jul 2002 17:47:57 -0500 | 1 line
+
+Added main() methods.
+------------------------------------------------------------------------
+r1 | sally | Mon, 15 Jul 2002 17:40:08 -0500 | 1 line
+
+Initial import
+------------------------------------------------------------------------
+</pre>
+        <p>Обратите внимание на то, что по умолчанию лог сообщения
+        выводятся в <span class="emphasis"><em>обратном хронологическом порядке</em></span>.
+        Если вам нужно увидеть другой диапазон правок в заранее определенном
+        порядке или только одну правку, укажите параметр
+        <code class="option">--revision</code> (<code class="option">-r</code>):</p>
+        <pre class="screen">
+$ svn log --revision 5:19    # shows logs 5 through 19 in chronological order
+
+$ svn log -r 19:5            # shows logs 5 through 19 in reverse order
+
+$ svn log -r 8               # shows log for revision 8
+</pre>
+        <p>Кроме того, можно проанализировать историю лог-сообщений
+        отдельного файла или каталога. Например:</p>
+        <pre class="screen">
+$ svn log foo.c
+…
+$ svn log http://foo.com/svn/trunk/code/foo.c
+…
+</pre>
+        <p>В результате будут показаны лог-сообщения
+        <span class="emphasis"><em>только</em></span> для тех правок, в которых изменялся 
+        рабочий файл (или URL).</p>
+        <p>Если вам нужно еще больше информации о файле или каталоге,
+        то для <span class="command"><strong>svn log</strong></span> есть параметр
+        <code class="option">--verbose</code> (<code class="option">-v</code>). Так как
+        Subversion позволяет перемещать и копировать файлы и каталоги,
+        важно отслеживать изменения путей в файловой системе. Поэтому 
+        в режиме расширенного вывода <span class="command"><strong>svn log</strong></span> включает 
+        перечень измененных в правке путей:</p>
+        <pre class="screen">
+$ svn log -r 8 -v
+------------------------------------------------------------------------
+r8 | sally | 2002-07-14 08:15:29 -0500 | 1 line
+Changed paths:
+M /trunk/code/foo.c
+M /trunk/code/bar.h
+A /trunk/code/doc/README
+
+Frozzled the sub-space winch.
+
+------------------------------------------------------------------------
+</pre>
+        <p>Кроме того, <span class="command"><strong>svn log</strong></span> имеет параметр 
+        <code class="option">--quiet</code> (<code class="option">-q</code>), сокращающий лог
+        сообщение. При его объединении с <code class="option">--verbose</code>
+        выдаются только имена измененных файлов.</p>
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Почему <span class="command"><strong>svn log</strong></span> ничего не выводит?</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Поработав немного с Subversion, многие пользователи
+          сталкиваются с чем-то похожим:</p>
+          <pre class="screen">
+$ svn log -r 2
+------------------------------------------------------------------------
+$
+</pre>
+          <p>На первый взгляд это выглядит как ошибка. Однако учтите, что,
+          поскольку правки привязаны к хранилищу, <span class="command"><strong>svn log</strong></span>
+          использует путь из хранилища. Если путь не указан,
+          Subversion по умолчанию будет использовать в качестве целевого
+          объекта текущий рабочий каталог. В результате, если вы
+          будете находиться в подкаталоге рабочей копии и попытаетесь
+          посмотреть лог правки, в которой ни этот каталог, ни его
+          подкаталоги не менялись, Subversion покажет пустой лог.
+          Если вы хотите знать, что менялось в этой правке, попробуйте
+          направить <span class="command"><strong>svn log</strong></span> прямо на самый верхний URL
+          вашего хранилища, примерно таким образом: <span class="command"><strong>svn log -r 2
+          http://svn.collab.net/repos/svn</strong></span>.</p>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title">
+                <a id="svn.tour.history.diff"></a>
+                <span class="command">
+                  <strong>svn diff</strong>
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <p>Ранее мы уже познакомились с <span class="command"><strong>svn diff</strong></span>
+        — эта команда показывает различия файла в едином формате
+        представления различий; она используется для того, что бы показать
+        локальные изменения, внесенные в рабочую копию, перед их фиксацией в
+        хранилище.</p>
+        <p>Вообще, существует <span class="emphasis"><em>три</em></span> возможных варианта
+        использования <span class="command"><strong>svn diff</strong></span>:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>Анализ локальных изменений</p>
+            </li>
+            <li class="listitem">
+              <p>Сравнение рабочей копии с хранилищем</p>
+            </li>
+            <li class="listitem">
+              <p>Сравнение хранилища с хранилищем</p>
+            </li>
+          </ul>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.tour.history.diff.local"></a>Анализ локальных изменений</h4>
+              </div>
+            </div>
+          </div>
+          <p>Как мы уже знаем, запуск <span class="command"><strong>svn diff</strong></span> без
+          параметров сравнивает рабочие файлы с кэшированными
+          в <code class="filename">.svn</code> <span class="quote">«<span class="quote">первоначальными</span>»</span>
+          копиями:</p>
+          <pre class="screen">
+$ svn diff
+Index: rules.txt
+===================================================================
+--- rules.txt (revision 3)
++++ rules.txt (working copy)
+@@ -1,4 +1,5 @@
+ Be kind to others
+ Freedom = Responsibility
+ Everything in moderation
+-Chew with your mouth open
++Chew with your mouth closed
++Listen when others are speaking
+$
+</pre>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.tour.history.diff.wcrepos"></a>Сравнение рабочей копии с хранилищем</h4>
+              </div>
+            </div>
+          </div>
+          <p>Если в <code class="option">--revision</code> (<code class="option">-r</code>)
+          указан один номер, то рабочая копия сравнивается
+          с указанной правкой хранилища.</p>
+          <pre class="screen">
+$ svn diff --revision 3 rules.txt
+Index: rules.txt
+===================================================================
+--- rules.txt (revision 3)
++++ rules.txt (working copy)
+@@ -1,4 +1,5 @@
+ Be kind to others
+ Freedom = Responsibility
+ Everything in moderation
+-Chew with your mouth open
++Chew with your mouth closed
++Listen when others are speaking
+$
+</pre>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.tour.history.diff.reposrepos"></a>Сравнение хранилища с хранилищем</h4>
+              </div>
+            </div>
+          </div>
+          <p>Если через <code class="option">--revision</code> (<code class="option">-r</code>)
+          передаются две правки, разделенные двоеточием, то непосредственно
+          сравниваются две правки.</p>
+          <pre class="screen">
+$ svn diff --revision 2:3 rules.txt
+Index: rules.txt
+===================================================================
+--- rules.txt (revision 2)
++++ rules.txt (revision 3)
+@@ -1,4 +1,4 @@
+ Be kind to others
+-Freedom = Chocolate Ice Cream
++Freedom = Responsibility
+ Everything in moderation
+ Chew with your mouth open
+$
+</pre>
+          <p><span class="command"><strong>svn diff</strong></span> можно использовать не только для 
+          сравнения файлов, присутствующих в рабочей копии. Если вы укажете
+          в качестве аргумента URL, то сможете анализировать различия между
+          элементами, даже не имея рабочей копии. Это полезно в случае,
+          если вы хотите проверить изменения файла тогда, когда у вас нет его
+          рабочей копии на локальной машине:</p>
+          <pre class="screen">
+$ svn diff --revision 4:5 http://svn.red-bean.com/repos/example/trunk/text/rules.txt
+…
+$
+</pre>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title">
+                <a id="svn.tour.history.cat"></a>
+                <span class="command">
+                  <strong>svn cat</strong>
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <p>Если вы хотите проанализировать ранние версии файла, а не
+        различия между двумя файлами, можно воспользоваться
+        <span class="command"><strong>svn cat</strong></span>:</p>
+        <pre class="screen">
+$ svn cat --revision 2 rules.txt
+Be kind to others
+Freedom = Chocolate Ice Cream
+Everything in moderation
+Chew with your mouth open
+$
+</pre>
+        <p>Или вы можете перенаправить вывод прямо в файл:</p>
+        <pre class="screen">
+$ svn cat --revision 2 rules.txt &gt; rules.txt.v2
+$
+</pre>
+        <p>Наверное, вам интересно, почему для замены файла старой правкой
+        мы не воспользовались <span class="command"><strong>svn update --revision</strong></span>.
+        Есть несколько причин, по которым нам оказалось
+        предпочтительнее воспользоваться
+        <span class="command"><strong>svn cat</strong></span>.</p>
+        <p>Во-первых, вы могли захотеть увидеть различия между
+        двумя правками одного файла, используя внешнюю программу
+        просмотра различий (возможно, с графическим интерфейсом
+        или работающую с файлами таких форматов, для которых единый формат 
+        представления различий не пригоден). В этом случае вам нужно вытащить
+        копию старой правки, перенаправить ее в файл и передать
+        этот файл вместе с файлом рабочей копии внешней программе
+        просмотра различий.</p>
+        <p>Во-вторых, иногда проще посмотреть полную старую версию файла чем
+        различия между ним и его другой правкой.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title">
+                <a id="svn.tour.history.list"></a>
+                <span class="command">
+                  <strong>svn list</strong>
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <p>Команда <span class="command"><strong>svn list</strong></span> показывает содержимое
+        каталога в хранилище, при этом не закачивая его на локальную
+        машину:</p>
+        <pre class="screen">
+$ svn list http://svn.collab.net/repos/svn
+README
+branches/
+clients/
+tags/
+trunk/
+</pre>
+        <p>Если вам нужна более подробная информация, воспользуйтесь
+        флагом <code class="option">--verbose</code> (<code class="option">-v</code>), и вы увидете
+        что-то подобное:</p>
+        <pre class="screen">
+$ svn list --verbose http://svn.collab.net/repos/svn
+   2755 harry          1331 Jul 28 02:07 README
+   2773 sally               Jul 29 15:07 branches/
+   2769 sally               Jul 29 12:07 clients/
+   2698 harry               Jul 24 18:07 tags/
+   2785 sally               Jul 29 19:07 trunk/
+</pre>
+        <p>Колонки показывают правку, в которой файл или каталог последний
+        раз изменялись, имя пользователя, вносившего изменения, размер (если это
+        файл), дату последнего изменения и имя элемента.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.tour.history.finalword"></a>Заключительное слово об истории</h3>
+            </div>
+          </div>
+        </div>
+        <p>В дополнение ко всем упомянутым выше командам, можно
+        воспользоваться <span class="command"><strong>svn update</strong></span> и <span class="command"><strong>svn
+        checkout</strong></span> с параметром <code class="option">--revision</code>,
+        чтобы переместить рабочую копию <span class="quote">«<span class="quote">назад во
+        времени</span>»</span><a href="#ftn.idm1498" class="footnote" id="idm1498"><sup class="footnote">[12]</sup></a>:</p>
+        <pre class="screen">
+$ svn checkout --revision 1729 # Checks out a new working copy at r1729
+…
+$ svn update --revision 1729 # Updates an existing working copy to r1729
+…
+</pre>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm1498" class="footnote">
+          <p><a href="#idm1498" class="para"><sup class="para">[12] </sup></a>Видите? Мы же говорили вам,
+        что Subversion — это машина времени.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.tour.cycle.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.tour.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.tour.other.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Простейший рабочий цикл </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Другие полезные команды</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

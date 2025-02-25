@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Глава 6. Настройка сервера</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="prev" href="svn.reposadmin.summary.html" title="Summary" />
+    <link rel="next" href="svn.serverconfig.overview.html" title="Обзор" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Глава 6. Настройка сервера</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.reposadmin.summary.html">Пред.</a> </td>
+          <th width="60%" align="center"> </th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.serverconfig.overview.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="chapter">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h1 class="title"><a id="svn.serverconfig"></a>Глава 6. Настройка сервера</h1>
+          </div>
+        </div>
+      </div>
+      <div class="toc">
+        <p>
+          <strong>Содержание</strong>
+        </p>
+        <dl class="toc">
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.overview.html">Обзор</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.overview.html#svn.serverconfig.overview.apache">Http-сервер Apache</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.overview.html#svn.serverconfig.overview.svnserve">Сервер <span class="command"><strong>svnserve</strong></span></a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.overview.html#svn.serverconfig.overview.svn-ssh"><span class="command"><strong>svnserve</strong></span> через SSH</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.overview.html#svn.serverconfig.overview.choosing-a-server">Выбор лучшей конфигурации сервера</a>
+                </span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.netmodel.html">Сетевая модель</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.netmodel.html#svn.serverconfig.netmodel.reqresp">Запросы и отклики</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.netmodel.html#svn.serverconfig.netmodel.credcache">Кэширование клиентской идентификационной информации</a>
+                </span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.svnserve.html">Собственный сервер svnserve</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.invoking">Запуск Сервера</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.auth">Встроенная аутентификация и авторизация</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.auth.users">Создание файла пользователей и область хранилища </a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.auth.general">Установка контроля доступа</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshauth">SSH идентификация и авторизация</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshtricks">Трюки конфигурирования SSH</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshtricks.setup">Начальная настройка</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshtricks.fixedcmd">Controlling the invoked command</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.httpd.html">httpd, the Apache HTTP server</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.prereqs">Prerequisites</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.basic">Basic Apache Configuration</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authn">Authentication Options</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authn.basic">Basic HTTP Authentication</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authn.sslcerts">SSL Certificate Management</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authz">Authorization Options</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authz.blanket">Blanket Access Control</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authz.perdir">Per-Directory Access Control</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authz.pathauthzoff">Disabling Path-based Checks</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.extra">Extra Goodies</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.extra.browsing">Repository Browsing</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.extra.other">Other Features</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.pathbasedauthz.html">Path-Based Authorization</a>
+            </span>
+          </dt>
+          <dt>
+            <span class="sect1">
+              <a href="svn.serverconfig.multimethod.html">Supporting Multiple Repository Access Methods</a>
+            </span>
+          </dt>
+        </dl>
+      </div>
+      <p>Одновременный доступ к хранилищу Subversion клиентами,
+    запущенными на том же компьютере, где расположено и хранилище,
+    возможен при использовании метода <code class="literal">file:///</code>.
+    Но, обычно, сервер Subversion устанавливается на отдельный
+    компьютер, к которому имеют доступ клиенты с компьютеров всего
+    офиса — или, возможно, всего мира.</p>
+      <p>Этот раздел расскажет, как предоставить доступ к хранилищу
+    Subversion удаленным клиентам. Мы опишем доступные на сегодняшний
+    день механизмы серверов Subversion, а так же обсудим вопросы
+    конфигурации и использования каждого из них. После прочтения этого
+    раздела вы сможете решить, какой тип сервера подходит вам, как его
+    установить и настроить на вашем компьютере.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.reposadmin.summary.html">Пред.</a> </td>
+          <td width="20%" align="center"> </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.serverconfig.overview.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Summary </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Обзор</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

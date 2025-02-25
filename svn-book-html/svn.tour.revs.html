@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Путешествие во времени вместе с Subversion</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion" />
+    <link rel="prev" href="svn.tour.import.html" title="Импорт" />
+    <link rel="next" href="svn.tour.initial.html" title="Создание рабочей копии" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Путешествие во времени вместе с Subversion</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.tour.import.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 2. Экскурсия по Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.tour.initial.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.tour.revs"></a>Путешествие во времени вместе с Subversion</h2>
+          </div>
+        </div>
+      </div>
+      <p>Как уже было сказано в <a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.revs" title="Правки">«Правки»</a>,
+      правка представляет собой <span class="quote">«<span class="quote">снимок</span>»</span> хранилища в конкретный
+      момент времени. Однако по-настоящему полезной Subversion (как и любую 
+      другую систему управления версиями) делает не то, что она просто хранит 
+      все версии файлов и каталогов. Главное заключается в том, что вы 
+      реально можете <span class="emphasis"><em>что-то делать</em></span> с этими старыми 
+      версиями! А для того, чтобы совершать подобные путешествия во времени, 
+      нужен механизм идентификации этих <span class="quote">«<span class="quote">снимков</span>»</span>.</p>
+      <p>Номера правок в Subversion — очень простая штука:
+      обычные, монотонно увеличивающиеся целые числа. При создании хранилища 
+      Subversion оно начинает свое существование с правки 0, и каждая 
+      последующая фиксация увеличивает номер правки на единицу. Subversion не 
+      прячет эти номера — они являются неотъемлемой частью истории 
+      версионированной информации. К примеру, после выполнения фиксации клиент 
+      Subversion информирует вас о новом номере правки:</p>
+      <pre class="screen">
+$ svn commit --message "Corrected number of cheese slices."
+Sending        sandwich.txt
+Transmitting file data .
+Committed revision 3.
+</pre>
+      <p>В будущем, в любой момент времени, если вам нужно будет сослаться
+      на эту правку, вы сможете сделать это, обратившись к ней как к правке 
+      <span class="quote">«<span class="quote">3</span>»</span>. Некоторые причины, по которым может возникнуть такая 
+      необходимость, будут приведены далее в этой главе.</p>
+      <p>Клиент для командной строки <span class="command"><strong>svn</strong></span> предлагает на 
+      выбор две опции для указания правок, которые вы хотите
+      использовать. Более общей из них является <code class="option">--revision</code>
+      (<code class="option">-r</code>), которая принимает в качестве параметра как 
+      одиночный указатель правки (<code class="option">-r
+      <em class="replaceable"><code>REV</code></em></code>), так и пару правок, разделенную 
+      двоеточием (<code class="option">-r
+      <em class="replaceable"><code>REV1</code></em>:<em class="replaceable"><code>REV2</code></em></code>).
+      Второй вариант используется для указания <em class="firstterm">диапазона
+      правок</em>, что в свою очередь полезно для команд, сравнивающих 
+      два снимка или обрабатывающих включительно все правки между двумя
+      указанными пределами.</p>
+      <p>В Subversion 1.4 была введена вторая опция для указания диапазона 
+      правок <code class="option">--change</code> (<code class="option">-c</code>). Эта опция 
+      является просто сокращением для указания диапазона правок, границами 
+      которого являются соседние целые числа. Другими словами,
+      <code class="option">-c<em class="replaceable"><code>REV</code></em></code> является тем же самым,
+      что и 
+      <code class="option">-r<em class="replaceable"><code>REV</code></em>-1:<em class="replaceable"><code>REV</code></em></code>.
+      Кроме того, так же просто можно указать и обратный диапазон, поместив
+      дефис перед номером правки, <code class="option">-c
+      -<em class="replaceable"><code>REV</code></em></code>.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.tour.import.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.tour.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.tour.initial.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Импорт </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Создание рабочей копии</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

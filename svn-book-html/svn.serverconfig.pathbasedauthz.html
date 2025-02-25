@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Path-Based Authorization</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.serverconfig.html" title="Глава 6. Настройка сервера" />
+    <link rel="prev" href="svn.serverconfig.httpd.html" title="httpd, the Apache HTTP server" />
+    <link rel="next" href="svn.serverconfig.multimethod.html" title="Supporting Multiple Repository Access Methods" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Path-Based Authorization</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.serverconfig.httpd.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 6. Настройка сервера</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.serverconfig.multimethod.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.serverconfig.pathbasedauthz"></a>Path-Based Authorization</h2>
+          </div>
+        </div>
+      </div>
+      <p>Both Apache and <span class="command"><strong>svnserve</strong></span> are capable of
+      granting (or denying) permissions to users.  Typically this is
+      done over the entire repository: a user can read the repository
+      (or not), and she can write to the repository (or not).  It's
+      also possible, however, to define finer-grained access rules.
+      One set of users may have permssion to write to a certain
+      directory in the repository, but not others; another directory
+      might not even be readable by all but a few special
+      people.</p>
+      <p>Both servers use a common file format to describe these
+      path-based access rules.  In the case of Apache, one needs to
+      load the <span class="command"><strong>mod_authz_svn</strong></span> module and then add
+      the <code class="literal">AuthzSVNAccessFile</code> directive (within
+      the <code class="filename">httpd.conf</code> file) pointing to your own
+      rules-file.  (For a full explanation, see
+      <a class="xref" href="svn.serverconfig.httpd.html#svn.serverconfig.httpd.authz.perdir" title="Per-Directory Access Control">«Per-Directory Access Control»</a>.)  If
+      you're using <span class="command"><strong>svnserve</strong></span>, then you need to make
+      the <code class="literal">authz-db</code> variable
+      (within <code class="filename">svnserve.conf</code>) point to your
+      rules-file.</p>
+      <div class="sidebar">
+        <div class="titlepage">
+          <div>
+            <div>
+              <p class="title">
+                <strong>Best practice: do you really need path-based access
+        control?</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>A lot of administrators setting up Subversion for the
+        first time tend to jump into path-based access control without
+        giving it a lot of thought.  The administrator usually knows
+        which teams of people are working on which projects, so it's
+        easy to jump in and grant certain teams access to certain
+        directories and not others.  It seems like a natural thing,
+        and it appeases the administrator's desire to maintain tight
+        control of the repository.</p>
+        <p>Note, though, that there are often invisible costs
+        associated with this feature.  Most of the time, while certain
+        users <span class="emphasis"><em>shouldn't</em></span> be committing changes to
+        certain parts of the repository, that social contract doesn't
+        need to be technologically enforced.  Teams can sometimes
+        spontaneously collaborate with each other; someone may want to
+        help someone else out by committing to an area she doesn't
+        normally work on.  By preventing this sort of thing at the
+        server level, you're setting up barriers to unexpected
+        collaboration.  You're also creating a bunch of rules that
+        need to be maintained as projects develop, new users are
+        added, and so on.  It's a bunch of extra work to maintain.</p>
+        <p>Remember that this is a version control system!  Even if
+        somebody accidentally commits a change to something they
+        shouldn't, it's easy to undo the change.  And if a user
+        commits to the wrong place with deliberate malice, then it's a
+        social problem anyway, and that the problem needs to be dealt
+        with outside of Subversion.</p>
+        <p>So before you begin restricting users' access rights, ask
+        yourself if there's a real, honest need for this, or if it's
+        just something that <span class="quote">«<span class="quote">sounds good</span>»</span> to an
+        administrator.  Remember that there's very little risk
+        involved, and that it's bad to become dependent on technology
+        as a crutch for social problems.<a href="#ftn.idm4975" class="footnote" id="idm4975"><sup class="footnote">[47]</sup></a>.</p>
+        <p>As an example to ponder, consider that the Subversion
+        project itself has always a notion of who is allowed to commit
+        where, but it's always been enforced socially.  This is a good
+        model of community trust, especially for open-source projects.
+        Of course, sometimes there <span class="emphasis"><em>are</em></span> truly
+        legitimate needs for path-based access control; within
+        corporations, for example, certain types of data really can be
+        sensitive, and access needs to be genuinely restricted to
+        small groups of people.</p>
+      </div>
+      <p>Once your server knows where to find your rules-file, it's
+      time to define the rules.</p>
+      <p>The syntax of the file is the same familiar one used
+      by <span class="command"><strong>svnserve.conf</strong></span> and the runtime
+      configuration files.  Lines that start with a hash
+      (<code class="literal">#</code>) are ignored.  In its simplest form, each
+      section names a repository and path within it, and the
+      authenticated usernames are the option names within each
+      section.  The value of each option describes the user's level of
+      access to the repository path: either
+      <code class="literal">r</code> (read-only) or <code class="literal">rw</code>
+      (read-write).  If the user is not mentioned at all, no access is
+      allowed.</p>
+      <p>To be more specific: the value of the section-names are
+      either of the form <code class="literal">[repos-name:path]</code> or the
+      form <code class="literal">[path]</code>.  If you're using the
+      <code class="literal">SVNParentPath</code> directive, then it's important
+      to specify the repository names in your sections.  If you omit
+      them, then a section like
+      <code class="literal">[/some/dir]</code> will match the path
+      <code class="filename">/some/dir</code> in <span class="emphasis"><em>every</em></span>
+      repository.  If you're using the <code class="literal">SVNPath</code>
+      directive, however, then it's fine to only define paths in your
+      sections—after all, there's only one repository.</p>
+      <pre class="screen">
+[calc:/branches/calc/bug-142]
+harry = rw
+sally = r
+</pre>
+      <p>In this first example, the user <code class="literal">harry</code> has
+      full read and write access on the
+      <code class="filename">/branches/calc/bug-142</code> directory in the
+      <code class="literal">calc</code> repository, but the user
+      <code class="literal">sally</code> has read-only access.  Any other users
+      are blocked from accessing this directory.</p>
+      <p>Of course, permissions are inherited from parent to child
+      directory.  That means that we can specify a subdirectory with a
+      different access policy for Sally:</p>
+      <pre class="screen">
+[calc:/branches/calc/bug-142]
+harry = rw
+sally = r
+
+# give sally write access only to the 'testing' subdir
+[calc:/branches/calc/bug-142/testing]
+sally = rw
+</pre>
+      <p>Now Sally can write to the <code class="filename">testing</code>
+      subdirectory of the branch, but can still only read other parts.
+      Harry, meanwhile, continues to have complete read-write access
+      to the whole branch.</p>
+      <p>It's also possible to explicitly deny permission to someone
+      via inheritance rules, by setting the username variable to
+      nothing:</p>
+      <pre class="screen">
+[calc:/branches/calc/bug-142]
+harry = rw
+sally = r
+
+[calc:/branches/calc/bug-142/secret]
+harry =
+</pre>
+      <p>In this example, Harry has read-write access to the
+      entire <code class="filename">bug-142</code> tree, but has absolutely no
+      access at all to the <code class="filename">secret</code> subdirectory
+      within it.</p>
+      <p>The thing to remember is that the most specific path always
+      matches first.  The <span class="command"><strong>mod_authz_svn</strong></span> module
+      tries to match the path itself, and then the parent of the path,
+      then the parent of that, and so on.  The net effect is that
+      mentioning a specific path in the accessfile will always
+      override any permissions inherited from parent
+      directories.</p>
+      <p>By default, nobody has any access to the repository at all.
+      That means that if you're starting with an empty file, you'll
+      probably want to give at least read permission to all users at
+      the root of the repository.  You can do this by using the
+      asterisk variable (<code class="literal">*</code>), which means <span class="quote">«<span class="quote">all
+      users</span>»</span>:</p>
+      <pre class="screen">
+[/]
+* = r
+</pre>
+      <p>This is a common setup; notice that there's no repository
+      name mentioned in the section name.  This makes all repositories
+      world readable to all users, whether you're
+      using <code class="literal">SVNPath</code> or
+      <code class="literal">SVNParentPath</code>.  Once all users have
+      read-access to the repositories, you can give explicit
+      <code class="literal">rw</code> permission to certain users on specific
+      subdirectories within specific repositories.</p>
+      <p>The asterisk variable (<code class="literal">*</code>) is also worth
+      special mention here: it's the
+      <span class="emphasis"><em>only</em></span> pattern which matches an anonymous
+      user.  If you've configured your <code class="literal">Location</code>
+      block to allow a mixture of anonymous and authenticated access,
+      all users start out accessing Apache anonymously.
+      <span class="command"><strong>mod_authz_svn</strong></span> looks for a
+      <code class="literal">*</code> value defined for the path being accessed;
+      if it can't find one, then Apache demands real authentication
+      from the client.</p>
+      <p>The access file also allows you to define whole groups of
+      users, much like the Unix <code class="filename">/etc/group</code>
+      file:</p>
+      <pre class="screen">
+[groups]
+calc-developers = harry, sally, joe
+paint-developers = frank, sally, jane
+everyone = harry, sally, joe, frank, sally, jane
+</pre>
+      <p>Groups can be granted access control just like users.
+      Distinguish them with an <span class="quote">«<span class="quote">at</span>»</span>
+      (<code class="literal">@</code>) prefix:</p>
+      <pre class="screen">
+[calc:/projects/calc]
+@calc-developers = rw
+
+[paint:/projects/paint]
+@paint-developers = rw
+jane = r
+</pre>
+      <p>Groups can also be defined to contain other groups:</p>
+      <pre class="screen">
+[groups]
+calc-developers = harry, sally, joe
+paint-developers = frank, sally, jane
+everyone = @calc-developers, @paint-developers
+</pre>
+      <p>…and that's pretty much all there is to it.</p>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm4975" class="footnote">
+          <p><a href="#idm4975" class="para"><sup class="para">[47] </sup></a>A common theme
+        in this book!</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.serverconfig.httpd.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.serverconfig.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.serverconfig.multimethod.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">httpd, the Apache HTTP server </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Supporting Multiple Repository Access Methods</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

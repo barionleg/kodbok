@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Собственный сервер svnserve</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.serverconfig.html" title="Глава 6. Настройка сервера" />
+    <link rel="prev" href="svn.serverconfig.netmodel.html" title="Сетевая модель" />
+    <link rel="next" href="svn.serverconfig.httpd.html" title="httpd, the Apache HTTP server" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Собственный сервер svnserve</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.serverconfig.netmodel.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 6. Настройка сервера</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.serverconfig.httpd.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.serverconfig.svnserve"></a>Собственный сервер svnserve</h2>
+          </div>
+        </div>
+      </div>
+      <p> Программа <span class="command"><strong>svnserve</strong></span> легкий сервер, способный 
+      общаться с клиентами через TCP/IP, используя собственный простой
+      протокол. Клиенты обращаются к серверу, <span class="command"><strong>svnserve</strong></span>
+      используя URL, который начинается с <code class="literal">svn://</code> или
+      <code class="literal">svn+ssh://</code>. В этом разделе рсказывается о различных
+      способах запуска <span class="command"><strong>svnserve</strong></span>, о том как клиенты
+      аутентифицируются на сервере и о настройке соответствующих правил доступа
+      к хранилищу.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.svnserve.invoking"></a>Запуск Сервера</h3>
+            </div>
+          </div>
+        </div>
+        <p>Существует несколько различных способов запустить программу
+        <span class="command"><strong>svnserve</strong></span>. При запуске без параметров, ничего
+        кроме справочного сообщения вы не увидите. Если вы
+        планируете запускать процесс через <span class="command"><strong>inetd</strong></span>,
+        необходимо указывать параметр <code class="option">-i</code>
+        (<code class="option">--inetd</code>):</p>
+        <pre class="screen">
+$ svnserve -i
+( success ( 1 2 ( ANONYMOUS ) ( edit-pipeline ) ) )
+</pre>
+        <p>При запуске с параметром <code class="option">--inetd</code>,
+        <span class="command"><strong>svnserve</strong></span> будет пытаться общаться с клиентом
+        Subversion через <span class="emphasis"><em>stdin</em></span> и
+        <span class="emphasis"><em>stdout</em></span> используя собственный протокол.
+        Это стандартное поведение для программ, запускаемых через
+        <span class="command"><strong>inetd</strong></span>.  IANA зарезервировал порт  3690 для протокола
+        Subversion, поэтому на unix-подобных системах вы можете добавить в
+        <code class="filename">/etc/services</code> строки подобные этим (возможно, они
+        там уже есть):</p>
+        <pre class="screen">
+svn           3690/tcp   # Subversion
+svn           3690/udp   # Subversion
+</pre>
+        <p>Если система использует классический Unix-подобный
+      демон <span class="command"><strong>inetd</strong></span>, в <code class="filename">/etc/inetd.conf</code>
+      можно добавить такую строку:</p>
+        <pre class="screen">
+svn stream tcp nowait svnowner /usr/bin/svnserve svnserve -i
+</pre>
+        <p> Убедитесь, что пользователь <span class="quote">«<span class="quote">svnowner</span>»</span> имеет
+        необходимые права для доступа к хранилищу. После этого, когда
+       	от клиента к серверу на порт 3690 придет запрос на соединение,
+        <span class="command"><strong>inetd</strong></span> запустит процесс <span class="command"><strong>svnserve</strong></span>
+        для обслуживания этого запроса.
+      </p>
+        <p>На Windows системах, существуют средства от сторонних
+        производителей, которые запускают <span class="command"><strong>svnserve</strong></span>
+        как сервис. Список этих инструментов можно посмотреть на веб-сайте
+        Subversion. </p>
+        <p>Второй параметр запускает <span class="command"><strong>svnserve</strong></span> как
+        автономный процесс—<span class="quote">«<span class="quote">демон</span>»</span>. Для этого используется
+        параметр <code class="option">-d</code>:</p>
+        <pre class="screen">
+$ svnserve -d
+$               # svnserve is now running, listening on port 3690
+</pre>
+        <p>Если <span class="command"><strong>svnserve</strong></span> запускается в режиме демона,
+        можно использовать опции <code class="option">--listen-port=</code> и
+        <code class="option">--listen-host=</code>, чтобы назначить нужное значение порта
+        и имени хоста, к которому <span class="quote">«<span class="quote">привязан</span>»</span>
+        <span class="command"><strong>svnserve</strong></span>.</p>
+        <p>Существует еще один, третий способ запуска
+        <span class="command"><strong>svnserve</strong></span>, с параметром <code class="option">-t</code> —
+        это так называемый <span class="quote">«<span class="quote">туннельный режим</span>»</span>. Этот режим
+      	предполагает, что программы удаленного доступа такие как
+      	<span class="command"><strong>RSH</strong></span> или <span class="command"><strong>SSH</strong></span> уже успешно
+      	аутентифицировали пользователя и запускают частный процесс
+      	<span class="command"><strong>svnserve</strong></span> от имени <span class="emphasis"><em>этого
+       	пользователя</em></span>. Программа <span class="command"><strong>svnserve</strong></span>
+      	работает в обычном режиме (работая через <span class="emphasis"><em>stdin</em></span>
+      	и <span class="emphasis"><em>stdout</em></span>) и предполагает, что трафик автоматически
+      	перенаправится по некоторому тунелю к клиенту. Когда
+      	<span class="command"><strong>svnserve</strong></span> запущен подобным туннельным агентом
+      	убедитесь в том что аутентифицированый пользователь имеет полный
+       	доступ на чтение и запись к файлам базы данных хранилища.
+        По сути, это соответствует обращению к хранилищу локального
+        пользователя через URL вида <code class="literal">file:///</code>.</p>
+        <p>После запуска <span class="command"><strong>svnserve</strong></span> все хранилища
+        на вашей системе будут доступны через сеть. Клиент должен указывать
+        <span class="emphasis"><em>абсолютный</em></span> путь в URL хранилища. Например, если
+        хранилище расположено в
+        <code class="filename">/usr/local/repositories/project1</code>, обращаться к
+        нему клиент сможет по адресу
+        <code class="uri">svn://host.example.com/usr/local/repositories/project1</code>.
+        Чтобы увеличить безопасность, можно передать 
+        <span class="command"><strong>svnserve</strong></span> параметр <code class="option">-r</code>, который
+        разрешит обращаться только к тем хранилищам, которые расположены ниже
+        указанного пути:</p>
+        <pre class="screen">
+$ svnserve -d -r /usr/local/repositories
+…
+</pre>
+        <p>Применение параметра <code class="option">-r</code> эффективно изменяет
+        местоположение рассматриваемое программой как корень файловой
+        системы. Клиенты используют URL, из которого удален этот
+        путь, в результате чего URL получается более коротким
+        (и менее разоблачительным):</p>
+        <pre class="screen">
+$ svn checkout svn://host.example.com/project1
+…
+</pre>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.svnserve.auth"></a>Встроенная аутентификация и авторизация</h3>
+            </div>
+          </div>
+        </div>
+        <p>Когда клиент подключается к <span class="command"><strong>svnserve</strong></span>,
+        происходит следующее:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>Клиент указывает требуемое
+        хранилище.</p>
+            </li>
+            <li class="listitem">
+              <p>Сервер обрабатывает файл
+        <code class="filename">conf/svnserve.conf</code> хранилища, и начинает выполнять
+        правила аутентификации и авторизации, указанные в нем.</p>
+            </li>
+            <li class="listitem">
+              <p>В зависимости от ситуации и правил авторизации,</p>
+              <div class="itemizedlist">
+                <ul class="itemizedlist" style="list-style-type: circle; ">
+                  <li class="listitem">
+                    <p>клиенту может быть разрешено делать анонимные
+               обращения, без запроса на идентификацию, ИЛИ</p>
+                  </li>
+                  <li class="listitem">
+                    <p>клиенту может быть сделан запрос на идентификацию
+               в любой момент, ИЛИ</p>
+                  </li>
+                  <li class="listitem">
+                    <p>при работе в <span class="quote">«<span class="quote">туннельном режиме</span>»</span>,
+               клиент объявит себя уже идентифицированным.</p>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <p>Во время написания данного материала сервер знал только об вызове
+       авторизации через CRAM-MD5 <a href="#ftn.idm4462" class="footnote" id="idm4462"><sup class="footnote">[41]</sup></a>. В сущности, сервер отправляет некоторые
+        данные клиенту. Клиент, используя хэш алгоритма MD5, создает отпечаток
+        (fingerprint) из совмещенных вместе этих данных и своего пароля,
+        после чего отправляет этот отпечаток серверу как ответ.
+        Сервер производит подобные вычисления со своей версией
+        пользовательского пароля и проверяет идентичность результатов.
+        <span class="emphasis"><em>Таким образом пароль никогда не передается в открытую по
+        сети.</em></span></p>
+        <p> Также возможно, что клиент уже был идентифицирован через внешнего
+        туннельного агента, такого как <span class="command"><strong>SSH</strong></span>. В таком
+        случае, сервер просто проверяет запустившего его пользователя и
+        в дальнейшем использует идентифицированное имя пользователя.
+        Более подробно об этом смотри в <a class="xref" href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshauth" title="SSH идентификация и авторизация">«SSH идентификация и авторизация»</a>.</p>
+        <p>Как вы уже догадались, файл хранилища
+        <code class="filename">svnserve.conf</code> — центральный механизм
+        контроля правил идентификации и авторизации. Этот файл имеет такой же
+        формат, как и другие конфигурационные файлы
+        (см. <a class="xref" href="svn.advanced.confarea.html" title="Параметры времени выполнения">«Параметры времени выполнения»</a>): имена секций помечены
+        квадратными скобками ((<code class="literal">[</code> и <code class="literal">]</code>),
+        комментарии начинаются с <code class="literal">#</code>, а каждая секция содержит
+        определенные переменные, которые могут быть использованы для
+        конфигурирования (<code class="literal">переменная = значение</code>). Давайте
+        посмотрим на этот файл и изучим как им пользоваться.</p>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.serverconfig.svnserve.auth.users"></a>Создание файла пользователей и область хранилища </h4>
+              </div>
+            </div>
+          </div>
+          <p>Сейчас, секция <code class="literal">[general]</code>
+          в<code class="filename">svnserve.conf</code> имеет все необходимые вам
+          переменные. Начнем с определения файла, содержащего имена
+          пользователей и пароли, а также с области хранилища: </p>
+          <pre class="screen">
+[general]
+password-db = userfile
+realm = example realm
+</pre>
+          <p><code class="literal">realm</code> — это определяемое вами имя.
+          Оно сообщает клиентам, к какой <span class="quote">«<span class="quote">области идентификации</span>»</span>
+          они подсоединяются; клиенту Subversion она выводится в приглашении к
+          аутентификации, и используется как ключ (вместе с именем сервера и
+          портом) для кэширования клиентской идентификационной информации
+          на диск (см. <a class="xref" href="svn.serverconfig.netmodel.html#svn.serverconfig.netmodel.credcache" title="Кэширование клиентской идентификационной информации">«Кэширование клиентской идентификационной информации»</a>).
+          Переменная <code class="literal">password-db</code> указывает на отдельный
+          файл, который содержит список пользователей и пароли в таком же
+          простом формате. Например:</p>
+          <pre class="screen">
+[users]
+harry = foopassword
+sally = barpassword
+</pre>
+          <p>Значение <code class="literal">password-db</code> может быть абсолютным или
+          относительным путем к файлу пользователей. Для большинства
+          администраторов, его легче держать в <code class="filename">conf/</code>
+          области хранилища, рядом с <code class="filename">svnserve.conf</code>.
+          С другой стороны, возможно, вы захотите разделять один и тот же файл
+          пользователей для двух или более хранилищ, в этом случае этот файл
+          стоит поместить в более доступное место. Хранилища разделяющие файл
+          пользователей, должны быть также сконфигурированы с одинаковыми
+          областями, так как список пользователей по существу определяет
+          область аутентификации. Где бы в итоге файл не находился, убедитесь,
+          что у него выставлены соответствующие права на чтение/запись. Если вы
+          знаете от имени какого пользователя(-ей) будет запускаться
+          <span class="command"><strong>svnserve</strong></span>, то ограничьте доступ на чтение только
+          тем пользователем, которым это нужно.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.serverconfig.svnserve.auth.general"></a>Установка контроля доступа</h4>
+              </div>
+            </div>
+          </div>
+          <p>Есть еще две дополнительных переменные в
+          <code class="filename">svnserve.conf</code>: они определяют,
+          что будут допущены делать не идентифицированные (анонимные) и
+          идентифицированные пользователи. Переменные
+          <code class="literal">anon-access</code> и <code class="literal">auth-access</code>
+          могут иметь значения: <code class="literal">none</code>,
+          <code class="literal">read</code>, или <code class="literal">write</code>.
+          Установка значения в <code class="literal">none</code> запрещает доступ любого
+          рода; <code class="literal">read</code> — доступ к хранилищу только на
+          чтение, а <code class="literal">write</code> — позволяет полный доступ
+          к хранилищу на чтение/запись. Например:</p>
+          <pre class="screen">
+[general]
+password-db = userfile
+realm = example realm
+
+# anonymous users can only read the repository
+anon-access = read
+
+# authenticated users can both read and write
+auth-access = write
+</pre>
+          <p>Значения установленные в примере — фактически значения
+          по умолчанию, они будут установлены если вы не захотите определить
+          их. Если вы хотите быть более консервативным, то можете заблокировать
+          полностью анонимный доступ:</p>
+          <pre class="screen">
+[general]
+password-db = userfile
+realm = example realm
+
+# anonymous users aren't allowed
+anon-access = none
+
+# authenticated users can both read and write
+auth-access = write
+</pre>
+          <p>Сервер понимает не только такие <span class="quote">«<span class="quote">поверхностные</span>»</span>
+	  ограничения доступа к хранилищу, но также и более детальные,
+	  связанные с конкретными файлами и каталогами в хранилище. Чтобы
+	  использовать эту возможность, вам необходимо создать файл,
+	  содержащий эти специальные правила и указать к нему путь с
+	  помощью переменной <code class="literal">authz-db</code>:</p>
+          <pre class="screen">
+[general]
+password-db = userfile
+realm = example realm
+
+# Specific access rules for specific locations
+authz-db = authzfile
+</pre>
+          <p>Формат файла <code class="filename">authzfile</code> детально описан
+	  в <a class="xref" href="svn.serverconfig.pathbasedauthz.html" title="Path-Based Authorization">«Path-Based Authorization»</a>. Заметьте,
+	  что переменная <code class="literal">authz-db</code> и пара
+	  <code class="literal">anon-access</code>, <code class="literal">auth-access</code>
+	  допускают совместное использование; если все переменные
+	  определены одновременно, то для получения доступа должны быть
+	  удовлетворены <span class="emphasis"><em>все</em></span> правила.</p>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.svnserve.sshauth"></a>SSH идентификация и авторизация</h3>
+            </div>
+          </div>
+        </div>
+        <p>Встроенная в <span class="command"><strong>svnserve</strong></span> идентификация может
+        быть более удобной, так как избегает необходимости создавать
+        реальные системные учетные записи. С другой стороны, некоторые
+        администраторы уже имеют хорошо настроенные SSH оболочки в своих
+        системах. В этой ситуации все пользователи проектов уже имеют
+        системные учетные записи и способность к <span class="quote">«<span class="quote">SSH
+        into</span>»</span> на серверную машину. </p>
+        <p>Проще всего использовать SSH в связке с <span class="command"><strong>svnserve</strong></span>.
+        Клиенты просто используют для коннекта схему
+        <code class="literal">svn+ssh://</code>:</p>
+        <pre class="screen">
+$ whoami
+harry
+
+$ svn list svn+ssh://host.example.com/repos/project
+harry@host.example.com's password:  *****
+
+foo
+bar
+baz
+…
+</pre>
+        <p>В этом примере клиент Subversion вовлекает локальный процесс
+        <span class="command"><strong>ssh</strong></span>, соединяется с
+        <code class="literal">host.example.com</code>, идентифицируется как пользователь
+        <code class="literal">harry</code>, затем порождает личный процесс
+        <span class="command"><strong>svnserve</strong></span> на удаленной машине запускаемый от имени
+        пользователя <code class="literal">harry</code>.  Команда
+        <span class="command"><strong>svnserve</strong></span> была вовлечена в режим тунелирования
+        (<code class="option">-t</code>) и ее сетевой протокол был
+        <span class="quote">«<span class="quote">тунелирован</span>»</span> через зашифрованное соединение через
+        тунельного-агента <span class="command"><strong>ssh</strong></span>. <span class="command"><strong>svnserve</strong></span>
+        знает что он запущен пользователем <code class="literal">harry</code>,
+        и если клиент выполняет фиксацию, идентификационное имя пользователя
+        будет использовано как имя автора новой ревизии.</p>
+        <p>Важная вещь для понимания здесь, это то что клиент
+        Subversion <span class="emphasis"><em>не</em></span> соединяется с запущенным демоном
+        <span class="command"><strong>svnserve</strong></span>. Этот метод доступа не требует демона, ни
+        делает уведомления даже если он присутствует. Он использует в целом
+        способность <span class="command"><strong>ssh</strong></span> запускать временный процесс
+        <span class="command"><strong>svnserve</strong></span>, которые завершается когда сетевое
+        соединение закроется.</p>
+        <p>Когда для доступа к хранилищу используется URL вида
+        <code class="literal">svn+ssh://</code>, помните что это программа
+        <span class="command"><strong>ssh</strong></span> запрашивает идентификацию,
+        а <span class="emphasis"><em>не</em></span> клиентская программа <span class="command"><strong>svn</strong></span>.
+        Это означает что нет автоматического кеширования паролей
+        (см. <a class="xref" href="svn.serverconfig.netmodel.html#svn.serverconfig.netmodel.credcache" title="Кэширование клиентской идентификационной информации">«Кэширование клиентской идентификационной информации»</a>).
+        Клиенты Subversion часто делают несколько соединений к хранилищу, хотя
+        пользователи обычно не знают об этом из-за возможности кеширования
+        паролей. Однако когда используют URL вида
+        <code class="literal">svn+ssh://</code> URLs, пользователи могут быть раздражены
+        <span class="command"><strong>ssh</strong></span> из-за повторяющихся запросов пароля для каждого
+        исходящего соединения. Решение этой проблемы заключается в
+        использовании отдельного инструмента для кеширования паролей SSH,
+        подобных <span class="command"><strong>ssh-agent</strong></span> на Unix-подобных системах, или
+        <span class="command"><strong>pageant</strong></span> в Windows.</p>
+        <p>Когда выполняется через тунелирование, идентификация первоначально
+        управляется правами операционной системы на файлы базы данных
+        хранилища; это очень похоже на то как если бы Harry получала доступ к
+        хранилищу напрямую через URL <code class="literal">file:///</code>.  Если
+        несколько пользователей системы получают доступ к хранилищу напрямую,
+        вы можете захотеть поместить их в общую группу, и вы должны будете
+        быть очень осторожным при разрешении (umasks). (Прочитайте <a class="xref" href="svn.serverconfig.multimethod.html" title="Supporting Multiple Repository Access Methods">«Supporting Multiple Repository Access Methods»</a>.)  Но в каждом случае
+        тунелирования файл <code class="filename">svnserve.conf</code> может продолжать
+        использоваться для блокирования доступа, простой установкой
+        <code class="literal">auth-access = read</code> или <code class="literal">auth-access
+        = none</code>.
+
+        <a href="#ftn.idm4560" class="footnote" id="idm4560"><sup class="footnote">[42]</sup></a>
+      </p>
+        <p>Вы не должны думать что рассказ о SSH тунелирование будет
+        закончен здесь. Subversion позволяет вам создавать заказное
+        поведение тунеля в файле <code class="filename">config</code>
+        (смотри <a class="xref" href="svn.advanced.confarea.html" title="Параметры времени выполнения">«Параметры времени выполнения»</a>).  Например,
+        предположим что вы хотите использовать RSH вместо SSH. В разделе
+        <code class="literal">[tunnels]</code> файла <code class="literal">[tunnels]</code>
+        просто укажите подобно этому:</p>
+        <pre class="screen">
+[tunnels]
+rsh = rsh
+</pre>
+        <p>И сейчас вы можете использовать новое определение туннеля
+        используя схему URL которая соответствует имени вашей новой переменной:
+        <code class="literal">svn+rsh://host/path</code>. Затем используя новую схему URL,
+        клиент Subversion будет выполнять команду <span class="command"><strong>rsh host
+        svnserve -t</strong></span>
+        за кулисами. Если вы включите имя пользователя в URL (например,
+        <code class="literal">svn+rsh://username@host/path</code>) клиент также будет
+        включать его в эту команду (<span class="command"><strong>rsh
+        username@host svnserve -t</strong></span>). Но вы может определить новую
+        схему
+        туннелирования которая будет более умная чем эта:</p>
+        <pre class="screen">
+[tunnels]
+joessh = $JOESSH /opt/alternate/ssh -p 29934
+</pre>
+        <p>Этот пример демонстрирует связанные вещи. С начала он
+       показывает как можно сделать чтобы клиент Subversion запускал очень
+       специфическую программу тунелирования (она расположена в
+       <code class="filename">/opt/alternate/ssh</code>) с некоторым параметром.
+       В данном случае, доступ к <code class="literal">svn+joessh://</code> будет
+       вовлекать особую программу SSH с аргументами <code class="option">-p 29934</code>
+       — полезно если вы хотите соединить программу тунелирования на
+       нестандартный порт.</p>
+        <p>Затем он показывает как определить пользовательскую переменную
+        окружения, которая может перекрыть имя программы тунелирования.
+        Установка переменной окружения <code class="literal">SVN_SSH</code> это
+        удобный путь для перекрытия агента тунелирования SSH по умолчанию.
+        Но если вы нуждаетесь в нескольких различных перекрытиях, для разных
+        серверов, каждый возможно взаимодействует с разными портами или
+        передача различных наборов параметров в SSH, вы можете использовать
+        механизм показанный в этом примере.
+        Сейчас, если вы установите переменную окружения <code class="literal">JOESSH</code>, ее
+        значение будет перекрывать содержимое переменной тунелирования
+        —<span class="command"><strong>$JOESSH</strong></span> будет выполняться вместо
+        <span class="command"><strong>/opt/alternate/ssh -p 29934</strong></span>.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.svnserve.sshtricks"></a>Трюки конфигурирования SSH</h3>
+            </div>
+          </div>
+        </div>
+        <p>Возможно не только управлять как клиент выполняет
+        <span class="command"><strong>ssh</strong></span>, но также управлять поведением
+        <span class="command"><strong>sshd</strong></span> на машине вашего сервера. В этом разделе,
+        мы покажем как управлять тем, какие именно команды
+        <span class="command"><strong>svnserve</strong></span> вызываются <span class="command"><strong>sshd</strong></span>,
+        а также о том, как несколько пользователей могут использовать
+        одну системную учетную запись.</p>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.serverconfig.svnserve.sshtricks.setup"></a>Начальная настройка</h4>
+              </div>
+            </div>
+          </div>
+          <p>Для начала, перейдите в домашнюю папку учетной записи которую вы
+          используете для запуска <span class="command"><strong>svnserve</strong></span>. Убедитесь что
+          учетная запись имеет установленную пару ключей SSH
+          (публичную/приватную), и что пользователь может зайти через
+          идентификацию с использованием публичного ключа. Парольная
+          идентификация не работает, так как все следующие SSH трюки вращаются
+          вокруг использования файла SSH <code class="filename">authorized_keys</code>.
+        </p>
+          <p>Если он не существует, создайте файл
+          <code class="filename">authorized_keys</code> (на Unix, обычно
+          <code class="filename">~/.ssh/authorized_keys</code>). Каждая
+          строка этого файла описывает публичный ключ, который разрешен
+          для соединения. Строки обычно в следующей форме:</p>
+          <pre class="screen">
+  ssh-dsa AAAABtce9euch… user@example.com
+</pre>
+          <p>Первое поле описывает тип ключа, второе поле uu-кодированный
+          (uuencoded) ключ и третье поле это комментарий. Однако, менее
+          известный факт что всей строке может предшествовать поле
+          <code class="literal">command</code>:</p>
+          <pre class="screen">
+  command="program" ssh-dsa AAAABtce9euch… user@example.com
+</pre>
+          <p>Когда поле <code class="literal">command</code> установлено, демон
+          SSH будет выполнять указанную программу, вместо обычной
+          <span class="command"><strong>svnserve -t</strong></span> моля что клиент знает об этом.
+          Это открывает двери для многих трюков на стороне сервера.
+          В следующем примерах мы сокращаем строки в файле так :</p>
+          <pre class="screen">
+  command="program" TYPE KEY COMMENT
+</pre>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.serverconfig.svnserve.sshtricks.fixedcmd"></a>Controlling the invoked command</h4>
+              </div>
+            </div>
+          </div>
+          <p>Так как мы можем указать выполняемую на сервере команду, проще
+          назвать специфическую программу <span class="command"><strong>svnserve</strong></span> и
+          передать дополнительные параметры:</p>
+          <pre class="screen">
+  command="/path/to/svnserve -t -r /virtual/root" TYPE KEY COMMENT
+</pre>
+          <p>В этом примере, <code class="filename">/path/to/svnserve</code> может быть
+          пользовательским скриптом, оберткой вокруг
+          <span class="command"><strong>svnserve</strong></span> которая устанавливает umask (смотри
+          <a class="xref" href="svn.serverconfig.multimethod.html" title="Supporting Multiple Repository Access Methods">«Supporting Multiple Repository Access Methods»</a>).  Также показано
+          как привязать <span class="command"><strong>svnserve</strong></span> к виртуальному корневому
+          каталогу, который часто делается когда запускается
+          <span class="command"><strong>svnserve</strong></span> как процесс-демон. Это может быть
+          сделано либо ограничением доступа к части системы,
+          или просто заставляя пользователя указывать абсолютный путь в
+          <code class="literal">svn+ssh://</code> URL.</p>
+          <p>Так же возможно иметь нескольких пользовательских разделяемых
+          ресурсов под одной учетной записью. Вместо создания различных учетных
+          записей для каждого пользователя, сгенерируйте пару публичный/частный
+          ключ для каждого человека. Затем поместите каждый публичный ключ
+          в файл <code class="filename">authorized_users</code>, по одному ключу в
+          строке, и используйте параметр <code class="option">--tunnel-user</code>:</p>
+          <pre class="screen">
+  command="svnserve -t --tunnel-user=harry" TYPE1 KEY1 harry@example.com
+  command="svnserve -t --tunnel-user=sally" TYPE2 KEY2 sally@example.com
+</pre>
+          <p>Этот пример позволяет обоим, Гарии и Салли подключаться к одной
+          учетной записи через идентификацию через публичный ключ. Каждый из
+          них имеет собственную команду, которая будет выполняться, параметр
+          <code class="option">--tunnel-user</code> говорит <span class="command"><strong>svnserve -t</strong></span>
+          какой из названных аргументов идентифицирует пользователя. Без
+          <code class="option">--tunnel-user</code> они будут появляться не смотря на все
+          фиксации которые сделаны из одной разделяемой учетной записи.</p>
+          <p>В заключение предостережение: предоставление доступа
+          пользователям к серверу через публичные ключи в разделяемой учетной
+          записи может оставлять доступным другие формы доступа через SSH, даже
+          если вы установили значение <code class="literal">command</code> в
+          <code class="filename">authorized_keys</code>. Например, пользователи могут
+          получить доступ через SSH, или иметь возможность выполнять X11 или
+          общий форвардинг портов через ваш сервер. Для предоставления
+          пользователям как можно меньше привилегий, можно указать несколько
+          ограничивающих опций сразу же после <code class="literal">command</code>:</p>
+          <pre class="screen">
+  command="svnserve -t --tunnel-user=harry",no-port-forwarding,\
+           no-agent-forwarding,no-X11-forwarding,no-pty \
+           TYPE1 KEY1 harry@example.com
+</pre>
+        </div>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm4462" class="footnote">
+          <p><a href="#idm4462" class="para"><sup class="para">[41] </sup></a>Смотри
+        RFC 2195.</p>
+        </div>
+        <div id="ftn.idm4560" class="footnote">
+          <p><a href="#idm4560" class="para"><sup class="para">[42] </sup></a>Note that using any sort
+            of <span class="command"><strong>svnserve</strong></span>-enforced access control at
+            all is a bit pointless;  the user already has direct access to
+            the repository database.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.serverconfig.netmodel.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.serverconfig.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.serverconfig.httpd.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Сетевая модель </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> httpd, the Apache HTTP server</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

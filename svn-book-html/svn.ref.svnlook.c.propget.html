@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>svnlook propget</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.svnlook.html#svn.ref.svnlook.c" title="svnlook" />
+    <link rel="prev" href="svn.ref.svnlook.c.log.html" title="svnlook log" />
+    <link rel="next" href="svn.ref.svnlook.c.proplist.html" title="svnlook proplist" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">svnlook propget</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.svnlook.c.log.html">Пред.</a> </td>
+          <th width="60%" align="center">
+            <span class="command">
+              <strong>svnlook</strong>
+            </span>
+          </th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.ref.svnlook.c.proplist.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svnlook.c.propget"></a>
+      <div class="titlepage"></div>
+      <a id="idm8566" class="indexterm"></a>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>svnlook propget — Print the raw value of a property on a path in
+            the repository.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm8573"></a>
+        <h2>Synopsis</h2>
+        <pre class="programlisting">svnlook propget REPOS_PATH PROPNAME [PATH_IN_REPOS]</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm8576"></a>
+        <h2>Description</h2>
+        <p>List the value of a property on a path in the
+            repository.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm8579"></a>
+        <h2>Alternate Names</h2>
+        <p>pg, pget</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm8582"></a>
+        <h2>Switches</h2>
+        <pre class="screen">
+--revision (-r) REV
+--transaction (-t)
+--revprop
+</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm8585"></a>
+        <h2>Examples</h2>
+        <p>This shows the value of the <span class="quote">«<span class="quote">seasonings</span>»</span> property
+            on the file <code class="filename">/trunk/sandwich</code> in the
+            <code class="literal">HEAD</code> revision:</p>
+        <pre class="screen">
+$ svnlook pg /usr/local/svn/repos seasonings /trunk/sandwich
+mustard
+</pre>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.svnlook.c.log.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.svnlook.html#svn.ref.svnlook.c">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.ref.svnlook.c.proplist.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">svnlook log </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> svnlook proplist</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

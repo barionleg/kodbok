@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Свойства Subversion</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.properties.html" title="Свойства Subversion" />
+    <link rel="prev" href="svn.ref.properties.html" title="Свойства Subversion" />
+    <link rel="next" href="svn.intro.html" title="Приложение A. Быстрый старт в Subversion" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Свойства Subversion</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.properties.html">Пред.</a> </td>
+          <th width="60%" align="center">Свойства Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.intro.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svnprops"></a>
+      <div class="titlepage"></div>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>Свойства Subversion — 
+        это свойства, которые определяются Subversion для управления ее поведением.</p>
+      </div>
+      <div class="refsect1">
+        <a id="svn.ref.svnprops.desc"></a>
+        <h2>Описание</h2>
+        <p>Subversion позволяет пользователям использовать любые
+          именнованные версионируемые <a class="link" href="svn.glossary.ru.html#property" title="property">свойства</a>
+          для файлов и каталогов, а так же неверсионируемые для
+          <a class="link" href="svn.glossary.ru.html#revision" title="revision">версий</a>. Ограничения
+          накладываются лишь на свойства с префиксом <span class="quote">«<span class="quote">svn:</span>»</span>.
+          Свойства в этом простанстве имен зарезервированы для
+          самой Subversion. Пользователи могут изменять значения
+          таких свойства для управляния поведение Subversion, но они
+          не должны создавать новых <span class="quote">«<span class="quote">svn:</span>»</span> свойств.</p>
+      </div>
+      <div class="refsect1">
+        <a id="svn.ref.properties.versioned-props"></a>
+        <h2>Версионируемые свойства</h2>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">
+                <code class="literal">svn:executable</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Наличие такого свойства говорит клиенту пометить
+                такой файл как исполняемый в рабочих копиях
+                на Unix машинах. Смотри
+                <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.executable" title="Исполнимость файла">«Исполнимость файла»</a>.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:mime-type</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Будучи задано для файла, определяет
+                MIME тип файла. Это позволяет клиенту решить, что
+                он может без опяски использовать построчное слияние
+                при обновлении. Это свойство также влияет на восприятие
+                файла веб браузером. Смотри
+                <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.mime-type" title="Тип содержимого файла">«Тип содержимого файла»</a>. </p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:ignore</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Будучи задано для <a class="link" href="svn.glossary.ru.html#directory" title="directory">каталога</a>,
+                определяет список шаблонов имен файлов,
+                которые будут игнорироваться <span class="command"><strong>svn status</strong></span>
+                и другими <a class="link" href="svn.glossary.ru.html#subcommand" title="sub~">подкомандами</a>.
+                Смотри
+                <a class="xref" href="svn.advanced.props.special.ignore.html" title="Пропуск неверсионированных элементов">«Пропуск неверсионированных элементов»</a></p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:keywords</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Будучи задано для файла, содержит имена ключевых слов,
+                которые клиент должн разименованы в файле.
+                Смотри
+                <a class="xref" href="svn.advanced.props.special.keywords.html" title="Подстановка ключевых слов">«Подстановка ключевых слов»</a>.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:eol-style</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Значение этого свойства, заданного для файла,
+                указывает клиенту механизм обработки символов конца
+                строк в рабочей копии. Смотри
+                <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.eol-style" title="Символы конца строки">«Символы конца строки»</a>.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:externals</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Будучи задано для <a class="link" href="svn.glossary.ru.html#directory" title="directory">каталога</a>,
+                определяет многострочный список других частей и URL-ов
+                кой клиент также должен включить в рабочую копию. Смотри
+                <a class="xref" href="svn.advanced.externals.html" title="Внешние зависимости">«Внешние зависимости»</a>.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:special</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Наличие этого свойства у файла указывает на то,
+                что он не является обычным файлом. Это может быть
+                символическая ссылка или любой другой специальный
+                объект.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:needs-lock</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Наличие этого свойства у файла, указывает клиенту
+                пометить его в рабочей копии доступным только для чтения,
+                как напоминание о необходимости
+                <a class="link" href="svn.glossary.ru.html#lock" title="lock">заблокировать</a> файл перед его
+                редактированием. Смотри                
+                <a class="xref" href="svn.advanced.locking.html#svn.advanced.locking.lock-communication" title="Lock Communication">«Lock Communication»</a>.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="refsect1">
+        <a id="svn.ref.properties.unversioned-props"></a>
+        <h2>Unversioned Properties</h2>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">
+                <code class="literal">svn:author</code>
+              </span>
+            </dt>
+            <dd>
+              <p>If present, contains the authenticated username of
+                the person who created the revision.  (If not present,
+                then the revision was committed anonymously.)</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:date</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Contains the UTC time the revision was created, in
+                ISO format.  The value comes from the server
+                machine's clock.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:log</code>
+              </span>
+            </dt>
+            <dd>
+              <p>Contains the log message describing the
+                revision.</p>
+            </dd>
+            <dt>
+              <span class="term">
+                <code class="literal">svn:autoversioned</code>
+              </span>
+            </dt>
+            <dd>
+              <p>If present, the revision was created via the
+                autoversioning feature.  See
+                <a class="xref" href="svn.webdav.autoversioning.html" title="Autoversioning">«Autoversioning»</a>.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.properties.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.properties.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.intro.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Свойства Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Приложение A. Быстрый старт в Subversion</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

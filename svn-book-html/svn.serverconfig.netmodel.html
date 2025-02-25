@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Сетевая модель</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.serverconfig.html" title="Глава 6. Настройка сервера" />
+    <link rel="prev" href="svn.serverconfig.overview.html" title="Обзор" />
+    <link rel="next" href="svn.serverconfig.svnserve.html" title="Собственный сервер svnserve" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Сетевая модель</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.serverconfig.overview.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 6. Настройка сервера</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.serverconfig.svnserve.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.serverconfig.netmodel"></a>Сетевая модель</h2>
+          </div>
+        </div>
+      </div>
+      <p>Этот раздел является обсуждением того, как клиент и сервер
+      Subversion взаимодействуют друг с другом, вне зависимости от
+      используемого вами сетевого решения. После прочтения вы будете
+      понимать, как работает сервер, а также знать различные способы
+      конфигурации клиента.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.netmodel.reqresp"></a>Запросы и отклики</h3>
+            </div>
+          </div>
+        </div>
+        <p>Основная часть работы клиента Subversion относится к управлению
+        рабочими копиями. Однако, когда возникает необходимость получить
+        информацию из хранилища, он посылает запрос серверу, а сервер
+        посылает соответствующий ответ. Подробности сетевого протокола
+        невидимы пользователю; клиент пытается установить связь с URL,
+        и, в зависимости от схемы URL, использует соответствующий
+        протокол связи с сервером (смотрите <a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.wc.sb-1" title="URL хранилища">URL хранилища</a>). Пользователи могут
+        использовать команду <span class="command"><strong>svn --version</strong></span> для
+        получения информации о том, с какими схемами URL и протоколами
+        клиент умеет работать.</p>
+        <p>Когда сервер получает запрос от клиента, он требует, чтобы
+        клиент идентифицировал себя. Он отсылает запрос об установлении
+        личности клиента, на что клиент реагирует предоставлением
+        <em class="firstterm">идентификационной информации</em> серверу.
+        После окончания процедуры установления личности сервер отсылает
+        клиенту информацию, которую тот запрашивал. Заметьте, что эта
+        система отличается от таких, как в CVS, где клиент вначале
+        отсылает идентификационную информацию, а потом уже посылает
+        запрос. В Subversion сервер сам получает идентификационную
+        информацию, запрашивая её у клиента тогда, когда ему нужно.
+        Такой способ делает определенные операции более изящными.
+        К примеру, в случае, когда конфигурация сервера открывает доступ
+        для чтения всем без ограничений, и клиент выполняет команду
+        <span class="command"><strong>svn checkout</strong></span>, сервер не будет запрашивать
+        идентификационную информацию для установления личности.</p>
+        <p>Когда клиентский запрос пишет в хранилище новые данные
+        (например <span class="command"><strong>svn commit</strong></span>), создается новое
+        дерево правок. Если клиентский запрос успешно прошел процедуру
+        установления личности, имя пользователя сохраняется как значение
+        свойства <code class="literal">svn:author</code> новой правки (смотрите
+        <a class="xref" href="svn.reposadmin.basics.html#svn.reposadmin.basics.revprops" title="Unversioned Properties">«Unversioned Properties»</a>). Если клиент
+        не был опознан (другими словами, сервер ни разу не послал
+        запрос об установлении личности), то свойство
+        <code class="literal">svn:author</code> остается пустым.
+        <a href="#ftn.idm4312" class="footnote" id="idm4312"><sup class="footnote">[39]</sup></a></p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.serverconfig.netmodel.credcache"></a>Кэширование клиентской идентификационной информации</h3>
+            </div>
+          </div>
+        </div>
+        <p>Многие серверы сконфигурированы таким образом, что они
+        требуют установить личность при каждом запросе. Это может сильно
+        раздражать пользователей, требуя от них ввода пароля еще и еще
+        раз.</p>
+        <p>К счастью, клиент Subversion спасает пользователя от этого:
+        он имеет встроенную систему кэширования идентификационной
+        информации на диск. По умолчанию, каждый раз, когда клиент
+        успешно проходит процедуру установления личности
+        на сервере, он сохраняет идентификационную информацию в области
+        конфигурации — в <code class="filename">~/.subversion/auth/</code>
+        на UNIX-системах и в
+        <code class="filename">%APPDATA%/Subversion/auth/</code> в Windows.
+        (Подробно про область конфигурации смотрите
+        <a class="xref" href="svn.advanced.confarea.html" title="Параметры времени выполнения">«Параметры времени выполнения»</a>). При успешном
+        определении личности идентификационная информация сохраняется на
+        диск с ключом, состоящим из имени хоста, порта и области
+        установления личности.</p>
+        <p>Когда клиент получает запрос об установлении личности,
+        он в первую очередь ищет соответствующую идентификационную
+        информацию в дисковом кеше пользователя; если ее нет в кеше или
+        она не проходит процедуру опознания, клиент просит пользователя
+        ввести необходимую информацию.</p>
+        <p>Люди, помешанные на безопасности, могут подумать: <span class="quote">«<span class="quote">
+        Сохранять пароли на диск? Это ужасно! Вы никогда не должны так
+        делать.</span>»</span> Пожалуйста, успокойтесь, это не так опасно, как
+        кажется.</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>Каталог <code class="filename">auth/</code> защищен системой прав
+            доступа, которая позволяет чтение данных из каталога только
+            его владельцу, и больше никому в мире. Права доступа на уровне
+            операционной системы защищены паролем.</p>
+            </li>
+            <li class="listitem">
+              <p>На операционных системах Windows 2000 и старше Subversion
+            использует стандартные средства шифрования Windows при сохранении
+            пароля на диск. Поскольку ключ шифрования управляется Windows
+            и привязывается к учетной записи пользователя, то только владелец
+            учетной записи может расшифровать сохраненный пароль. (Обратите 
+            внимание: если администратор сменит пароль для учетной записи
+            пользователя все сохраненные на диск пароли станут 
+            недействительными. Клиент Subversion будет вести себя так, словно
+            их не существует, запрашивая пароль, когда он потребуется.)</p>
+            </li>
+            <li class="listitem">
+              <p>Для тех параноиков, которые готовы жертвовать всеми
+            удобствами, предусмотрена возможность отключения механизма
+            кеширования.</p>
+            </li>
+          </ul>
+        </div>
+        <p>Чтобы отключить кеширование для текущей команды, используйте
+        ключ <code class="option">--no-auth-cache</code>.</p>
+        <pre class="screen">
+$ svn commit -F log_msg.txt --no-auth-cache
+Authentication realm: &lt;svn://host.example.com:3690&gt; example realm
+Username:  joe
+Password for 'joe':
+
+Adding         newfile
+Transmitting file data .
+Committed revision 2324.
+
+# password was not cached, so a second commit still prompts us
+
+$ svn delete newfile
+$ svn commit -F new_msg.txt
+Authentication realm: &lt;svn://host.example.com:3690&gt; example realm
+Username:  joe
+…
+</pre>
+        <p>Однако, если вы хотите навсегда отключить механизм
+        кеширования идентификационной информации, вам надо 
+        отредактировать файл <code class="filename">config</code> (находится в
+        каталоге <code class="filename">auth/</code>). Просто установите параметр
+        <code class="literal">store-auth-creds</code> в <code class="literal">no</code>. Всё!
+        Кешироание идентификационной информации на диск отключено!</p>
+        <pre class="screen">
+[auth]
+store-auth-creds = no
+</pre>
+        <p>Иногда требуется удалить идентификационную информацию из
+        кеша. Для этого необходимо вручную удалить соответствующий файл
+        из каталога <code class="filename">auth/</code>. Идентификационная
+        информация хранится в отдельных файлах; если вы просмотрите эти
+        файлы, вы увидите список ключей и их значений. Ключ
+        <code class="literal">svn:realmstring</code> описывает конкретную realm
+        сервера, с которой связан данный файл.</p>
+        <pre class="screen">
+$ ls ~/.subversion/auth/svn.simple/
+5671adf2865e267db74f09ba6f872c28
+3893ed123b39500bca8a0b382839198e
+5c3c22968347b390f349ff340196ed39
+
+$ cat ~/.subversion/auth/svn.simple/5671adf2865e267db74f09ba6f872c28
+
+K 8
+username
+V 3
+joe
+K 8
+password
+V 4
+blah
+K 15
+svn:realmstring
+V 45
+&lt;https://svn.domain.com:443&gt; Joe's repository
+END
+</pre>
+        <p>Вы нашли требуемый файл? Теперь просто удалите его.</p>
+        <p>И последнее о некоторых особенностях идентификации клиента,
+        а именно небольшое разъяснение ключей <code class="option">--username</code>
+        и <code class="option">--password</code>. Многие подкоманды клиента
+        используют эти ключи, однако следует понимать, что использование
+        этих ключей <span class="emphasis"><em>не подразумевает</em></span> автоматическую
+        отсылку идентификационной информации на сервер. Как объяснялось
+        раньше, сервер получает идентификационную информацию от клиента
+        только тогда, когда считает, что это необходимо; клиент не может
+        передать её серверу по своей инициативе. Когда имя пользователя
+        и пароль передаются в ключах, они будут отосланы серверу
+        <span class="emphasis"><em>только</em></span> в том случае, если сервер запросит
+        их.
+
+
+         <a href="#ftn.idm4351" class="footnote" id="idm4351"><sup class="footnote">[40]</sup></a>
+
+
+        Обычно эти ключи используются в следующих случаях:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>пользователь не хочет использовать текущую учетную
+            запись, или</p>
+            </li>
+            <li class="listitem">
+              <p>скрипт хочет пройти опознание личности, не используя
+            сохранённые идентификационные данные.</p>
+            </li>
+          </ul>
+        </div>
+        <p>Вот итоговое описание, как клиент Subversion ведет себя 
+        когда он получает запрос на авторизацию: </p>
+        <div class="orderedlist">
+          <ol class="orderedlist" type="1">
+            <li class="listitem">
+              <p>Проверяет указал ли пользователь любую авторизационную 
+            информацию как параметры командной строки, через 
+            <code class="option">--username</code> и/или <code class="option">--password</code>.  
+            Если нет или если эти параметры не прошли авторизацию, тогда
+            </p>
+            </li>
+            <li class="listitem">
+              <p>Просматривает область сервера в разделе 
+           <code class="filename">auth/</code>
+            на предмет были ли закешированы данные пользователя.  Если 
+            нет, или если закешированные данные пользователя не прошли 
+            авторизацию, тогда</p>
+            </li>
+            <li class="listitem">
+              <p>Обращается с запросом к пользователю.</p>
+            </li>
+          </ol>
+        </div>
+        <p>Если клиент успешно идентифицирован через любой из методов, 
+        перечисленных выше, он будет пытаться закешировать данные 
+        пользователя на диск (за исключением случав, когда пользователь 
+        запретил это поведение, как описывалось ранее).</p>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm4312" class="footnote">
+          <p><a href="#idm4312" class="para"><sup class="para">[39] </sup></a>Эта проблема описана в FAQ, она является результатом
+        плохой конфигурации сервера.</p>
+        </div>
+        <div id="ftn.idm4351" class="footnote">
+          <p><a href="#idm4351" class="para"><sup class="para">[40] </sup></a>И опять-таки, частой ошибкой является 
+           неправильная конфигурация сервера, при которой сервер никогда
+           не посылает запрос об установлении личности. Когда
+           пользователи используют ключи <code class="option">--username</code>
+           и <code class="option">--password</code>, они могут быть неприятно
+           удивлены, увидев, что ключи не используются, что новые правки
+           зафиксированы анонимными пользователями.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.serverconfig.overview.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.serverconfig.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.serverconfig.svnserve.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Обзор </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Собственный сервер svnserve</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

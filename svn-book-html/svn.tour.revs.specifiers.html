@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Способы обозначения правок</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion" />
+    <link rel="prev" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion" />
+    <link rel="next" href="svn.advanced.props.html" title="Свойства" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Способы обозначения правок</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.advanced.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 3. Профессиональное использование Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.props.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.tour.revs.specifiers"></a>Способы обозначения правок</h2>
+          </div>
+        </div>
+      </div>
+      <p>Как вы уже заметили в <a class="xref" href="svn.tour.revs.html" title="Путешествие во времени вместе с Subversion">«Путешествие во времени вместе с Subversion»</a>, 
+      номера правок в Subversion — это не более чем целые числа,
+      монотонно возрастающие при каждой фиксации изменений 
+      версионированных данных. Пройдет совсем немного времени, и вы уже
+      не сможете точно вспомнить, что произошло в каждой из правок.
+      К счастью, типовая практика работы с Subversion не часто 
+      предполагает указание вами конкретных правок, к которым 
+      следует применить ту или иную операцию. 
+      Для операций, которые требуют <span class="emphasis"><em>обязательной</em></span> 
+      ссылки на конкретную правку, чаще всего указывают номер правки,
+      который известен из сообщения о фиксации, вывода некоторых других 
+      операций Subversion или из каких-либо других обстоятельств,
+      которые могли бы дать этот конкретный номер.</p>
+      <p>Однако, иногда у вас может возникнуть необходимость сослаться
+      на момент времени, для которого у вас уже не осталось в памяти 
+      или в записях точного номера правки. Поэтому, кроме целочисленных
+      номеров правок, <span class="command"><strong>svn</strong></span> позволяет использовать
+      дополнительные формы обозначения правок — ключевые 
+      слова и даты правок.</p>
+      <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Note">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Примечание]" src="images/note.png" />
+            </td>
+            <th align="left">Примечание</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>При указании диапазонов правок можно смешивать различные 
+        способы их обозначения, допустимые в Subversion.  Например, вы 
+        можете использовать <code class="option">-r
+        <em class="replaceable"><code>REV1</code></em>:<em class="replaceable"><code>REV2</code></em></code>,
+        где <em class="replaceable"><code>REV1</code></em> — это ключевое слово, 
+        а <em class="replaceable"><code>REV2</code></em> — обычный номер правки, или
+        где <em class="replaceable"><code>REV1</code></em> — дата, а 
+        <em class="replaceable"><code>REV2</code></em> — ключевое слово, и так далее.  
+        Каждое обозначение правки будет интерпретироваться независимо друг 
+        от друга, поэтому вы можете указать по другую сторону от двоеточия 
+        что угодно.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.tour.revs.keywords"></a>Ключевые слова правок</h3>
+            </div>
+          </div>
+        </div>
+        <p>Клиент Subversion понимает ряд 
+        <em class="firstterm">ключевых слов</em>.  Эти ключевые слова можно
+        использовать вместо целочисленных аргументов опции 
+        <code class="option">--revision</code>, при этом Subversion переведет их в 
+        конкретные номера правок:</p>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">HEAD</span>
+            </dt>
+            <dd>
+              <p>Последняя (или <span class="quote">«<span class="quote">самая новая</span>»</span>) правка
+              хранилища</p>
+            </dd>
+            <dt>
+              <span class="term">BASE</span>
+            </dt>
+            <dd>
+              <p>Номер правки элемента в рабочей копии. Если элемент
+              редактировался, то <span class="quote">«<span class="quote">BASE версия</span>»</span> соответствует тому,
+              как выглядел этот элемент до внесения локальных изменений.</p>
+            </dd>
+            <dt>
+              <span class="term">COMMITTED</span>
+            </dt>
+            <dd>
+              <p>Правка, в которой элемент последний раз изменялся
+              (предшествующая либо равная <code class="literal">BASE</code>).</p>
+            </dd>
+            <dt>
+              <span class="term">PREV</span>
+            </dt>
+            <dd>
+              <p>Правка, непосредственно <span class="emphasis"><em>предшествующая</em></span> 
+              той правке, в которой элемент был последний раз изменен. 
+              (То есть, фактически, <code class="literal">COMMITTED</code> - 1.)</p>
+            </dd>
+          </dl>
+        </div>
+        <p>Из данного описания можно сделать очевидный вывод о том, что
+        ключевые слова <code class="literal">PREV</code>, <code class="literal">BASE</code>, 
+        и <code class="literal">COMMITTED</code> могут использоваться только при ссылках 
+        на пути в рабочей копии; они не применимы к URL-адресам хранилища.
+        Напротив, ключевое слово <code class="literal">HEAD</code> можно использовать
+        совместно с обоими типами путей.</p>
+        <p>Ниже приведено несколько примеров использования ключевых слов
+        правок:</p>
+        <pre class="screen">
+$ svn diff --revision PREV:COMMITTED foo.c
+
+# показать последнее изменение, зафиксированное для foo.c
+
+$ svn log --revision HEAD
+
+# показать лог-сообщение для последней фиксации в хранилище
+
+$ svn diff --revision HEAD
+
+# сравнить ваш рабочий файл (с учетом локальных изменений)
+# с последней правкой в хранилище
+
+$ svn diff --revision BASE:HEAD foo.c
+
+# сравнить ваш <span class="quote">«<span class="quote">исходный</span>»</span> foo.c (без учета локальных
+# изменений) с последней версией в хранилище
+
+$ svn log --revision BASE:HEAD
+
+# показать все логи фиксаций со времени вашего последнего обновления
+
+$ svn update --revision PREV foo.c
+
+# отменить последние изменения в foo.c, понизив рабочую правку foo.c
+      
+$ svn diff -r BASE:14 foo.c
+
+# сравнить неизмененную версию foo.c и версию foo.c в правке 14
+</pre>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.tour.revs.dates"></a>Даты правок</h3>
+            </div>
+          </div>
+        </div>
+        <p>Номера правок не несут никакой информации об окружающем мире
+        за пределами системы управления версиями, тогда как вам иногда 
+        требуется сопоставить момент времени в реальной жизни
+        с моментом в истории версий. Чтобы помочь вам в этом, опция
+        <code class="option">--revision</code> допускает указание даты, которую
+        заключают в фигурные скобки (<code class="literal">{</code> и 
+        <code class="literal">}</code>). Subversion принимает дату и время в формате,
+        соответствующем стандарту ISO-8601, а также в некоторых других.
+        Ниже приведено несколько примеров. (Не забывайте брать в кавычки
+        любые даты, содержащие пробелы.)</p>
+        <pre class="screen">
+$ svn checkout -r {2006-02-17}
+$ svn checkout -r {15:30}
+$ svn checkout -r {15:30:00.200000}
+$ svn checkout -r {"2006-02-17 15:30"}
+$ svn checkout -r {"2006-02-17 15:30 +0230"}
+$ svn checkout -r {2006-02-17T15:30}
+$ svn checkout -r {2006-02-17T15:30Z}
+$ svn checkout -r {2006-02-17T15:30-04:00}
+$ svn checkout -r {20060217T1530}
+$ svn checkout -r {20060217T1530Z}
+$ svn checkout -r {20060217T1530-0500}
+…
+</pre>
+        <p>Когда вы указываете дату, Subversion находит в хранилище 
+        наиболее близкую к ней правку, после чего продолжает работу с 
+        вычисленным номером правки. </p>
+        <pre class="screen">
+$ svn log -r {2006-11-28}
+------------------------------------------------------------------------
+r12 | ira | 2006-11-27 12:31:51 -0600 (Mon, 27 Nov 2006) | 6 lines
+…
+</pre>
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Почему Subversion выдает правку за предыдущий день?</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Указав при обращении к правке только дату, без уточнения
+          времени (например, <code class="literal">2006-11-27</code>), вы, 
+          наверное, предположите, что Subversion должен выдать вам последнюю 
+          правку за 27 ноября. 
+          Однако, вместо этого вы можете получить правку за 26-е число или
+          даже более раннюю. Помните, что Subversion будет искать в хранилище
+          правку, <span class="emphasis"><em>наиболее отвечающую</em></span> указанной вами 
+          дате. Если вы укажете дату без уточнения времени,
+          например <code class="literal">2006-11-27</code>, Subversion примет за
+          временную метку 00:00:00, и таким образом поиск ближайшей к 27-му
+          числу правки не даст ничего, относящегося к 27 ноября.</p>
+          <p>Если вам необходимо найти именно 27-е число, вы можете либо
+          указать это число с временной меткой (<code class="literal">{"2006-11-27
+          23:59"}</code>), либо просто использовать в запросе следующий
+          день (<code class="literal">{2006-11-28}</code>).</p>
+        </div>
+        <p>Также вы можете задавать диапазоны дат. Subversion
+        найдет все правки между обеими датами включительно:</p>
+        <pre class="screen">
+$ svn log -r {2006-11-20}:{2006-11-29}
+…
+</pre>
+        <div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Warning">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Предупреждение]" src="images/warning.png" />
+              </td>
+              <th align="left">Предупреждение</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Временн<span class="emphasis"><em>ы</em></span>е метки правок 
+          сохраняются как их неверсионированные изменяемые свойства 
+          (см. <a class="xref" href="svn.advanced.props.html" title="Свойства">«Свойства»</a> ). Исходя из этого, 
+          изменением временн<span class="emphasis"><em>ы</em></span>х меток можно легко 
+          исказить истинную хронологию, или даже удалить совсем информацию
+          о времени правки.  Это может привести
+          к неожиданным результатам при внутреннем преобразовании
+          дат в номера правок, выполняемом Subversion.</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.advanced.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.advanced.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.props.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Глава 3. Профессиональное использование Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Свойства</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
