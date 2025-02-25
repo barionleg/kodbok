@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Пропуск неверсионированных элементов</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion" />
+    <link rel="prev" href="svn.advanced.props.file-portability.html" title="Переносимость файлов" />
+    <link rel="next" href="svn.advanced.props.special.keywords.html" title="Подстановка ключевых слов" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Пропуск неверсионированных элементов</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.advanced.props.file-portability.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 3. Профессиональное использование Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.props.special.keywords.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.advanced.props.special.ignore"></a>Пропуск неверсионированных элементов</h2>
+          </div>
+        </div>
+      </div>
+      <p>В любой реальной рабочей копии среди версионированных
+      файлов и каталогов почти наверняка обнаружатся и другие файлы и
+      каталоги, которые не версионированы и не должны быть 
+      таковыми. Текстовые редакторы мусорят, создавая каталоги с 
+      резервными копиями файлов. Компиляторы программного кода
+      генерируют временные — или даже результирующие —
+      файлы, которые обычно нет смысла версионировать. Сами 
+      пользователи также бросают различные файлы и каталоги там,
+      где им проще — в том числе нередко и в каталогах
+      рабочей копии.</p>
+      <p>Было бы нелепо ожидать, что рабочие копии Subversion окажутся
+      в стороне от такого рода мусора и беспорядка. При этом
+      Subversion считает своей важной <span class="emphasis"><em>особенностью</em></span> то, 
+      что ее рабочие копии являются самыми обычными каталогами, такими же
+      как и неверсионированные структуры каталогов. Однако не подлежащие
+      версионированию файлы и каталоги могут вызывать у пользователей
+      Subversion некоторое раздражение. Например, поскольку команды 
+      <span class="command"><strong>svn add</strong></span> и <span class="command"><strong>svn import</strong></span> 
+      по умолчанию действуют рекурсивно и не знают, какие
+      из вновь созданных файлов в данном каталоге вы не собираетесь
+      версионировать, очень легко случайно добавить под версионный 
+      контроль всякий хлам, о котором вы даже не думали. Кроме того, 
+      много лишнего может выводить команда <span class="command"><strong>svn status</strong></span>,
+      поскольку по умолчанию она выдает отчет по каждому
+      элементу в рабочей копии, включая неверсионированные файлы
+      и каталоги.</p>
+      <p>Исходя из этого, Subversion поддерживает два способа для того,
+      чтобы указать, на какие файлы желательно просто не обращать
+      внимание. Первый способ затрагивает систему настройки
+      среды исполнения Subversion 
+      (см. <a class="xref" href="svn.advanced.confarea.html" title="Параметры времени выполнения">«Параметры времени выполнения»</a>), и,
+      следовательно, применяется ко всем операциям Subversion,
+      использующим эти настройки среды исполнения (которые, как правило,
+      производятся на конкретном компьютере или конкретным пользователем
+      компьютера). Другой способ использует поддерживаемые в Subversion
+      свойства каталогов, он более тесно связан с 
+      самим версионированным деревом каталогов и, следовательно,
+      действует для всех, кто оперирует рабочей копией этого дерева. 
+      Оба механизма используют маски файлов.</p>
+      <p>Система настройки среды исполнения Subversion 
+      имеет параметр <code class="literal">global-ignores</code>, 
+      значением которой служит разделенный пробелами набор масок 
+      файлов. Эти маски применяются к файлам, являющимся кандидатами
+      на добавление под версионный контроль, а также к неверсионированным
+      файлам, попадающим в поле зрения команды <span class="command"><strong>svn status</strong></span>.
+      Если имя файла соответствуют одной из масок, Subversion будет
+      действовать так, как будто файла вовсе не существует.
+      Это действительно полезно для масок файлов, которые вы однозначно
+      не хотите версионировать — например, файлов резервных копий,
+      создаваемых редакторами, таких как файлы <code class="literal">*~</code> 
+      и <code class="literal">.*~</code> от Emacs.</p>
+      <p>Свойство <code class="literal">svn:ignore</code>, задаваемое для
+      версионированного каталога, содержит список масок файлов
+      (каждая маска записывается с новой строки), с помощью которого
+      Subversion должна определять, какие объекты следует игнорировать
+      в этом каталоге. Эти маски не переопределяют те, что заданы
+      параметром среды исполнения <code class="literal">global-ignores</code>,
+      а дополняют их. Стоит отметить, что в отличие от параметра 
+      <code class="literal">global-ignores</code>, маски, перечисленные в свойстве
+      <code class="literal">svn:ignore</code>, применяются только к тому каталогу, 
+      в свойстве которого они заданы, не затрагивая любые его подкаталоги.
+      Свойство <code class="literal">svn:ignore</code> — это хороший способ
+      попросить Subversion пропускать файлы, которые, вероятно,
+      присутствуют во всех пользовательских рабочих копиях —
+      например, результаты компиляции или, если взять пример, более 
+      подходящий этой книге, файлы HTML, PDF или PostScript,
+      генерируемые в результате преобразования исходных файлов
+      формата DocBook XML в более удобный для чтения выходной формат.</p>
+      <div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Warning">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Предупреждение]" src="images/warning.png" />
+            </td>
+            <th align="left">Предупреждение</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>Реализованная в Subverion поддержка масок пропуска файлов
+        действует только в момент добавления 
+        неверсионированного файла или каталога под версионный контроль. 
+        Если объект уже находится под управлением Subversion, 
+        механизм масок пропуска больше к нему не применяется.
+        Иными словами, не следует ожидать, что Subversion не будет
+        фиксировать изменения, сделанные в версионированном файле,
+        только на том основании, что его имя соответствует
+        маске пропуска — Subversion <span class="emphasis"><em>всегда</em></span> 
+        просматривает все версионированные объекты.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="sidebar">
+        <div class="titlepage">
+          <div>
+            <div>
+              <p class="title">
+                <strong>Маски пропуска для пользователей CVS</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>Свойство <code class="literal">svn:ignore</code> в Subversion по 
+        синтаксису и назначению очень похоже на файл 
+        <code class="filename">.cvsignore</code> в CVS.  По сути, если
+        вы переносите свою рабочую копию в Subversion, вы можете 
+        перенести маски пропуска напрямую, используя файл 
+        <code class="filename">.cvsignore</code> в качестве входного для команды
+        <span class="command"><strong>svn propset</strong></span>:</p>
+        <pre class="screen">
+$ svn propset svn:ignore -F .cvsignore .
+property 'svn:ignore' set on '.'
+$
+</pre>
+        <p>Тем не менее, в работе CVS и Subversion с масками пропуска имеются
+        некоторые отличия. Системы используют маски пропуска в несколько 
+        различные моменты времени, и есть небольшое различие
+        в том, как эти маски применяются. Также Subversion не понимает
+        использование маски <code class="literal">!</code> как способа
+        полного отказа от масок пропуска.</p>
+      </div>
+      <p>Глобальный список масок пропуска в большей степени подходит
+      для задания личных предпочтений, и завязан больше на
+      конкретный набор пользовательских инструментов, чем на 
+      специфику конкретной рабочей копии. Исходя из этого,
+      остаток данной главы будет посвящен использованию свойства
+      <code class="literal">svn:ignore</code>.</p>
+      <p>Допустим, что команда <span class="command"><strong>svn status</strong></span> выдает 
+      нам следующее:</p>
+      <pre class="screen">
+$ svn status calc
+ M     calc/button.c
+?      calc/calculator
+?      calc/data.c
+?      calc/debug_log
+?      calc/debug_log.1
+?      calc/debug_log.2.gz
+?      calc/debug_log.3.gz
+</pre>
+      <p>В примере видно, что вы изменили некоторые свойства файла 
+      <code class="filename">button.c</code>, и, кроме того, в рабочей копии
+      есть несколько неверсионированных файлов: программа 
+      <code class="filename">calculator</code>, скомпилированная из
+      исходных кодов, файл исходного кода <code class="filename">data.c</code>
+      и набор файлов с отладочными сообщениями. Вам известно, что 
+      ваша система сборки всегда генерирует программу с именем
+      <code class="filename">calculator</code>.
+      <a href="#ftn.idm1926" class="footnote" id="idm1926"><sup class="footnote">[17]</sup></a>
+      Также вам известно, что после тестового прогона всегда остаются
+      те самые файлы с отладочными сообщениями. Это справедливо
+      не только для вашей, но и для всех остальных рабочих копий 
+      данного проекта.
+      Вы точно знаете, что вам не хотелось бы видеть эти отладочные
+      файлы при каждом запуске команды <span class="command"><strong>svn status</strong></span>, 
+      и вы абсолютно уверены, что так же их не хотелось бы видеть и 
+      остальным. Исходя из этого, можно добавить необходимые маски 
+      пропуска для каталога <code class="filename">calc</code>, выполнив
+      команду <span class="command"><strong>svn propedit svn:ignore calc</strong></span>.
+      Например, вы могли бы добавить в значение свойства 
+      <code class="literal">svn:ignore</code> такие строки:</p>
+      <pre class="programlisting">
+calculator
+debug_log*
+</pre>
+      <p>Результатом добавления этого свойства станет локальное 
+      изменение свойств в каталоге <code class="filename">calc</code>.  
+      Обратите внимание, чем еще отличается теперь вывод 
+      команды <span class="command"><strong>svn status</strong></span>:</p>
+      <pre class="screen">
+$ svn status
+ M     calc
+ M     calc/button.c
+?      calc/data.c
+</pre>
+      <p>Заметьте, весь "мусор" исчез из вывода!  Конечно, скомпилированная
+      программа <code class="filename">calculator</code> и упоминавшиеся файлы 
+      отладочных сообщений никуда не делись из вашей рабочей копии.
+      Просто Subversion больше не напоминает вам об их существовании. Теперь, 
+      когда весь не представляющий интереса "мусор" исчез с экрана, вам 
+      остается разобраться с более интересными элементами — в частности,
+      с исходным файлом <code class="filename">data.c</code>, который вы, вероятно,
+      забыли добавить под версионный контроль.</p>
+      <p>Конечно же, вам доступен не только этот короткий отчет 
+      о статусе вашей рабочей копии. Если в какой-то момент времени вам
+      действительно захочется увидеть в составе статусного отчета 
+      проигнорированные файлы, вы можете воспользоваться опцией
+      <code class="option">--no-ignore</code>:</p>
+      <pre class="screen">
+$ svn status --no-ignore
+ M     calc
+ M     calc/button.c
+I      calc/calculator
+?      calc/data.c
+I      calc/debug_log
+I      calc/debug_log.1
+I      calc/debug_log.2.gz
+I      calc/debug_log.3.gz
+</pre>
+      <p>Как отмечалось выше, список файловых масок для пропуска 
+      также учитывается командами <span class="command"><strong>svn add</strong></span> и <span class="command"><strong>svn
+      import</strong></span>.  В результате обеих операций Subversion
+      берет под управление некоторое множество файлов и каталогов.
+      Прежде чем требовать у пользователя, чтобы он выбирал те файлы 
+      в структуре каталогов, которые необходимо версионировать,
+      Subversion применяет маски пропуска — как глобальные,
+      так и назначенные отдельным каталогам — чтобы определить,
+      какие файлы не должны подхватываться системой управления версиями
+      в ходе рекурсивной операции добавления или импорта. И снова вы можете
+      воспользоваться опцией <code class="option">--no-ignore</code>, чтобы предложить
+      Subversion не учитывать списки пропуска и обрабатывать все имеющиеся
+      файлы и каталоги.</p>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm1926" class="footnote">
+          <p><a href="#idm1926" class="para"><sup class="para">[17] </sup></a>Это все, что создает система сборки?</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.advanced.props.file-portability.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.advanced.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.props.special.keywords.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Переносимость файлов </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Подстановка ключевых слов</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

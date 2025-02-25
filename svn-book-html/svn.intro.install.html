@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Установка Subversion</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.intro.html" title="Приложение A. Быстрый старт в Subversion" />
+    <link rel="prev" href="svn.intro.html" title="Приложение A. Быстрый старт в Subversion" />
+    <link rel="next" href="svn.intro.quickstart.html" title="Быстрый старт в Subversion" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Установка Subversion</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.intro.html">Пред.</a> </td>
+          <th width="60%" align="center">Приложение A. Быстрый старт в Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.intro.quickstart.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.intro.install"></a>Установка Subversion</h2>
+          </div>
+        </div>
+      </div>
+      <p>Subversion построена на слое переносимости под названием
+      APR (the Apache Portable Runtime library). Библиотека APR предоставляет
+      все интерфейсы, необходимые для функционирования Subversion под
+      управлением различных операционных систем: доступ к жесткому диску,
+      доступ к сети, управление памятью, и тому подобное. Не смотря на то,
+      что Subversion может использовать Apache как сервер, ее зависимость
+      от Apache <span class="emphasis"><em>не означает</em></span> того, что Apache
+      является необходимым компонентом. APR представляет собой отдельную
+      библиотеку, которую может использовать любое приложение. Кроме прочего,
+      это означает, что как и Apache, Subversion клиенты и серверы работают
+      на любой операционной системе на которой работает httpd сервер Apache:
+      Windows, Linux, все разновидности BSD, MacOS X, Netware и другие.
+    </p>
+      <p>Наиболее простой способ получить Subversion - скачать бинарный
+      пакет, собранный для вашей операционной системы. Как правило, эти
+      пакеты присланные волонтерами, доступны для загрузки с веб-сайта
+      Subversion (<a class="ulink" href="http://subversion.tigris.org" target="_top">http://subversion.tigris.org</a>). Сайт обычно
+      содержит графический инсталлятор для пользователей операционных
+      систем Microsoft. Если вы используете Unix-подобную ОС то для получения
+      Subversion вы можете использовать пакетную систему, специфичную для
+      вашей системы (RPM, DEB, ports tree и т. д.).
+    </p>
+      <p>В качестве альтернативного варианта вы можете построить Subversion
+      прямо из исходного кода. Закачайте с web-сайта Subversion последний
+      релиз исходного кода. После его распаковки для его сборки
+      следуйте инструкциям в файле <code class="filename">INSTALL</code>. Обратите
+      внимание, что такой пакет содержит все необходимое для сборки клиента командной строки,
+      способного работать с удаленным хранилищем (обычно это библиотеки apr,
+      apr-util и  neon). Однако некоторые опциональные части Subversion имеют
+      много других зависимостей, таких как Berkeley DB и возможно Apache httpd.
+      Если вы хотите выполнить полную сборку, убедитесь, что у вас есть все
+      пакеты, указанные в файле <code class="filename">INSTALL</code>.</p>
+      <p>Если вы один из тех, кто предпочитает использовать максимально современное
+      програмное обеспечение, вы можете получить исходники Subversion прямо из репозитория
+      Subversion. Само собой, чтобы сделать это, необходимо чтобы у вас уже был клиент Subversion.
+      Затем вы можете создать рабочую копию репозитория исходного кода Subversion из
+      <a class="ulink" href="http://svn.collab.net/repos/svn/trunk/" target="_top">http://svn.collab.net/repos/svn/trunk/</a>:
+      <a href="#ftn.idm9044" class="footnote" id="idm9044"><sup class="footnote">[58]</sup></a></p>
+      <pre class="screen">
+$ svn checkout http://svn.collab.net/repos/svn/trunk subversion
+A    subversion/HACKING
+A    subversion/INSTALL
+A    subversion/README
+A    subversion/autogen.sh
+A    subversion/build.conf
+…
+</pre>
+      <p>
+      Приведенная выше команда создаст последнюю версию исходного кода
+      Subversion в поддиректории <code class="filename">subversion</code> вашей 
+      рабочей директории. Очевидно, вы можете скорректировать последний
+      аргумент так как вам нужно. Хотя независимо от того как вы назовете 
+      директорию с новой рабочей копией, после того как эта операция завершится,
+      у вас будут исходики Subversion. Конечно, вам все еще необходимо получить
+      несколько вспомогательных библиотек (apr, apr-util, и так далее.)
+      —Чтобы узнать детали, обратитесь к файлу <code class="filename">INSTALL</code> каталоге верхнего 
+      уровня вашей рабочей копии.
+    </p>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm9044" class="footnote">
+          <p><a href="#idm9044" class="para"><sup class="para">[58] </sup></a>Обратите внимание, что URL в указаном примере окнчивается не директорией <code class="literal">svn</code>, 
+        а поддиректорией <code class="literal">trunk</code>. Смотрите обсуждение модели ветвления и меток Subversion,
+        для выяснения причин этого.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.intro.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.intro.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.intro.quickstart.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Приложение A. Быстрый старт в Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Быстрый старт в Subversion</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

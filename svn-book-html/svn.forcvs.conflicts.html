@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Conflict Resolution</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.forcvs.html" title="Приложение B. Subversion для пользователей CVS" />
+    <link rel="prev" href="svn.forcvs.properties.html" title="Metadata Properties" />
+    <link rel="next" href="svn.forcvs.binary-and-trans.html" title="Binary Files and Translation" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Conflict Resolution</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.forcvs.properties.html">Пред.</a> </td>
+          <th width="60%" align="center">Приложение B. Subversion для пользователей CVS</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.forcvs.binary-and-trans.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.forcvs.conflicts"></a>Conflict Resolution</h2>
+          </div>
+        </div>
+      </div>
+      <p>CVS marks conflicts with in-line <span class="quote">«<span class="quote">conflict
+      markers</span>»</span>, and prints a <code class="literal">C</code> during an
+      update.  Historically, this has caused problems, because CVS
+      isn't doing enough.  Many users forget about (or don't see) the
+      <code class="literal">C</code> after it whizzes by on their terminal.
+      They often forget that the conflict-markers are even present,
+      and then accidentally commit files containing
+      conflict-markers.</p>
+      <p>Subversion solves this problem by making conflicts more
+      tangible.  It remembers that a file is in a state of conflict,
+      and won't allow you to commit your changes until you run
+      <span class="command"><strong>svn resolved</strong></span>.  See <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.resolve" title="Разрешение конфликтов (при слиянии с чужими изменениями)">«Разрешение конфликтов (при слиянии с чужими 
+        изменениями)»</a> for more details.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.forcvs.properties.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.forcvs.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.forcvs.binary-and-trans.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Metadata Properties </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Binary Files and Translation</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

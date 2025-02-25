@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Внешние зависимости</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion" />
+    <link rel="prev" href="svn.advanced.locking.html" title="Locking" />
+    <link rel="next" href="svn.advanced.pegrevs.html" title="Стержневые и оперативные правки" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Внешние зависимости</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.advanced.locking.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 3. Профессиональное использование Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.pegrevs.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.advanced.externals"></a>Внешние зависимости</h2>
+          </div>
+        </div>
+      </div>
+      <p>Иногда полезно иметь рабочую копию, собранную из разных источников.
+      К примеру, может понадобиться, чтобы различные рабочие подкаталоги
+      выгружались из разных каталогов хранилища, или даже из разных хранилищ.
+      Безусловно, всё это можно сделать вручную, с помощью вызовов команды
+      <span class="command"><strong>svn checkout</strong></span> создав рабочую копию с нужной структурой.
+      Но, ели подобная структура требуется всем пользователям хранилища, 
+      каждому из них нужно будет повторить все те же операции по созданию
+      рабочей копии, которые делали вы сами.</p>
+      <p>Чтобы этого избежать, Subversion обеспечивает поддержку
+      <em class="firstterm">внешних зависимостей</em>. Внешняя зависимость 
+      является сопоставлением локального каталога к URL  
+      версионированного каталога (или к его конкретной правке). Групповое 
+      объявление внешних зависимостей делается в Subversion при помощи 
+      свойства <code class="literal">svn:externals</code>. Установка и редактирование 
+      этого свойства выполняется с помощью команд
+      <span class="command"><strong>svn propset</strong></span> и <span class="command"><strong>svn propedit</strong></span>
+      (см. <a class="xref" href="svn.advanced.props.html#svn.advanced.props.manip" title="Использование свойств">«Использование свойств»</a>). Свойство может быть 
+      установлено для любого версионированного каталога, значение свойства 
+      представляет собой таблицу с путями к подкаталогам (относительно того 
+      каталога, для которого это свойство устанавливается) и полными 
+      абсолютными URL в Subversion-хранилище.</p>
+      <pre class="screen">
+$ svn propget svn:externals calc
+third-party/sounds             http://sounds.red-bean.com/repos
+third-party/skins              http://skins.red-bean.com/repositories/skinproj
+third-party/skins/toolkit -r21 http://svn.red-bean.com/repos/skin-maker
+</pre>
+      <p>Удобство свойства <code class="literal">svn:external</code> заключается в том,
+      что после его задания для версионированного каталога все, кто будет
+      создавать рабочую копию с этим каталогом, получат возможность пользоваться
+      преимуществами внешней зависимости. Другими словами, после того как 
+      кто-то из участников проекта обозначил необходимую структуру рабочей
+      копии, больше никому не придется об этом беспокоиться — при 
+      создании рабочей копии Subversion, кроме оригинальных данных, сделает 
+      рабочие копии данных, определенных как внешние зависимости.</p>
+      <p>Посмотрите на предыдущий пример с внешними зависимостями. Когда 
+      кто-нибудь будет создавать рабочую копию каталога
+      <code class="filename">calc</code>, Subversion создаст, в том числе, и копии
+      элементов, определенных как внешние зависимости.</p>
+      <pre class="screen">
+$ svn checkout http://svn.example.com/repos/calc
+A  calc
+A  calc/Makefile
+A  calc/integer.c
+A  calc/button.c
+Checked out revision 148.
+
+Fetching external item into calc/third-party/sounds
+A  calc/third-party/sounds/ding.ogg
+A  calc/third-party/sounds/dong.ogg
+A  calc/third-party/sounds/clang.ogg
+…
+A  calc/third-party/sounds/bang.ogg
+A  calc/third-party/sounds/twang.ogg
+Checked out revision 14.
+
+Fetching external item into calc/third-party/skins
+…
+</pre>
+      <p>Если необходимо изменить внешние зависимости, сделать это можно с 
+      помощью обычных команд редактирования свойств. После того как вы 
+      зафиксируете изменения свойства <code class="literal">svn:externals</code>, 
+      при следующем запуске
+      <span class="command"><strong>svn update</strong></span> Subversion синхронизирует 
+      существующие копии элементов в соответствии с внесенными во внешние 
+      зависимости изменениями. Тоже самое произойдет и когда другие 
+      участники проекта обновят свои рабочие копии и получат изменения во
+      внешних зависимостях.</p>
+      <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Tip">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Подсказка]" src="images/tip.png" />
+            </td>
+            <th align="left">Подсказка</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>Учитывая, что свойство <code class="literal">svn:externals</code> имеет 
+        многострочное значение, крайне рекомендуется вместо команды
+        <span class="command"><strong>svn propset</strong></span> использовать
+        <span class="command"><strong>svn propedit</strong></span>.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Tip">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Подсказка]" src="images/tip.png" />
+            </td>
+            <th align="left">Подсказка</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>Вам стоит всерьез подумать про использование явно указанного
+        номера правки для всех внешних зависимостей. Поступая таким образом, 
+        вы сможете выбирать момент перехода на другой снимок внешней 
+        информации и явно указывать какой это будет снимок. Кроме того что это 
+        позволяет избежать получения неожиданных изменений из сторонних 
+        хранилищ, которые вы, возможно, никак не контролируете, явное указание
+        номера правки означает, что откат вашей рабочей копии к более ранней
+        правке приведет к откату и для внешних зависимостей, к тому состоянию,
+        в котором они были в той, предыдущей, правке, то есть это значит, что
+        внешние рабочие копии будут выглядеть так, как <span class="emphasis"><em>они</em></span>
+        выглядели на момент той правки вашего хранилища. Для программных
+        проектов это может быть вопросом удачной или неудачной сборки старого
+        снимка сложной и запутанной базы программного кода.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <p>Команда <span class="command"><strong>svn status</strong></span> умеет определять внешние 
+      зависимости, показывая код статуса <code class="literal">X</code> для 
+      подкаталогов, выгруженных из внешних зависимостей, и рекурсивно 
+      проходя по этим подкаталогам для отображения статуса самих внешних
+      элементов.</p>
+      <p>Вместе с тем, текущая реализация поддержки внешних зависимостей
+      в Subversion может вводить в заблуждение. Во-первых, внешние зависимости
+      могут указывать только на папки, но не на файлы. Во-вторых, внешние 
+      зависимости не могут указывать на относительные пути (например, 
+      такие как <code class="filename">../../skins/myskin</code>).  В-третьих, 
+      рабочие копии, созданные через внешние зависимости, являются оторванными от 
+      первичной рабочей копии (от того каталога, для которого установлено
+      свойство <code class="literal">svn:externals</code>). А Subversion полноценно
+      работает только на неотсоединенных рабочих копиях. Это означает, что
+      если вы захотите зафиксировать изменения, сделанные в одной или
+      нескольких таких рабочих копиях, вам придется принудительно выполнять
+      команду <span class="command"><strong>svn commit</strong></span> для этих рабочих копий — 
+      фиксация в первичной рабочей копии не распространяется на внешние 
+      зависимости.</p>
+      <p>Кроме того, поскольку зависимости используют абсолютные URL,
+      перемещение или копирование папки, к которой они присоединены, не
+      будет влиять на то, что будет выгружаться из хранилища в виде
+      внешней зависимости (при этом, локальные подкаталоги, назначенные
+      как целевые для внешних зависимостей, при переименовании родительского
+      каталога будут, естественно, перемещены вместе с ним).
+      В определенных ситуациях это может сбивать с толку и запутывать.
+      Например, у вас есть корневой каталог <code class="filename">my-project</code>
+      и для одного из его подкаталогов (<code class="filename">my-project/some-dir</code>)
+      вы назначаете внешнюю зависимость, отслеживающую изменения другого
+      подкаталога (<code class="filename">my-project/external-dir</code>).</p>
+      <pre class="screen">
+$ svn co http://svn.example.com/projects .
+A    my-project
+A    my-project/some-dir
+A    my-project/external-dir
+…
+Fetching external item into 'my-project/some-dir/subdir'
+Checked out external at revision 11.
+
+Checked out revision 11.
+$ svn pget svn:externals my-project/some-dir
+subdir http://svn.example.com/projects/my-project/external-dir
+
+$
+</pre>
+      <p>Переименуем с помощью команды <span class="command"><strong>svn move</strong></span> 
+      каталог <code class="filename">my-project</code>. Теперь 
+      внешние зависимости продолжают продолжают указывать на путь в каталоге
+     <code class="filename">my-project</code>, а самого этого каталога уже не 
+     существует.</p>
+      <pre class="screen">
+$ svn mv -q my-project renamed-project
+$ svn ci -m "Rename my-project to renamed-project."
+Deleting       my-project
+Adding         my-renamed-project
+
+Committed revision 12.
+$ svn up
+
+Fetching external item into 'renamed-project/some-dir/subdir'
+svn: Target path does not exist
+$
+</pre>
+      <p>Тот факт, что внешние зависимости используют абсолютные URL, может 
+      вызвать проблемы при работе с хранилищами, доступными через несколько
+      URL-схем. Интересная проблема может возникнуть, если, например, сервер 
+      Subversion позволяет любому пользователю создать рабочую копию, подключившись
+      через <code class="literal">http://</code> или <code class="literal">https://</code>, а
+      фиксации позволяет выполнять только через <code class="literal">https://</code>.
+      Если внешние зависимости используют <code class="literal">http://</code> вариант 
+      URL хранилища, то для рабочих копий, созданных для этих внешних 
+      зависимостей, нельзя будет выполнить фиксацию изменений. С другой 
+      стороны, если использовался <code class="literal">https://</code> вариант URL, то 
+      пользователи, которые создают рабочую копию через
+      <code class="literal">http://</code> потому, что их клиент не поддерживает
+      <code class="literal">https://</code>, не смогут получить внешние элементы.
+      Обратите внимание и на то, что при переопределении рабочей копии
+      (с помощью команды <span class="command"><strong>svn --relocate</strong></span>) внешние 
+      зависимости <span class="emphasis"><em>не</em></span> будут переопределены.</p>
+      <p>Наконец, могут быть ситуации, в которых предпочтительно, чтобы
+      подкоманды <span class="command"><strong>svn</strong></span> не идентифицировали и не оперировали
+      рабочими копиями, созданными как внешние зависимости. Для таких
+      случаев при вызове подкоманды можно использовать параметр
+      <code class="option">--ignore-externals</code>.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.advanced.locking.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.advanced.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.pegrevs.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Locking </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Стержневые и оперативные правки</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

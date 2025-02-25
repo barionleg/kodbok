@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Поддержка веток</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние" />
+    <link rel="prev" href="svn.branchmerge.tags.html" title="Метки" />
+    <link rel="next" href="svn.advanced.vendorbr.html" title="Vendor branches" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Поддержка веток</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.branchmerge.tags.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 4. Ветвление и слияние</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.vendorbr.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.branchmerge.maint"></a>Поддержка веток</h2>
+          </div>
+        </div>
+      </div>
+      <p>Сейчас вы уже понимаете, что Subversion очень гибкая система.
+      Учитывая то, что ветки и метки имеют одну и ту же основу (копии
+      директорий), а также то, что ветки и метки являются обычными элементами
+      файловой системы, Subversion многих пугает. Она
+      <span class="emphasis"><em>слишком</em></span> гибкая. В этом разделе мы предложим
+      несколько советов по компоновке и поддержке информации с течением
+      времени.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.maint.layout"></a>Структура хранилища</h3>
+            </div>
+          </div>
+        </div>
+        <p>Существует несколько стандартных, рекомендуемых способов
+        организации хранилища. Как правило, создается директория
+        <code class="filename">trunk</code>, в которой находится
+        <span class="quote">«<span class="quote">главная линия</span>»</span> разработки, директория
+        <code class="filename">branches</code> для хранения веток и директория
+        <code class="filename">tags</code> для хранения меток. Если хранилище
+        содержит только один проект, обычно создают три директории
+        верхнего уровня:</p>
+        <pre class="screen">
+/trunk
+/branches
+/tags
+</pre>
+        <p>Если хранилище содержит несколько проектов, администратор,
+        обычно создает такую структуру для каждого проекта отдельно
+        (за более подробной информацией о <span class="quote">«<span class="quote">корне проекта</span>»</span>
+        обратитесь в раздел <a class="xref" href="svn.reposadmin.projects.html#svn.reposadmin.projects.chooselayout" title="Choosing a Repository Layout">«Choosing a Repository Layout»</a>):</p>
+        <pre class="screen">
+/paint/trunk
+/paint/branches
+/paint/tags
+/calc/trunk
+/calc/branches
+/calc/tags
+</pre>
+        <p>Конечно, вы можете не использовать такие типовые структуры.
+        Вы можете сделать любую разновидность, которая будет удобна для вас
+        или вашей команды. Помните о том, какой бы вы выбор не сделали,
+        он может быть не окончательным. Хранилище можно реорганизовать в
+        любое время. Учитывая то, что ветки и метки являются обычными
+        директориями, команда <span class="command"><strong>svn move</strong></span> может переместить
+        или переименовать их по вашему усмотрению. Переход от одной структуры
+        к другой означает просто несколько последовательных передвижек
+        на сервере; если организация хранилища вам не нравится, просто
+        поменяйте местами директории.</p>
+        <p>Однако не забывайте о том, что несмотря на легкость перемещения
+        директорий, нужно помнить и о других пользователях. Ваши перестановки
+        могут дезориентировать пользователей с существующими рабочими копиями.
+        Если у пользователя есть рабочая копия отдельной директории хранилища,
+        то ваше использование <span class="command"><strong>svn move</strong></span> может удалить этот
+        путь из последней правки. Когда в очередной раз пользователь запустит
+        <span class="command"><strong>svn update</strong></span>, он будет проинформирован о том, что
+        его рабочая копия отражает путь, который больше не существует,
+        и пользователь будет вынужден переключиться (<span class="command"><strong>svn
+        switch</strong></span>) на новое местоположение.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.maint.lifetime"></a>Продолжительность жизни информации</h3>
+            </div>
+          </div>
+        </div>
+        <p>Еще одним замечательным свойством модели Subversion
+        является то, что ветки и метки могут иметь конечную
+        продолжительность жизни, так же как и все другие версионированные
+        элементы. Например, предположим вы наконец закончили все работы
+        в ваше личной ветке проекта <code class="filename">calc</code>. После
+        объединения изменений с  <code class="filename">/calc/trunk</code>,
+        нет причин продолжать хранить эту ветку:</p>
+        <pre class="screen">
+$ svn delete http://svn.example.com/repos/calc/branches/my-calc-branch \
+             -m "Removing obsolete branch of calc project."
+
+Committed revision 375.
+</pre>
+        <p>Больше вашей ветки не существует. Конечно, на самом деле она
+        не исчезла: просто ее больше нет в правке <code class="literal">HEAD</code>,
+        она больше никого не отвлекает. Если воспользоваться командами
+        <span class="command"><strong>svn checkout</strong></span>, <span class="command"><strong>svn switch</strong></span>
+        или <span class="command"><strong>svn list</strong></span> для обращения к ранним правкам,
+        свою старую ветку вы увидите.</p>
+        <p>Если просмотра удаленной директории не достаточно, вы всегда
+        можете восстановить эту директорию. Восстановление информации в
+        Subversion выполнить очень просто. Если есть директория или файл,
+        который вы хотите вернуть обратно в <code class="literal">HEAD</code>,
+        просто воспользуйтесь <span class="command"><strong>svn copy -r</strong></span> для того,
+        что бы скопировать его из старой правки:</p>
+        <pre class="screen">
+$ svn copy -r 374 http://svn.example.com/repos/calc/branches/my-calc-branch \
+                  http://svn.example.com/repos/calc/branches/my-calc-branch
+
+Committed revision 376.
+</pre>
+        <p>В нашем примере ваша личная ветка имеет относительно
+        короткую продолжительность жизни: возможно она создавалась
+        для того, что бы исправить ошибку или реализовать новую функцию.
+        После того, как работа завершена, завершена и ветка. При разработке
+        программного обеспечения, тем не менее, часто имеют две
+        <span class="quote">«<span class="quote">главных</span>»</span> ветки, существующих рядом довольно долгое
+        время. Допустим, пришло время выпустить релиз стабильной версии
+        проекта <code class="filename">calc</code>, а вы знаете, что нужна будет пара
+        месяцев для того, что бы вытрясти из программы последние ошибки.
+        Разработчики не должны добавлять в проект новых функции, но при этом
+        и работа не должна останавливаться. В подобной ситуации создается
+        <span class="quote">«<span class="quote">стабильная</span>»</span> ветка программы, которая существенно
+        изменяться уже не будет:</p>
+        <pre class="screen">
+$ svn copy http://svn.example.com/repos/calc/trunk \
+         http://svn.example.com/repos/calc/branches/stable-1.0 \
+         -m "Creating stable branch of calc project."
+
+Committed revision 377.
+</pre>
+        <p>После этого, разработчикам ничего не мешает продолжать добавлять
+        в <code class="filename">/calc/trunk</code> новые передовые (или экспериментальные)
+        функции, а в правилах проекта можно указать, что в
+        <code class="filename">/calc/branches/stable-1.0</code> должны фиксироваться
+        только исправления ошибок. По мере того, как будет продвигаться
+        работа над главной линией разработки, исправленные ошибки будут
+        выборочно портироваться в стабильную ветку. Даже после выхода релиза
+        стабильной ветки, она может продолжать поддерживаться долгое время
+        — столько, сколько этот релиз будет продолжать поддерживаться
+        для пользователей.</p>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.branchmerge.tags.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.branchmerge.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.vendorbr.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Метки </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Vendor branches</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

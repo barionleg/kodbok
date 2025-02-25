@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>svn delete</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.svn.html#svn.ref.svn.c" title="Подкоманды svn" />
+    <link rel="prev" href="svn.ref.svn.c.copy.html" title="svn copy" />
+    <link rel="next" href="svn.ref.svn.c.diff.html" title="svn diff" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">svn delete</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.svn.c.copy.html">Пред.</a> </td>
+          <th width="60%" align="center">Подкоманды <span class="command"><strong>svn</strong></span></th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.ref.svn.c.diff.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svn.c.delete"></a>
+      <div class="titlepage"></div>
+      <a id="idm6491" class="indexterm"></a>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>svn delete — Удаляет объект из рабочей копии
+            или хранилища.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6498"></a>
+        <h2>Формат</h2>
+        <pre class="programlisting">svn delete PATH...</pre>
+        <pre class="programlisting">svn delete URL...</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6502"></a>
+        <h2>Описание</h2>
+        <p>Объекты определенные через <em class="replaceable"><code>PATH</code></em>
+            вносятся в план удаления следующей фиксацией изменений.
+            При этом файлы под контролем версий удаляются из рабочей копии
+            немедленно. Команда не удаляет версионированные или модифицированные
+            объекты. Если вы этого необходимо—используйте параметр
+            <code class="option">--force</code>.</p>
+        <p>Объекты определенные через <em class="replaceable"><code>URL</code></em>
+            сразу же фиксируются как удаленные. При использовании в
+            команде нескольких URL - удаление фиксируется атомарно.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6509"></a>
+        <h2>Альтернативные имена</h2>
+        <p>del, remove, rm</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6512"></a>
+        <h2>Изменяет</h2>
+        <p>Рабочую копию в случае работы с файлами и хранилище при
+            использовании URL</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6515"></a>
+        <h2>Требует доступа к хранилищу</h2>
+        <p>Только в случае работы с URL</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6518"></a>
+        <h2>Параметры</h2>
+        <pre class="screen">
+--force
+--force-log
+--message (-m) TEXT
+--file (-F) FILE
+--quiet (-q)
+--targets FILENAME
+--username USER
+--password PASS
+--no-auth-cache
+--non-interactive
+--editor-cmd EDITOR
+--encoding ENC
+--config-dir DIR
+</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6521"></a>
+        <h2>Примеры</h2>
+        <p>Использование <span class="command"><strong>svn</strong></span> для удаления файла
+            из вашей рабочей копии на самом деле только планирует
+            его на удаление. Только фиксируя изменения вы удаляете
+            файл из хранилища.</p>
+        <pre class="screen">
+$ svn delete myfile
+D         myfile
+
+$ svn commit -m "Deleted file 'myfile'."
+Deleting       myfile
+Transmitting file data .
+Committed revision 14.
+</pre>
+        <p>Так как удаление по URL отражается в хранилище сразу,
+            вам необходимо задать комментарий:</p>
+        <pre class="screen">
+$ svn delete -m "Deleting file 'yourfile'" file:///tmp/repos/test/yourfile
+
+Committed revision 15.
+</pre>
+        <p>Это пример принудительного удаления версионированного
+            файла который был локально изменен:</p>
+        <pre class="screen">
+$ svn delete over-there
+svn: Attempting restricted operation for modified resource
+svn: Use --force to override this restriction
+svn: 'over-there' has local modifications
+
+$ svn delete --force over-there
+D         over-there
+</pre>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.svn.c.copy.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.svn.html#svn.ref.svn.c">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.ref.svn.c.diff.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">svn copy </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> svn diff</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

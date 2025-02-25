@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Как читать эту книгу?</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.preface.html" title="Об этой книге" />
+    <link rel="prev" href="svn.preface.audience.html" title="Для кого написана эта книга?" />
+    <link rel="next" href="svn.preface.conventions.html" title="Соглашения, принятые в книге" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Как читать эту книгу?</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.preface.audience.html">Пред.</a> </td>
+          <th width="60%" align="center">Об этой книге</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.preface.conventions.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.preface.howread"></a>Как читать эту книгу?</h2>
+          </div>
+        </div>
+      </div>
+      <p>Книга предназначена для людей с самым разным уровнем
+      подготовки — от новичков, не имевших дела с управлением
+      версиями ранее, до опытных системных администраторов. Важность
+      той или иной главы для читателя будет зависеть от уровня его подготовки.
+      Приведём наши рекомендации для разных групп читателей:</p>
+      <div class="variablelist">
+        <dl class="variablelist">
+          <dt>
+            <span class="term">Опытные системные администраторы</span>
+          </dt>
+          <dd>
+            <p>Предполагается, что читатели этой группы раннее уже
+            использовали систему управления версиями и теперь им не терпится
+            поднять сервер Subversion как можно скорее.
+            В <a class="xref" href="svn.reposadmin.html" title="Глава 5. Администрирование хранилища">Глава 5, <em>Администрирование хранилища</em></a>
+            и <a class="xref" href="svn.serverconfig.html" title="Глава 6. Настройка сервера">Глава 6, <em>Настройка сервера</em></a> показано, как
+            создать первое хранилище и сделать его доступным в сети.
+            Далее можно перейти к изучению клиента Subversion, причём чтение
+            <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a> и <a class="xref" href="svn.forcvs.html" title="Приложение B. Subversion для пользователей CVS">Приложение B, <em>Subversion для пользователей CVS</em></a>
+            будет наиболее быстрым путём к цели.</p>
+          </dd>
+          <dt>
+            <span class="term">Новички</span>
+          </dt>
+          <dd>
+            <p>По-видимому, администратор уже установил Subversion в
+            сети и вам необходимо научиться пользоваться клиентом. Если
+            вы раньше не пользовались системой управления версиями,
+            то <a class="xref" href="svn.basic.html" title="Глава 1. Фундаментальные понятия">Глава 1, <em>Фундаментальные понятия</em></a> будет необходимым введением.
+            А <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a> содержит основные сведения о клиенте
+            Subversion.</p>
+          </dd>
+          <dt>
+            <span class="term">Продвинутые пользователи</span>
+          </dt>
+          <dd>
+            <p>Рано или поздно ваш проект будет разрастаться, и тогда,
+            независимо от того, администратор вы или пользователь, вам
+            потребуется узнать, как делать в Subversion более сложные
+            вещи: использовать ветки и осуществлять слияния (<a class="xref" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние">Глава 4, <em>Ветвление и слияние</em></a>), работать со свойствами 
+            (<a class="xref" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion">Глава 3, <em>Профессиональное использование Subversion</em></a>), настраивать рабочую среду
+            (<a class="xref" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion">Глава 3, <em>Профессиональное использование Subversion</em></a>) и т.д. Эти главы не являются
+            важными в самом начале работы, но их следует прочесть, когда
+            вы разберётесь с основами.</p>
+          </dd>
+          <dt>
+            <span class="term">Разработчики</span>
+          </dt>
+          <dd>
+            <p>Предполагается, что вы уже знакомы с Subversion и хотите
+            либо расширить её, либо создать новое программное
+            обеспечение на основе её многочисленных
+            API<a href="#ftn.idm124" class="footnote" id="idm124"><sup class="footnote">[2]</sup></a>. Что ж,
+            <a class="xref" href="svn.developer.html" title="Глава 8. Информация для разработчиков">Глава 8, <em>Информация для разработчиков</em></a> написана именно для вас.</p>
+          </dd>
+        </dl>
+      </div>
+      <p>Книга завершается справочным материалом — <a class="xref" href="svn.ref.html" title="Глава 9. Полное справочное руководство по Subversion">Глава 9, <em>Полное справочное руководство по Subversion</em></a> представляет собой справочное руководство
+      по всем командам Subversion, а несколько полезных тем раскрыто в
+      приложениях. К этим разделам вы скорее всего будете обращаться
+      уже после прочтения книги.</p>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm124" class="footnote">
+          <p><a href="#idm124" class="para"><sup class="para">[2] </sup></a>Application Program
+            Interface, интерфейс прикладного
+            программирования</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.preface.audience.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.preface.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.preface.conventions.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Для кого написана эта книга? </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Соглашения, принятые в книге</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

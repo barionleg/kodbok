@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>svn cleanup</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.svn.html#svn.ref.svn.c" title="Подкоманды svn" />
+    <link rel="prev" href="svn.ref.svn.c.checkout.html" title="svn checkout" />
+    <link rel="next" href="svn.ref.svn.c.commit.html" title="svn commit" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">svn cleanup</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.svn.c.checkout.html">Пред.</a> </td>
+          <th width="60%" align="center">Подкоманды <span class="command"><strong>svn</strong></span></th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.ref.svn.c.commit.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svn.c.cleanup"></a>
+      <div class="titlepage"></div>
+      <a id="idm6325" class="indexterm"></a>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>svn cleanup — Рекурсивно чистит рабочую копию.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6332"></a>
+        <h2>Формат</h2>
+        <pre class="programlisting">svn cleanup [PATH...]</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6335"></a>
+        <h2>Описание</h2>
+        <p>Рекурсивно чистит рабочую копию, удаляя блокировки
+            и выполняет незавершенные операции. Как только столкнетесь
+            с ошибкой <span class="quote">«<span class="quote">рабочая копия заблокирована</span>»</span>, запустите
+            эту подкоманду для удаления старых блокировок и приведения
+            рабочей копии в работоспособное состояние.</p>
+        <p>Если по некоторым причинам команда
+            <span class="command"><strong>svn update</strong></span> завершилась с ошибкой из-за проблем
+            с запущенным внешней программой различий (например, из-за
+            пользовательского ввода или сбоя в сети), нужно задать
+            параметр <code class="option">--diff3-cmd</code> чтобы дать возможность при
+            чистке копии завершить слияние используя внешнюю программу diff.
+            Вы также можете указать конфигурационный каталог посредством
+            параметра <code class="option">--config-dir</code>, но постарайтесь не
+            злоупотреблять этими параметрами.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6343"></a>
+        <h2>Альтернативные имена</h2>
+        <p>Нет</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6346"></a>
+        <h2>Изменяет</h2>
+        <p>Рабочую копию.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6349"></a>
+        <h2>Требует доступа к хранилищу</h2>
+        <p>Нет</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6352"></a>
+        <h2>Параметры</h2>
+        <pre class="screen">
+--diff3-cmd CMD
+--config-dir DIR
+</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6355"></a>
+        <h2>Примеры</h2>
+        <p>Не много примеров использования подкоманды <span class="command"><strong>svn
+            cleanup</strong></span> можно привести, так как она работает молча. Если
+            вы не указали <em class="replaceable"><code>PATH</code></em>, будет
+            использовано <span class="quote">«<span class="quote"><code class="filename">.</code></span>»</span> .</p>
+        <pre class="screen">
+$ svn cleanup
+
+$ svn cleanup /path/to/working-copy
+</pre>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.svn.c.checkout.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.svn.html#svn.ref.svn.c">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.ref.svn.c.commit.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">svn checkout </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> svn commit</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

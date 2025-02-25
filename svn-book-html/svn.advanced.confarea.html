@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Параметры времени выполнения</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.customization.html" title="Глава 7. Профессиональная настройка Subversion" />
+    <link rel="prev" href="svn.customization.html" title="Глава 7. Профессиональная настройка Subversion" />
+    <link rel="next" href="svn.advanced.l10n.html" title="Localization" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Параметры времени выполнения</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.customization.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 7. Профессиональная настройка Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.l10n.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.advanced.confarea"></a>Параметры времени выполнения</h2>
+          </div>
+        </div>
+      </div>
+      <p>Subversion имеет множество контролируемых пользователем
+      опциональных параметров поведения. Возможно пользователь
+      хотел бы применять некоторые из этих параметров во всех
+      операциях Subversion. Поэтому для того, что бы не заставлять
+      пользователей помнить ключи командной строки используемые для
+      указания этих параметров и не указывать их при всех выполняемых
+      операциях, Subversion использует конфигурационные файлы, выделенные
+      в область конфигурации Subversion.</p>
+      <p><em class="firstterm">Область конфигурации</em> Subversion
+      имеет двухуровневую иерархию имен параметров и их значений.
+      Как правило, она сводится к отдельной директории, содержащей
+      <em class="firstterm">конфигурационные файлы</em> (первый уровень)
+      являющиеся простыми текстовыми файлами в стандартном INI формате
+      (с <span class="quote">«<span class="quote">разделами</span>»</span>, обеспечивающими второй уровень).
+      Эти файлы содержат директивы используемые клиентом для определения
+      поведения клиента предпочитаемого пользователем, и могут быть легко
+      отредактированы используя ваш любимый редактор (например, Emacs
+      или vi).</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.confarea.layout"></a>Структура области конфигурации</h3>
+            </div>
+          </div>
+        </div>
+        <p>Во время первого запуска клиент для командной строки
+        <span class="command"><strong>svn</strong></span> создает отдельную для каждого пользователя
+        область конфигурации. На Unix-подобных системах эта директория
+        называется <code class="filename">.subversion</code> и находиться в домашней
+        директории пользователя. На Win32 системах Subversion создает
+        папку с именем <code class="filename">Subversion</code> в области
+        <code class="filename">Application Data</code> директории с профилем
+        пользователя (которая, кстати говоря, обычно является скрытой
+        директорией). Однако на этой платформе точное местоположение
+        отличается от системы к системе и указывается в реестре
+        Windows. <a href="#ftn.idm5106" class="footnote" id="idm5106"><sup class="footnote">[48]</sup></a>
+        При обращении к пользовательской области конфигурации мы будем
+        использовать ее Unix-название.</p>
+        <p>В дополнение к пользовательской области конфигурации,
+        Subversion использует общесистемную область конфигурации. Это
+        дает возможность системным администраторам устанавливать
+        параметры по умолчанию для всех пользователей отдельно взятой
+        машины. Помните, что системная область конфигурации не
+        устанавливает безоговорочные правила — параметры, заданные
+        пользовательской конфигурацией переопределяют системные параметры,
+        а аргументы командной строки, передаваемые программе
+        <span class="command"><strong>svn</strong></span>, имеют последнее слово. На Unix-подобных
+        платформах ожидаемым местоположением системной области конфигурации
+        является директория <code class="filename">/etc/subversion</code>; на
+        Windows машинах ищется директория <code class="filename">Subversion</code>
+        внутри общесистемной области <code class="filename">Application Data</code>
+        (также определяемой реестром). В отличие от пользовательской,
+        системную область конфигурации <span class="command"><strong>svn</strong></span> не
+        создает.</p>
+        <p>На сегодняшний момент пользовательская область конфигурации
+        содержит три файла — два файла конфигурации
+        (<code class="filename">config</code> и <code class="filename">servers</code>) и
+        <code class="filename">README.txt</code>, который содержит описание INI формата.
+        После их создания, эти файлы содержат значения по умолчанию для всех,
+        поддерживаемых Subversion параметров, обычно закомментированных и
+        объединенных с текстовым описанием значений ключей, влияющих на
+        поведение Subversion. Для того, что бы изменить отдельный параметр все,
+        что нужно, просто загрузить соответствующий файл в текстовый редактор
+        и изменить значение нужного параметра. Если в какой-то момент вы
+        захотите восстановить параметры по умолчанию, необходимо просто
+        удалить (или переименовать) директорию с конфигурацией, после чего
+        выполнить какую-то безобидную команду <span class="command"><strong>svn</strong></span>,
+        например, <span class="command"><strong>svn --version</strong></span>. В результате будет
+        создана новая директория с конфигурацией и содержимым по
+        умолчанию.</p>
+        <p>Кроме того, пользовательская область конфигурации содержит
+        кеш идентификационной информации. Директория <code class="filename">auth</code>
+        объединяет набор поддиректорий, содержащих кешированну информацию,
+        используемую в различных, поддерживаемых Subversion методах
+        авторизации. Эта директория создается так, что бы только сам
+        пользователь имел право просматривать ее содержимое.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.confarea.windows-registry"></a>Конфигурация и реестр Windows</h3>
+            </div>
+          </div>
+        </div>
+        <p>В дополнение к обычным INI-настройкам, Subversion-клиент,
+        работающий на платформе Windows, может использовать для
+        хранения настроек Windows-реестр. Имена параметров и их значения
+        точно такие же, как и в INI-файлах. Иерархия <span class="quote">«<span class="quote">файлов</span>»</span>
+        сохраняется, только немного меняется способ адресации —
+        файлы и разделы просто заменяются уровнями в дереве ключей
+        реестра.</p>
+        <p>За общесистемными настройками Subversion обращается к ключу
+        <code class="literal">HKEY_LOCAL_MACHINE\Software\Tigris.org\Subversion</code>
+        Например, параметр <code class="literal">global-ignores</code>, находящийся в
+        разделе <code class="literal">miscellany</code> файла
+        <code class="filename">config</code> будет находиться в <code class="literal">HKEY_LOCAL_MACHINE\Software\Tigris.org\Subversion\Config\Miscellany\global-ignores</code>. Пользовательские настройки хранятся в ключе
+        <code class="literal">HKEY_CURRENT_USER\Software\Tigris.org\Subversion</code>.
+      </p>
+        <p>Параметры конфигурации, указанные в реестре обрабатываются
+        <span class="emphasis"><em>до</em></span> эквивалентных параметров в файлах
+        конфигурации, поэтому они заменяются значениями, найденными,
+        в файлах конфигурации. Другими словами, на Windows-системе
+        приоритеты расположены в следующем порядке:</p>
+        <div class="orderedlist">
+          <ol class="orderedlist" type="1">
+            <li class="listitem">
+              <p>Параметры командной строки</p>
+            </li>
+            <li class="listitem">
+              <p>Пользовательские INI-файлы</p>
+            </li>
+            <li class="listitem">
+              <p>Параметры в реестре</p>
+            </li>
+            <li class="listitem">
+              <p>Системные INI-файлы</p>
+            </li>
+            <li class="listitem">
+              <p>Общесистемные параметры в реестре</p>
+            </li>
+          </ol>
+        </div>
+        <p>Кроме того, реестр Windows не поддерживает механизма
+        <span class="quote">«<span class="quote">комментирования</span>»</span>. Тем не менее, Subversion
+        игнорирует параметры, у которых имена начинаются с
+        символа <span class="quote">«<span class="quote">решетка</span>»</span> (<code class="literal">#</code>).
+        Это позволяет закомментировать параметр, не удаляя ключ из
+        реестра, что значительно упрощает процесс восстановления этого
+        параметра.</p>
+        <p>Клиент для командной строки <span class="command"><strong>svn</strong></span>
+        никогда ничего не записывает и не создает первоначальные
+        <span class="quote">«<span class="quote">умолчательные</span>»</span> параметры в реестре Windows.
+        Нужные вам ключи вы можете создать используя программу
+        <span class="command"><strong>REGEDIT</strong></span>. Либо, можно создать
+        <code class="filename">.reg</code>-файл и двойным щелчком на этом файле
+        в Explorer добавить информацию в реестр.</p>
+        <div class="example">
+          <a id="svn.advanced.confarea.windows-registry.ex-1"></a>
+          <p class="title">
+            <strong>Пример 7.1. Пример указания параметров в (.reg) файле реестра.</strong>
+          </p>
+          <div class="example-contents">
+            <pre class="programlisting">
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Tigris.org\Subversion\Servers\groups]
+
+[HKEY_LOCAL_MACHINE\Software\Tigris.org\Subversion\Servers\global]
+"#http-proxy-host"=""
+"#http-proxy-port"=""
+"#http-proxy-username"=""
+"#http-proxy-password"=""
+"#http-proxy-exceptions"=""
+"#http-timeout"="0"
+"#http-compression"="yes"
+"#neon-debug-mask"=""
+"#ssl-authority-files"=""
+"#ssl-trust-default-ca"=""
+"#ssl-client-cert-file"=""
+"#ssl-client-cert-password"=""
+
+[HKEY_CURRENT_USER\Software\Tigris.org\Subversion\Config\auth]
+"#store-auth-creds"="no"
+
+[HKEY_CURRENT_USER\Software\Tigris.org\Subversion\Config\helpers]
+"#editor-cmd"="notepad"
+"#diff-cmd"=""
+"#diff3-cmd"=""
+"#diff3-has-program-arg"=""
+
+[HKEY_CURRENT_USER\Software\Tigris.org\Subversion\Config\miscellany]
+"#global-ignores"="*.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store"
+"#log-encoding"=""
+"#use-commit-times"=""
+"#template-root"=""
+"#enable-auto-props"=""
+
+[HKEY_CURRENT_USER\Software\Tigris.org\Subversion\Config\tunnels]
+
+[HKEY_CURRENT_USER\Software\Tigris.org\Subversion\Config\auto-props]
+</pre>
+          </div>
+        </div>
+        <br class="example-break" />
+        <p>В предыдущем примере показано содержимое
+        <code class="filename">.reg</code>-файла, содержащего часто используемые
+        параметры и их значения по умолчанию. Обратите внимание, что
+        приведены как общесистемные (сетевые настройки, относящиеся к
+        прокси-серверу) и пользовательские параметры (программы-редакторы
+        и сохранение паролей, среди прочего). Так же обратите внимание,
+        что все параметры закомментированы. Необходимо будет просто удалить
+        символ <span class="quote">«<span class="quote">решетка</span>»</span> (<code class="literal">#</code>) и установить
+        нужное значение.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.confarea.opts"></a>Параметры конфигурации</h3>
+            </div>
+          </div>
+        </div>
+        <p>В этом разделе рассматриваются поддерживаемые
+        Subversion параметры времени выполнения.</p>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.advanced.confarea.opts.servers"></a>Servers</h4>
+              </div>
+            </div>
+          </div>
+          <p>В файле <code class="filename">servers</code> находятся настройки,
+          относящиеся к работе Subversion через сеть. Он содержит
+          два специальных раздела — <code class="literal">groups</code> и
+          <code class="literal">global</code>. Раздел <code class="literal">groups</code>
+          представляет собой просто перекрестную таблицу. Ключи этого
+          раздела являются именами последующих разделов файла; значения
+          ключей представляют собой <em class="firstterm">обобщения</em> —
+          текстовые блоки, которые могут содержать подстановочные символы
+          — сравниваемые с именами машин, к которым Subversion
+          направляет запросы.</p>
+          <pre class="programlisting">
+[groups]
+beanie-babies = *.red-bean.com
+collabnet = svn.collab.net
+
+[beanie-babies]
+…
+
+[collabnet]
+…
+</pre>
+          <p>При работе через сеть, Subversion ищет совпадения между
+          именем сервера, с которым устанавливается связь и именем группы
+          в разделе <code class="literal">groups</code>. Если найдено совпадение,
+          Subversion обращается к файлу <code class="filename">servers</code>,
+          к разделу с именем, совпадающим с именем группы. Из этого раздела
+          берутся необходимые сетевые настройки.</p>
+          <p>Раздел <code class="literal">global</code> содержит настройки,
+          используемые для всех серверов, не подпадающих ни под одно
+          обобщение раздела <code class="literal">groups</code>. Здесь указываются
+          те-же, что и для остальных серверных разделов файла параметры
+          (конечно, за исключением специального раздела
+          <code class="literal">groups</code>), используемые параметры приведены
+          ниже:</p>
+          <div class="variablelist">
+            <dl class="variablelist">
+              <dt>
+                <span class="term">
+                  <code class="literal">http-proxy-host</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает имя компьютера-посредника, через который
+                Subversion должна отправлять HTTP-запросы. По умолчанию,
+                этот параметр имеет пустое значение, которое говорит
+                Subversion о том, что она должна направлять HTTP-запросы
+                не через компьютер-посредник, а связываться с целевой машиной
+                напрямую.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">http-proxy-port</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает номер используемого порта на промежуточном
+                компьютере. По умолчанию имеет пустое значение.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">http-proxy-username</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает имя пользователя, передаваемого
+                компьютеру-посреднику. По умолчанию имеет пустое
+                значение.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">http-proxy-password</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает пароль, передаваемый
+                компьютеру-посреднику. По умолчанию имеет пустое
+                значение.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">http-timeout</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает, в секундах, промежуток времени ожидания
+                ответа сервера. Если при низкоскоростном сетевом соединении
+                у вас возникает проблема превышения времени ожидания,
+                следует увеличить это значение. Значение по умолчанию
+                <code class="literal">0</code> означает для низлежащей HTTP библиотеки,
+                Neon, использовать свое собственное значение времени
+                ожидания.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">http-compression</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Указывает, должна или нет Subversion использовать
+                сжатие сетевых запросов, выполняющихся к DAV-серверам.
+                Значением по умолчанию является <code class="literal">yes</code>
+                (однако выполняться сжатие будет только если такая
+                возможность поддерживается сетевым слоем). Установите
+                этот параметр в <code class="literal">no</code>, для отключения
+                сжатия, например при отладке сетевых транзакций.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">neon-debug-mask</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Целочисленная маска, которая используется низлежащей
+                HTTP-библиотекой, Neon, для определения типа выводимой
+                отладочной информации. По умолчанию установлено значение
+                <code class="literal">0</code>, скрывающие весь отладочный вывод.
+                Подробнее о том как Subversion использует Neon читайте в
+                разделе <a class="xref" href="svn.developer.html" title="Глава 8. Информация для разработчиков">Глава 8, <em>Информация для разработчиков</em></a>.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">ssl-authority-files</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Разделенный точкой с запятой перечень путей к файлам,
+                содержащим сертификаты авторизации (или CAs), используемые
+                Subversion-клиентом при обращении к хранилищу через
+                HTTPS.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">ssl-trust-default-ca</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Установите значение этой переменной в
+                <code class="literal">yes</code>, если хотите чтобы Subversion
+                автоматически доверяла набору поставляемых вместе
+                с OpenSSL сертификатов (CAs).</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">ssl-client-cert-file</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Если хост (или хосты) требуют SSL сертификат клиента,
+                у вас будет запрошен путь к вашему сертификату. Установите
+                значение этой переменной и Subversion сможет автоматически
+                находить ваш сертификат, без запроса. Нет стандартного места
+                для хранения сертификата на диске; Subversion будет
+                использовать тот, который располагается по указанному вами
+                пути.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">ssl-client-cert-password</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Если ваш клиентский SSL сертификат защищен паролем,
+                при обращении к нему Subversion запросит у вас пароль.
+                Если это вам надоедает (и вас не пугает хранить пароль
+                в файле <code class="filename">servers</code>), можно присвоить
+                значению этой переменной пароль сертификата. После этого
+                пароль больше запрашиваться не будет.</p>
+              </dd>
+            </dl>
+          </div>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.advanced.confarea.opts.config"></a>Config</h4>
+              </div>
+            </div>
+          </div>
+          <p>Остальные доступные параметры времени выполнения Subversion,
+          не относящиеся к сетевой работе, находятся в файле
+          <code class="filename">config</code>. В данный момент существует всего
+          несколько параметров, но они тоже сгруппированы в разделы,
+          в расчете на их увеличение в будущем.</p>
+          <p>Раздел <code class="literal">auth</code> содержит параметры, относящиеся
+          к аутентификации и авторизации в хранилище. Он содержит:</p>
+          <div class="variablelist">
+            <dl class="variablelist">
+              <dt>
+                <span class="term">
+                  <code class="literal">store-passwords</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Устанавливает, используется или не используется
+                кеширование паролей, введенных пользователем в ответ на
+                запрос при аутентификации на сервере. Значением по умолчанию
+                является <code class="literal">да</code>. Для запрета кеширования
+                паролей на диск установите этот параметр в
+                <code class="literal">нет</code>. Для отдельного запуска
+                <span class="command"><strong>svn</strong></span> этот параметр можно переопределить,
+                используя параметр командной строки
+                <code class="option">--no-auth-cache</code> (для тех команд, которые его
+                поддерживают). За более подробной информацией обратитесь к
+                разделу <a class="xref" href="svn.serverconfig.netmodel.html#svn.serverconfig.netmodel.credcache" title="Кэширование клиентской идентификационной информации">«Кэширование клиентской идентификационной информации»</a>.
+              </p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">store-auth-creds</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Этот параметр такой же как и
+                <code class="literal">store-passwords</code>, за исключением того,
+                что он разрешает или запрещает дисковое кеширование
+                <span class="emphasis"><em>всей</em></span> информации для аутентификации:
+                имен пользователей, паролей, серверных сертификатов и всей
+                другой кешируемой информации.</p>
+              </dd>
+            </dl>
+          </div>
+          <p>Раздел <code class="literal">helpers</code> определяет, какие внешние
+          приложения, при выполнении своих задач, будет использовать
+          Subversion. Доступные параметры:</p>
+          <div class="variablelist">
+            <dl class="variablelist">
+              <dt>
+                <span class="term">
+                  <code class="literal">editor-cmd</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Определяет программу, которую будет использовать
+                Subversion для ввода лог сообщений, в тех случаях, когда
+                <span class="command"><strong>svn commit</strong></span> используется без параметров
+                <code class="option">--message</code> (<code class="option">-m</code>) или
+                <code class="option">--file</code> (<code class="option">-F</code>). Эта же
+                программа используется с командой <span class="command"><strong>svn
+                propedit</strong></span> — вызывается временный файл,
+                содержащий текущее значение редактируемого пользователем
+                свойства и редактирование выполняется прямо в
+                программе-редакторе (см. <a class="xref" href="svn.advanced.props.html" title="Свойства">«Свойства»</a>). По умолчанию значение
+                этого свойства не установлено. Порядок определения
+                используемого редактора следующий:</p>
+                <div class="orderedlist">
+                  <ol class="orderedlist" type="1">
+                    <li class="listitem">
+                      <p>Command-line option <code class="literal">--editor-cmd</code></p>
+                    </li>
+                    <li class="listitem">
+                      <p>Environment variable <code class="literal">SVN_EDITOR</code></p>
+                    </li>
+                    <li class="listitem">
+                      <p>Configuration option <code class="literal">editor-cmd</code></p>
+                    </li>
+                    <li class="listitem">
+                      <p>Environment variable <code class="literal">VISUAL</code></p>
+                    </li>
+                    <li class="listitem">
+                      <p>Environment variable <code class="literal">EDITOR</code></p>
+                    </li>
+                    <li class="listitem">
+                      <p>Possibly, a default value built in to Subversion
+                    (not present in the official builds)</p>
+                    </li>
+                  </ol>
+                </div>
+                <p>The value of any of these options or variables is
+                (unlike <code class="literal">diff-cmd</code>) the beginning of a
+                command line to be executed by the shell.  Subversion
+                appends a space and the pathname of the temporary file to be
+                edited.  The editor should modify the temporary file and
+                return a zero exit code to indicate success.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">diff-cmd</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Здесь указывается абсолютный путь к программе
+                определения отличий, используемой, Subversion для
+                <span class="quote">«<span class="quote">diff</span>»</span>-вывода (такого как при использовании
+                команды <span class="command"><strong>svn diff</strong></span>). По умолчанию для
+                определения отличий Subversion использует внутреннюю
+                библиотеку — установка этого параметра
+                заставит ее использовать внешнюю программу. Подробнее
+                об использовании таких программ читайте в разделе
+                <a class="xref" href="svn.advanced.externaldifftools.html" title="Using External Differencing Tools">«Using External Differencing Tools»</a>.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">diff3-cmd</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Здесь указывается абсолютный путь к программе
+                трехстороннего сравнения. Subversion использует эту
+                программу при объединении изменений, сделанных
+                пользователем, с теми, которые были получены из
+                хранилища. По умолчанию для определения отличий Subversion
+                использует внутреннюю библиотеку — установка этого
+                параметра заставит ее использовать внешнюю программу.
+                Подробнее об использовании таких программ читайте в разделе
+                <a class="xref" href="svn.advanced.externaldifftools.html" title="Using External Differencing Tools">«Using External Differencing Tools»</a>.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">diff3-has-program-arg</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Этот флаг должен быть установлен в
+                <code class="literal">true</code> если программа, указанная в
+                параметре <code class="literal">diff3-cmd</code> использует
+                параметр командной строки
+                <code class="option">--diff-program</code>.</p>
+              </dd>
+            </dl>
+          </div>
+          <p>Раздел <code class="literal">tunnels</code> позволяет определить
+          новые схемы туннелирования при использовании
+          <span class="command"><strong>svnserve</strong></span> и клиентских подключений через
+          <code class="literal">svn://</code>. За более подробной информацией
+          обращайтесь в раздел <a class="xref" href="svn.serverconfig.svnserve.html#svn.serverconfig.svnserve.sshauth" title="SSH идентификация и авторизация">«SSH идентификация и авторизация»</a>.</p>
+          <p>Все что не попало в другие разделы собирается в разделе
+          <code class="literal">miscellany</code><a href="#ftn.idm5335" class="footnote" id="idm5335"><sup class="footnote">[49]</sup></a>. В этом разделе можно найти:</p>
+          <div class="variablelist">
+            <dl class="variablelist">
+              <dt>
+                <span class="term">
+                  <code class="literal">global-ignores</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Про выполнении команды <span class="command"><strong>svn status</strong></span>,
+                Subversion перечисляет не версионированные файлы и
+                директории вместе с версионированными, отмечая их
+                символом <code class="literal">?</code> (см. <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.examine.status" title="svn status">«<span class="command"><strong>svn status</strong></span>»</a>). Просмотр
+                не интересных, не версионированных элементов при просмотре
+                может раздражать — например объектные файлы, полученные
+                в результате компиляции программы. Параметр
+                <code class="literal">global-ignores</code> является перечислением
+                разделннных пробелом обобщений, представляющих имена файлов и
+                директорий которые Subversion не должна показывать, если они
+                не версионированны. Значением, присвоенным по умолчанию,
+                является <code class="literal">*.o *.lo *.la #*# .*.rej *.rej .*~ *~
+                .#* .DS_Store</code>.</p>
+                <p>Также как и <span class="command"><strong>svn status</strong></span>, команды
+                <span class="command"><strong>svn add</strong></span> и <span class="command"><strong>svn import</strong></span>
+                при просмотре директорий тоже игнорируют файлы, подходящие
+                к этому списку. Можно переопределить этот параметр, используя
+                флаг командной строки <code class="option">--no-ignore</code>. Более
+                подробнее о контроле игнорирования см. <a class="xref" href="svn.advanced.props.special.ignore.html" title="Пропуск неверсионированных элементов">«Пропуск неверсионированных элементов»</a>.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">enable-auto-props</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Определяет автоматическую установку свойств
+                для вновь добавляемых или импортированных файлов.
+                Значением по умолчанию является <code class="literal">no</code>,
+                поэтому для разрешения авто-свойств установите
+                <code class="literal">yes</code>. Раздел <code class="literal">auto-props</code>
+                этого файла определяет, какие свойства и для каких файлов
+                должны устанавливаться.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">log-encoding</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Эта переменная задает набор символов кодировки для
+                лог-сообщений фиксаций. Это перманентная форма параметра
+                <code class="option">--encoding</code> (см. <a class="xref" href="svn.ref.svn.html#svn.ref.svn.sw" title="Параметры командной строкиsvn">«Параметры командной строки<span class="command"><strong>svn</strong></span>»</a>). Хранилище Subversion
+                хранит лог-сообщения в UTF8, и предполагает, что ваше
+                лог-сообщение написано используя родную локаль операционной
+                ситемы. Кодировку необходимо указывать, если
+                используется любая другая кодировка.</p>
+              </dd>
+              <dt>
+                <span class="term">
+                  <code class="literal">use-commit-times</code>
+                </span>
+              </dt>
+              <dd>
+                <p>Как правило, файлы рабочей копии имеют отметки
+                времени, отражающие время последнего обращения к
+                ним какого-либо процесса, был ли это ваш редактор,
+                или подкоманды <span class="command"><strong>svn</strong></span>. Это должно
+                быть близко людям, разрабатывающим программное
+                обеспечение, потому, что как правило, системы
+                сборки определяют по метке времени какие файлы
+                требуют перекомпиляции.</p>
+                <p>С другой стороны, иногда бывает выгодно, что бы
+                рабочие файлы имели метки времени отражающие время их
+                последнего изменения в хранилище. Команда <span class="command"><strong>svn
+                export</strong></span> всегда устанавливает <span class="quote">«<span class="quote">метку времени
+                последней фиксации</span>»</span> для создаваемого ею дерева
+                файлов. При установке значения этой переменной в
+                <code class="literal">yes</code> команды <span class="command"><strong>svn
+                checkout</strong></span>, <span class="command"><strong>svn update</strong></span>,
+                <span class="command"><strong>svn switch</strong></span> и <span class="command"><strong>svn
+                revert</strong></span> для используемых ими файлов,
+                так же будут устанавливать метку времени последней
+                фиксации.</p>
+              </dd>
+            </dl>
+          </div>
+          <p>Раздел <code class="literal">auto-props</code> определяет возможность
+          Subversion-клиента автоматически устанавливать свойства файлов,
+          когда они добавлялись или импортировались. Он содержит любое
+          количество пар ключ-значение, в формате
+          <code class="literal">PATTERN = PROPNAME=PROPVALUE</code>, где
+          <code class="literal">PATTERN</code> является файловым шаблоном,
+          соответствующих набору имен файлов, а остальная часть строки
+          является свойством и его значением. Множественные совпадения
+          для одного файла приведут к множественной установке свойств для
+          этого файла; однако не гарантируется, что порядок установки
+          авто-свойств будет таким же в каком они указаны в файле
+          конфигурации, поэтому нельзя будет одним правилом
+          <span class="quote">«<span class="quote">перекрыть</span>»</span> другое. Несколько примеров использования
+          авто-свойств можно найти в файле <code class="filename">config</code>.
+          Наконец, если хотите использовать авто-свойства, не забудьте в
+          разделе <code class="literal">miscellany</code> установить
+          <code class="literal">enable-auto-props</code> в
+          <code class="literal">yes</code>.</p>
+        </div>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm5106" class="footnote">
+          <p><a href="#idm5106" class="para"><sup class="para">[48] </sup></a>Переменная среды окружения
+        <code class="literal">APPDATA</code> указывает на папку <code class="filename">Application
+        Data</code> поэтому к этой директории можно всегда обращаться
+        как к <code class="filename">%APPDATA%\Subversion</code>.</p>
+        </div>
+        <div id="ftn.idm5335" class="footnote">
+          <p><a href="#idm5335" class="para"><sup class="para">[49] </sup></a>Anyone for potluck
+          dinner?</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.customization.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.customization.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.l10n.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Глава 7. Профессиональная настройка Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Localization</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

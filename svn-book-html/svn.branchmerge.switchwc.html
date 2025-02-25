@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Переключение рабочей копии</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние" />
+    <link rel="prev" href="svn.branchmerge.commonuses.html" title="Типовые примеры" />
+    <link rel="next" href="svn.branchmerge.tags.html" title="Метки" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Переключение рабочей копии</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.branchmerge.commonuses.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 4. Ветвление и слияние</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.branchmerge.tags.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.branchmerge.switchwc"></a>Переключение рабочей копии</h2>
+          </div>
+        </div>
+      </div>
+      <p>Команда <span class="command"><strong>svn switch</strong></span> трансформирует
+      существующую рабочую копию в другую ветку. Несмотря на то, что
+      при работе с ветками эта команда не является крайне необходимой,
+      она значительно облегчает жизнь пользователям. В ранее приведенном
+      примере, после создания личной ветки вы создавали новую рабочую
+      копию созданной директории хранилища. Вместо этого, можно
+      попросить Subversion изменить рабочую копию
+      <code class="filename">/calc/trunk</code> так, что бы она отражала
+      созданную ветку:</p>
+      <pre class="screen">
+$ cd calc
+
+$ svn info | grep URL
+URL: http://svn.example.com/repos/calc/trunk
+
+$ svn switch http://svn.example.com/repos/calc/branches/my-calc-branch
+U   integer.c
+U   button.c
+U   Makefile
+Updated to revision 341.
+
+$ svn info | grep URL
+URL: http://svn.example.com/repos/calc/branches/my-calc-branch
+</pre>
+      <p>После <span class="quote">«<span class="quote">переключения</span>»</span> на ветку, рабочая копия
+      не будет отличаться от той которая получилась бы при создании
+      новой рабочей копии директории хранилища. Как правило, более
+      эффективно использовать эту команду, так как обычно у ветки
+      немного отличий. Сервер отправляет минимально необходимый для
+      того, что бы рабочая копия отражала директорию ветки, набор
+      изменений.</p>
+      <p>Команда <span class="command"><strong>svn switch</strong></span> принимает параметр
+      <code class="option">--revision</code> (<code class="option">-r</code>), по-этому
+      необязательно помещать рабочую копию на самую
+      <span class="quote">«<span class="quote">верхушку</span>»</span> ветки.</p>
+      <p>Конечно, большинство проектов, по сравнению с нашим примером
+      <code class="filename">calc</code> более сложны, содержат множество
+      поддиректорий. Обычно пользователи Subversion используют
+      специальный алгоритм для работы с ветками:</p>
+      <div class="orderedlist">
+        <ol class="orderedlist" type="1">
+          <li class="listitem">
+            <p>Скопировать всю директорию <span class="quote">«<span class="quote">trunk</span>»</span> в
+            директорию новой ветки.</p>
+          </li>
+          <li class="listitem">
+            <p>Переключить <span class="emphasis"><em>часть</em></span> главной линии
+            разработки на ветку.</p>
+          </li>
+        </ol>
+      </div>
+      <p>Другими словами, если пользователь знает, что работа над веткой
+      будет проходить в конкретной директории, он может, с помощью,
+      <span class="command"><strong>svn switch</strong></span> переключить на ветку только эту
+      поддиректорию. (А иногда на ветку переключается только один
+      рабочий файл!) В этом случае пользователи могут продолжать
+      обычным образом получать обновления <span class="quote">«<span class="quote">trunk</span>»</span> для
+      большей части рабочей копии, а переключенные части будут оставаться
+      нетронутыми (до тех пор, пока кто-то не изменит этой ветки).
+      Эта возможность добавляет совершенно новое измерение в понятие
+      <span class="quote">«<span class="quote">смешанная рабочая копия</span>»</span> — рабочая копия может
+      содержать не только смесь рабочих правок но и смесь местоположений
+      в хранилище.</p>
+      <p>Если рабочая копия содержит какое-то количество переключенных
+      на разные местоположения в хранилище поддиректорий, она будет
+      продолжать нормально функционировать. При обновлении, патчи
+      соответственно будут приниматься для каждой поддиректории.
+      При фиксации, локальные модификации будут приниматься в хранилище
+      в виде единого, атомарного изменения.</p>
+      <p>Обратите внимание, на то, что хотя и иметь в рабочей копии
+      смесь местоположений в хранилище является нормальным, все эти
+      местоположения должны быть из <span class="emphasis"><em>одного</em></span>
+      хранилища. Хранилища Subversion пока не могут сообщаться друг с
+      другом; реализация этой возможности запланирована после Subversion
+      1.0.<a href="#ftn.idm2966" class="footnote" id="idm2966"><sup class="footnote">[28]</sup></a></p>
+      <div class="sidebar">
+        <div class="titlepage">
+          <div>
+            <div>
+              <p class="title">
+                <strong>Переключения и обновления</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <p>Вы не обратили внимания на то, что вывод <span class="command"><strong>svn
+        switch</strong></span> и <span class="command"><strong>svn update</strong></span> выглядит
+        одинаково? На самом деле команда <code class="literal">switch</code>
+	является расширенным вариантом команды обновления.</p>
+        <p>При запуске <span class="command"><strong>svn update</strong></span> вы просите
+        хранилище сравнить два дерева. Хранилище выполняет это
+        и отправляет описания изменений обратно клиенту. Отличие
+        между <span class="command"><strong>svn switch</strong></span> и <span class="command"><strong>svn
+        update</strong></span> только в том, что команда <code class="literal">update</code>
+        всегда сравнивает два одинаковых пути.</p>
+        <p>То есть, рабочая копия отражает <code class="filename">/calc/trunk</code>,
+        то <span class="command"><strong>svn update</strong></span> будет автоматически сравнивать
+        рабочую копию <code class="filename">/calc/trunk</code> с правкой
+         <code class="literal">HEAD</code> <code class="filename">/calc/trunk</code>.
+         Если вы переключаете рабочую копию на ветку, то <span class="command"><strong>svn
+         switch</strong></span> будет сравнивать рабочую копию
+         <code class="filename">/calc/trunk</code> с какой-то
+         <span class="emphasis"><em>другой</em></span> директорией в правке
+         <code class="literal">HEAD</code>.</p>
+        <p>Другими словами, обновление переносит рабочую копию сквозь
+        время. А переключение переносит рабочую копию сквозь время
+        <span class="emphasis"><em>и</em></span> пространство.</p>
+      </div>
+      <p>Учитывая то, что <span class="command"><strong>svn switch</strong></span> в сущности
+      является разновидностью <span class="command"><strong>svn update</strong></span> их поведение
+      схоже; при получении новой информации из хранилища, все локальные
+      изменения сохраняются. Это позволяет использовать разнообразные
+      трюки.</p>
+      <p>Предположим вы внесли некоторые изменения в имеющуюся у вас
+      рабочую копию <code class="filename">/calc/trunk</code>. После чего неожиданно
+      обнаружили, что вместо этого вам необходимо внести изменения в ветку.
+      Нет проблем! Когда вы переключите (<span class="command"><strong>svn switch</strong></span>)
+      рабочую копию на ветку, локальные изменения сохраняться. После чего
+      их можно проверить и зафиксировать в ветке.</p>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm2966" class="footnote">
+          <p><a href="#idm2966" class="para"><sup class="para">[28] </sup></a>Однако, <span class="emphasis"><em>можно</em></span>
+      воспользоваться <span class="command"><strong>svn switch</strong></span> с параметром
+      <code class="option">--relocate</code> если URL сервера изменился
+      и вы не хотите бросать существующую рабочую копию. За более
+      подробной информацией и примерами смотрите раздел, посвященный
+      <span class="command"><strong>svn switch</strong></span> в <a class="xref" href="svn.ref.html" title="Глава 9. Полное справочное руководство по Subversion">Глава 9, <em>Полное справочное руководство по Subversion</em></a></p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.branchmerge.commonuses.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.branchmerge.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.branchmerge.tags.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Типовые примеры </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Метки</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

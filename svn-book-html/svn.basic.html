@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Глава 1. Фундаментальные понятия</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="prev" href="svn.intro.whatis.html" title="Что такое Subversion?" />
+    <link rel="next" href="svn.basic.repository.html" title="Хранилище" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Глава 1. Фундаментальные понятия</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.intro.whatis.html">Пред.</a> </td>
+          <th width="60%" align="center"> </th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.basic.repository.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="chapter">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h1 class="title"><a id="svn.basic"></a>Глава 1. Фундаментальные понятия</h1>
+          </div>
+        </div>
+      </div>
+      <div class="toc">
+        <p>
+          <strong>Содержание</strong>
+        </p>
+        <dl class="toc">
+          <dt>
+            <span class="sect1">
+              <a href="svn.basic.repository.html">Хранилище</a>
+            </span>
+          </dt>
+          <dt>
+            <span class="sect1">
+              <a href="svn.basic.vsn-models.html">Модели версионирования</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.vsn-models.html#svn.basic.vsn-models.problem-sharing">Проблема разделения файлов</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.vsn-models.html#svn.basic.vsn-models.lock-unlock">Модель Блокирование-Изменение-Разблокирование</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.vsn-models.html#svn.basic.vsn-models.copy-merge">Модель Копирование-Изменение-Слияние</a>
+                </span>
+              </dt>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.basic.in-action.html">Subversion в действии</a>
+            </span>
+          </dt>
+          <dd>
+            <dl>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.in-action.html#svn.advanced.reposurls">URL хранилища в Subversion</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.in-action.html#svn.basic.in-action.wc">Рабочие копии</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.in-action.html#svn.basic.in-action.revs">Правки</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.in-action.html#svn.basic.in-action.track-repos">Как рабочие копии отслеживают хранилище</a>
+                </span>
+              </dt>
+              <dt>
+                <span class="sect2">
+                  <a href="svn.basic.in-action.html#svn.basic.in-action.mixedrevs">Смешивание правок в рабочих копиях</a>
+                </span>
+              </dt>
+              <dd>
+                <dl>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.basic.in-action.html#svn.basic.in-action.mixedrevs.update-commit">Обновления и фиксации отделены друг от друга</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.basic.in-action.html#svn.basic.in-action.mixedrevs.normal">Смешивание правок — это нормально</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.basic.in-action.html#svn.basic.in-action.mixedrevs.useful">Смешивание правок — это полезно</a>
+                    </span>
+                  </dt>
+                  <dt>
+                    <span class="sect3">
+                      <a href="svn.basic.in-action.html#svn.basic.in-action.mixedrevs.limits">Смешивание правок имеет ограничения</a>
+                    </span>
+                  </dt>
+                </dl>
+              </dd>
+            </dl>
+          </dd>
+          <dt>
+            <span class="sect1">
+              <a href="svn.basic.summary.html">Подводя итоги</a>
+            </span>
+          </dt>
+        </dl>
+      </div>
+      <p>Эта глава представляет собой краткое, промежуточное введение
+    в Subversion. Если управление версиями для вас в новинку, то эта глава
+    специально для вас. Мы начнем с обсуждения основных понятий
+    управления версиями, подойдем к основным идеям, лежащим в основе Subversion
+    и покажем несколько простых примеров использования Subversion.</p>
+      <p>Несмотря на то, что примеры в этой главе показывают людей,
+    разделяющих между собой набор исходных кодов программ, помните, что
+    Subversion может управлять набором файлов любого типа — она не
+    ограничивается помощью компьютерным программистам.</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.intro.whatis.html">Пред.</a> </td>
+          <td width="20%" align="center"> </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.basic.repository.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Что такое Subversion? </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Хранилище</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

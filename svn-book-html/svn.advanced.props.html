@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Свойства</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion" />
+    <link rel="prev" href="svn.tour.revs.specifiers.html" title="Способы обозначения правок" />
+    <link rel="next" href="svn.advanced.props.file-portability.html" title="Переносимость файлов" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Свойства</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.tour.revs.specifiers.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 3. Профессиональное использование Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.advanced.props.file-portability.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.advanced.props"></a>Свойства</h2>
+          </div>
+        </div>
+      </div>
+      <p>Мы уже подробно рассмотрели, каким образом Subversion сохраняет 
+      и извлекает различные версии файлов и каталогов из хранилища. 
+      Несколько глав было посвящено этой самой фундаментальной  
+      функциональной возможности данного инструмента. И даже если бы
+      поддержка версионирования этим исчерпывалась, Subversion все равно 
+      мог бы считаться полноценным средством управления версиями.</p>
+      <p>Однако Subversion этим не ограничивается.</p>
+      <p>Помимо версионированния каталогов и файлов,
+      Subversion позволяет для каждого версионированного каталога или файла
+      добавлять, изменять и удалять версионированные метаданные.
+      Мы обращаемся к этим метаданным как
+      к <em class="firstterm">свойствам</em>, которые можно представить
+      в виде таблицы с двумя столбцами, присоединенной к каждому
+      элементу рабочей копии и сопоставляющей имена свойств 
+      соответствующим значениям. Вообще, имена и значения свойств могут быть 
+      какими угодно; единственное ограничение — имена должны быть 
+      читаемым текстом.
+      Самое главное — то, что свойства версионированы точно
+      так же, как и текстовое содержимое файлов. Изменять, фиксировать
+      свойства или возвращать их в исходное состояние так же просто,
+      как и делать то же самое с содержимым файлов.
+      Отправка и получение измененных свойств происходит точно
+      так же, как и обычные фиксации и обновления — для этого нет
+      необходимости менять обычный порядок действий.</p>
+      <p>В Subversion существует еще одна разновидность свойств.
+      Так же, как и файлы и каталоги, произвольные свойства и 
+      соответствующие им значения может иметь каждая правка. 
+      Ограничения здесь те же самые — свойство должно иметь 
+      читаемое имя и может принимать любое бинарное значение. 
+      Главное отличие заключается в том, что свойства правок 
+      не версионируются.  Другими словами, если изменить
+      значение свойства правки или удалить такое свойство, Subversion не
+      сможет восстановить предыдущее значение.</p>
+      <p>В Subversion нет жестко определенных правил по использованию
+      свойств.  Она требует только того, чтобы имена свойств не 
+      начинались с префикса <code class="literal">svn:</code>, поскольку
+      это пространство имен закреплено для служебного использования.  
+      Subversion действительно использует свойства, как версионированные, 
+      так и неверсионированные, для внутренних целей. Ряд версионированных
+      свойств играет особую роль при поиске файлов и каталогов
+      или хранит определенную информацию о правках, в которых они найдены.
+      Ряд свойств автоматически присоединяется к правкам в процессе
+      фиксации, и несет о них определенную информацию . Большинство таких 
+      свойств упоминаются в этой или других главах при обсуждении более 
+      обших тем, к которым они относятся. Исчерпывающий список 
+      предопределенных свойств
+      Subversion приводится в <a class="xref" href="svn.ref.svnprops.html" title="Свойства Subversion">Свойства Subversion</a>.</p>
+      <p>В этом разделе мы рассмотрим полезность поддержки свойств как 
+      для пользователя, так и для самой Subversion. Вы узнаете о 
+      командах <span class="command"><strong>svn</strong></span>, относящихся к
+      свойствам, и о том, как изменение свойств влияет на привычный рабочий
+      цикл. Надеемся, вы убедитесь в том, что свойства в Subversion
+      расширяют возможности управления версиями.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.props.why"></a>Зачем нужны свойства?</h3>
+            </div>
+          </div>
+        </div>
+        <p>Итак, Subversion использует свойства, чтобы хранить
+        дополнительную информацию файлах, каталогах и правках.
+        Вы можете найти свойствам аналогичное применение. 
+        Наличие места рядом с версионированными данными, в котором 
+        можно хранить пользовательские метаданные об этих данных,
+        может пригодиться для поддержки ваших регламентов
+        работы с кодом, или, возможно, для использования 
+        какими-то дополнительными утилитами.</p>
+        <p>Допустим, вы разрабатываете веб-сайт, содержащий много
+        цифровых фотографий и показывающий их с подписями и датой.
+        Набор этих фотографий постоянно изменяется, поэтому сайт нужно
+        по возможности максимально автоматизировать. Фотографии
+        могут быть большого размера, поэтому, как обычно делают на таких
+        сайтах, посетителям потребуется показывать миниатюры 
+        изображений.</p>
+        <p>Эту задачу можно решить с помощью обычных файлов. 
+        Рядом, в одном каталоге, вы можете иметь файлы
+        <code class="filename">image123.jpg</code> и
+        <code class="filename">image123-thumbnail.jpg</code>. Если важно
+        сохранить оригинальное имя файла, миниатюры могут размещаться в
+        отдельном каталоге (например, 
+        <code class="filename">thumbnails/image123.jpg</code>). Таким же образом,
+        отдельно от основного графического файла, можно хранить описание и
+        дату. Проблема заключается в том, что файловая структура будет сильно
+        разрастаться при каждом добавлении фотографии на сайт.</p>
+        <p>Теперь представим, как можно организовать работу того же веб-сайта,
+        используя Subversion-свойства файлов. Допустим, имеется файл 
+        <code class="filename">image123.jpg</code> и у этого файла установлены свойства
+        <code class="literal">caption</code>, <code class="literal">datestamp</code> и даже
+        <code class="literal">thumbnail</code>. В этом случае рабочая копия выглядит
+        гораздо нагляднее. Фактически, она выглядит так, как будто содержит
+        только сами графические файлы, и ничего больше.
+        Однако ваши скрипты автоматизации знают, что с помощью 
+        <span class="command"><strong>svn</strong></span> (а еще лучше языковой обвязки
+        Subversion — см. <a class="xref" href="svn.developer.usingapi.html#svn.developer.usingapi.otherlangs" title="Using Languages Other than C and C++">«Using Languages Other than C and C++»</a>) можно получить
+        дополнительную, необходимую для показа на сайте информацию,
+        не занимаясь чтением индексного файла или манипуляциями с 
+        путями.</p>
+        <p>Не менее часто используются пользовательские свойства правок.
+        Одним из типичных примеров является свойство, хранящее ID
+        записи в трекере, с которой сопоставлена данная правка — 
+        например, потому что внесенные в правке изменения 
+        исправляют ошибку, зафиксированную в трекере с данным ID.
+        Другие варианты использования свойств правок — задание правке 
+        более содержательного имени. Нелегко запомнить, что, к примеру, 
+        правка 1935 полностью протестирована! Если же, скажем, задать свойству
+        <code class="literal">результаты тестирования</code> в этой правке значение 
+        <code class="literal">пройдены все тесты</code>, получится
+        абсолютно четкая информация.</p>
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Эффективность поиска (или Что <span class="emphasis"><em>препятствует</em></span>
+          использованию свойств)</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Несмотря на всю пользу, свойства Subversion — или,
+          точнее, доступные способы обращения к ним — обладают
+          большим недостатком, снижающим их практическую ценность.
+          Дело в том, что пользовательские свойства очень легко задать, 
+          но их последующий <span class="emphasis"><em>поиск</em></span> 
+          может оказаться серьезной проблемой.</p>
+          <p>Обращение к пользовательскому свойству правки
+          обычно приводит к последовательному просмотру всех правок 
+          хранилища. При этом каждая правка опрашивается: "Есть ли у тебя
+          свойство, которое я ищу?" Поиск версионированного 
+          пользовательского свойства также оказывается затратной, и часто
+          приводит к рекурсивному вызову <span class="command"><strong>svn propget</strong></span> 
+          по всей рабочей копии.  В вашей ситуации это, возможно, окажется
+          не таким плохим вариантом, как последовательный просмотр всех правок.
+          Но, в любом случае, такой подход оставляет желать лучшего 
+          как с точки зрения производительности, так и с точки зрения 
+          вероятности успеха, особенно если поиск потребует получения 
+          рабочей копии корневой папки хранилища.</p>
+          <p>По этой причине стоит подумать над тем (в особенности,
+          в случае со свойствами правок), чтобы просто добавить ваши 
+          метаданные в лог-сообщение правки, придерживаясь при этом
+          некоторого заранее оговоренного (и, возможно, программно 
+          поддерживаемого) форматирования, допускающего впоследствии
+          легкий разбор и анализ вывода команды <span class="command"><strong>svn log</strong></span>.
+          В Subversion можно частенько увидеть такие характерные
+          лог-сообщения:</p>
+          <pre class="programlisting">
+Issue(s): IZ2376, IZ1919
+Reviewed by:  sally
+
+This fixes a nasty segfault in the wort frabbing process
+…
+</pre>
+          <p>Но и здесь вас поджидает одна неприятность.  Subversion пока 
+          еще не поддерживает механизма задания шаблонов для лог-сообщений,
+          поэтому вам придется довольно долго разъяснять пользователям, 
+          как им правильно форматировать сообщения, включая в них  
+          метаданные правки.</p>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.props.manip"></a>Использование свойств</h3>
+            </div>
+          </div>
+        </div>
+        <p>Команда <span class="command"><strong>svn</strong></span> предоставляет несколько
+        способов добавления или изменения свойств файлов и каталогов.
+        Чтобы добавить свойство с коротким читаемым значением, наверное, 
+        проще всего указать его имя и значение в командной строке
+        подкоманды <span class="command"><strong>propset</strong></span>.</p>
+        <pre class="screen">
+$ svn propset copyright '(c) 2006 Red-Bean Software' calc/button.c
+property 'copyright' set on 'calc/button.c'
+$
+</pre>
+        <p>Однако мы уже знаем о том, насколько гибкими могут быть 
+        свойства Subversion. И если вам необходимо задать свойству
+        многострочное текстовое или даже бинарное значение, передавать
+        его через командную строку будет неудобно. Для
+        таких случаев команда <span class="command"><strong>propset</strong></span> имеет
+        параметр <code class="option">--file</code> (<code class="option">-F</code>), 
+        позволяющий указать имя файла с новым значением свойства.</p>
+        <pre class="screen">
+$ svn propset license -F /path/to/LICENSE calc/button.c
+property 'license' set on 'calc/button.c'
+$
+</pre>
+        <p>На имена свойств накладывается ряд ограничений. Имя должно
+        начинаться с буквы, двоеточия (<code class="literal">:</code>) или подчеркивания
+        (<code class="literal">_</code>); после них можно использовать цифры, тире
+        (<code class="literal">-</code>) и точки (<code class="literal">.</code>).
+          <a href="#ftn.idm1681" class="footnote" id="idm1681"><sup class="footnote">[13]</sup></a>
+      </p>
+        <p>Кроме команды <span class="command"><strong>propset</strong></span>,
+        <span class="command"><strong>svn</strong></span> предлагает команду <span class="command"><strong>propedit</strong></span>.
+        Эта команда использует для добавления или изменения свойства заданную
+        программу-редактор (см. <a class="xref" href="svn.advanced.confarea.html#svn.advanced.confarea.opts.config" title="Config">«Config»</a>). При выполнении
+        команды <span class="command"><strong>svn</strong></span> вызывает редактор с временным файлом,
+        содержащим текущее значение свойства (или с пустым файлом, если
+        добавляется новое свойство). Затем вы просто изменяете в редакторе
+        значение, пока оно не станет таким, каким вы хотели бы его видеть,
+        сохраняете временный файл и выходите из редактора. Если Subversion
+        обнаружит, что вы действительно изменили существующее значение
+        свойства, будет записано новое значение. Если вы вышли из
+        редактора, не внеся никаких изменений, модификации свойства не
+        произойдет.</p>
+        <pre class="screen">
+$ svn propedit copyright calc/button.c  ### exit the editor without changes
+No changes to property 'copyright' on 'calc/button.c'
+$
+</pre>
+        <p>Обращаем ваше внимание на то, что, подобно другим командам
+        <span class="command"><strong>svn</strong></span>, команды, относящиеся к свойствам,
+        могут применяться к нескольким путям за раз. Это дает возможность
+        одной командой изменять свойства целого набора файлов. Например,
+        можно сделать вот так:</p>
+        <pre class="screen">
+$ svn propset copyright '(c) 2006 Red-Bean Software' calc/*
+property 'copyright' set on 'calc/Makefile'
+property 'copyright' set on 'calc/button.c'
+property 'copyright' set on 'calc/integer.c'
+…
+$
+</pre>
+        <p>Все эти добавления и редактирования свойств были бы не слишком 
+        полезны, если бы нельзя было просто узнать значение свойства. 
+        Чтобы посмотреть имена и значения свойств, заданных для файлов и 
+        каталогов, в <span class="command"><strong>svn</strong></span> есть две подкоманды.
+        Команда <span class="command"><strong>svn proplist</strong></span> перечисляет существующие
+        для указанного пути свойства. После того как вы узнаете имя свойства,
+        с помощью <span class="command"><strong>svn propget</strong></span> можно запросить его
+        значение. Эта команда выведет в стандартный поток ввода-вывода
+        значение свойства для элемента по указанному пути (или путям) и с
+        указанным именем.</p>
+        <pre class="screen">
+$ svn proplist calc/button.c
+Properties on 'calc/button.c':
+  copyright
+  license
+$ svn propget copyright calc/button.c
+(c) 2006 Red-Bean Software
+</pre>
+        <p>Существует даже вариант команды <span class="command"><strong>proplist</strong></span>,
+        перечисляющий как имена, так и значения свойств. Нужно просто
+        добавить параметр <code class="option">--verbose</code>
+        (<code class="option">-v</code>).</p>
+        <pre class="screen">
+$ svn proplist --verbose calc/button.c
+Properties on 'calc/button.c':
+  copyright : (c) 2006 Red-Bean Software
+  license : ================================================================
+Copyright (c) 2006 Red-Bean Software.  All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions, and the recipe for Fitz's famous
+red-beans-and-rice.
+…
+</pre>
+        <p>Последняя команда, относящаяся к свойствам — 
+        <span class="command"><strong>propdel</strong></span>. Несмотря на то, что Subversion
+        позволяет сохранять свойства с пустыми значениями, полностью
+        удалить свойство с помощью <span class="command"><strong>propedit</strong></span> или
+        <span class="command"><strong>propset</strong></span> нельзя. Например, такая команда
+        не даст желаемого эффекта:</p>
+        <pre class="screen">
+$ svn propset license '' calc/button.c
+property 'license' set on 'calc/button.c'
+$ svn proplist --verbose calc/button.c
+Properties on 'calc/button.c':
+  copyright : (c) 2006 Red-Bean Software
+  license :
+$
+</pre>
+        <p>Для полного удаления свойств необходимо пользоваться
+        подкомандой <span class="command"><strong>propdel</strong></span>. Ее синтаксис такой же,
+        как и у других команд для работы со свойствами:</p>
+        <pre class="screen">
+$ svn propdel license calc/button.c
+property 'license' deleted from 'calc/button.c'.
+$ svn proplist --verbose calc/button.c
+Properties on 'calc/button.c':
+  copyright : (c) 2006 Red-Bean Software
+$
+</pre>
+        <p>Помните, мы говорили о неверсионированных свойствах
+        правок? Их тоже можно изменять с помощью <span class="command"><strong>svn</strong></span>.
+        Просто добавьте параметр командной строки <code class="option">--revprop</code>
+        и укажите правку, свойство которой вы хотите изменить. Поскольку
+        правки глобальны, указывать пути не требуется до тех пор, пока 
+        вы находитесь в рабочей копии того хранилища, свойство правки в
+        котором вам нужно изменить. В противном случае, нужно просто указать
+        URL любого пути в интересующем вас хранилище (в том числе это может 
+        быть и корневой URL хранилища). Например, вы можете заменить
+        лог-сообщение фиксации в существующей правке. 
+        <a href="#ftn.idm1714" class="footnote" id="idm1714"><sup class="footnote">[14]</sup></a>
+        Если текущий рабочий каталог является частью рабочей копии хранилища, 
+        можно просто выполнить команду <span class="command"><strong>svn propset</strong></span>, 
+        не указывая целевой путь:</p>
+        <pre class="screen">
+$ svn propset svn:log '* button.c: Fix a compiler warning.' -r11 --revprop
+property 'svn:log' set on repository revision '11'
+$
+</pre>
+        <p>Но даже если вы не выгружали из хранилища рабочую копию, 
+        можно изменить свойство, указав корневой URL хранилища:</p>
+        <pre class="screen">
+$ svn propset svn:log '* button.c: Fix a compiler warning.' -r11 --revprop \
+              http://svn.example.com/repos/project
+property 'svn:log' set on repository revision '11'
+$
+</pre>
+        <p>Обратите внимание на то, что изменение этих
+        неверсионированных свойств должно быть явно разрешено
+        администратором (см. <a class="xref" href="svn.reposadmin.create.html#svn.reposadmin.create.hooks" title="Hook Scripts">«Hook Scripts»</a>). 
+        Учитывая то, что свойства не версионируются, при неаккуратном 
+        редактировании вы рискуете потерять информацию. Чтобы предотвратить 
+        потерю информации,
+        администратор хранилища может принять меры предосторожности, и
+        по умолчанию изменение неверсионированных свойств
+        запрещено.</p>
+        <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Подсказка]" src="images/tip.png" />
+              </td>
+              <th align="left">Подсказка</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Пользователям следует, по возможности, пользоваться <span class="command"><strong>svn
+          propedit</strong></span> вместо <span class="command"><strong>svn
+          propset</strong></span>.  Хотя конечный результат обеих команд будет 
+          одинаков, первая позволит увидеть текущее значение свойства перед
+          изменением, и таким образом удостовериться, что вносятся именно 
+          те изменения, которые были задуманы. В особенности это справедливо
+          для модификации неверсионированных свойств правок. Да и изменять
+          свойства с многострочными значениями гораздо проще в текстовом 
+          редакторе, а не в командной строке.</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.props.workflow"></a>Свойства и рабочий цикл Subversion</h3>
+            </div>
+          </div>
+        </div>
+        <p>Теперь, когда вы познакомились со всеми командами 
+        <span class="command"><strong>svn</strong></span>, имеющими отношение к свойствам, 
+        давайте посмотрим,
+        как изменения свойств влияют на привычный порядок работы с
+        Subversion. Как мы уже говорили, свойства файлов и каталогов 
+        версионированы аналогично содержимому файлов. Поэтому
+        Subversion предоставляет те же возможности по слиянию
+        — в случае конфликтных ситуаций — чужих изменений
+        с вашими собственными.</p>
+        <p>Так же как и в случае с содержимым файлов, изменения свойств
+        являются локальной модификацией и становятся постоянными только при их
+        фиксации в хранилище с помощью <span class="command"><strong>svn commit</strong></span>.
+        Изменение свойств можно легко отменить — команда
+        <span class="command"><strong>svn revert</strong></span> восстановит файлы и каталоги
+        в их первоначальное состояние, включая содержимое, свойства и
+        все остальное. Кроме того, интересную информацию о состоянии
+        свойств файлов и каталогов можно получить с помощью команд
+        <span class="command"><strong>svn status</strong></span> и <span class="command"><strong>svn
+        diff</strong></span>.</p>
+        <pre class="screen">
+$ svn status calc/button.c
+ M     calc/button.c
+$ svn diff calc/button.c
+Property changes on: calc/button.c
+___________________________________________________________________
+Name: copyright
+   + (c) 2006 Red-Bean Software
+
+$
+</pre>
+        <p>Обратите внимание на то, что подкоманда <span class="command"><strong>status</strong></span>
+        показала <code class="literal">M</code> не в первой, а во второй колонке.
+        Это произошло потому, что в <code class="filename">calc/button.c</code> 
+        изменились свойства, а не текстовое содержимое. Если бы мы изменили 
+        и то и другое, в первой колонке также стояла бы буква 
+        <code class="literal">M</code> (см. 
+        <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.examine.status" title="svn status">«<span class="command"><strong>svn status</strong></span>»</a>).</p>
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Конфликты свойств</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Как и в случае с содержимым файлов, локальные
+          модификации свойств могут конфликтовать с изменениями,
+          зафиксированными кем-то другим. При обновлении каталога 
+          рабочей копии и получении изменений свойств версионированного
+          объекта, которые идут вразрез с вашими собственными, Subversion
+          сообщит о конфликтном состоянии объекта.</p>
+          <pre class="screen">
+% svn update calc
+M  calc/Makefile.in
+ C calc/button.c
+Updated to revision 143.
+$
+</pre>
+          <p>В каталоге с конфликтующим объектом Subversion
+          создаст файл с расширением <code class="filename">.prej</code>,
+          содержащий подробную информацию о конфликте. Для разрешения 
+          конфликта необходимо посмотреть содержимое этого файла. Пока
+          не будет решен конфликт, во второй колонке вывода
+          команды <span class="command"><strong>svn status</strong></span> будет присутствовать
+          буква <code class="literal">C</code>, а попытки фиксации локальных
+          изменений будут отклоняться.</p>
+          <pre class="screen">
+$ svn status calc
+ C     calc/button.c
+?      calc/button.c.prej
+$ cat calc/button.c.prej
+prop 'linecount': user set to '1256', but update set to '1301'.
+$
+</pre>
+          <p>Для разрешения конфликтов свойств просто убедитесь,
+          что свойства имеют нужные значения, после чего с помощью команды
+          <span class="command"><strong>svn resolved</strong></span> уведомите Subversion о том, что
+          вы решили проблему вручную.</p>
+        </div>
+        <p>Кроме того, нужно помнить о нестандартном подходе, используемом
+        Subversion при выводе различий для свойств. Безусловно, можно
+        запустить <span class="command"><strong>svn diff</strong></span> и перенаправить вывод для создания
+        работоспособного патч-файла. Но программа <span class="command"><strong>patch</strong></span>
+        будет просто игнорировать различия свойств — как правило,
+        она игнорирует любой мусор, который не может обработать. К сожалению,
+        это означает, что для полного применения патча, сгенерированного
+        <span class="command"><strong>svn diff</strong></span>, изменения свойств придется вносить 
+        вручную.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.props.auto"></a>Автоматическая установка свойств</h3>
+            </div>
+          </div>
+        </div>
+        <p>Поддержка свойств — мощная функциональная особенность
+        Subversion. Свойства служат базовым механизмом для реализации многих 
+        других функций Subversion, обсуждаемых в книге — 
+        поддержки текстового поиска различий и слияния, 
+        подстановки ключевых слов, трансляции символов перевода
+        строки и т. д. Однако, чтобы получить реальную выгоду от свойств,
+        их нужно задавать для соответствующих файлов и каталогов. К сожалению,
+        среди повседневных забот об этом очень легко забыть, особенно 
+        учитывая то, что неустановка значения свойства обычно не приводит
+        к явно заметным ошибкам (по сравнению, скажем, с 
+        недобавлением файла под версионный контроль). Чтобы помочь в
+        установке свойств для нужных элементов, Subversion 
+        обеспечивает пару простых, но полезных функций.</p>
+        <p>При каждом добавлении файла под версионный контроль с помощью
+        команд <span class="command"><strong>svn add</strong></span> или <span class="command"><strong>svn import</strong></span>
+        Subversion пытается автоматически установить несколько базовых 
+        свойств файлов. Во-первых, в операционных системах, файловые
+        системы которых поддерживают бит разрешения выполнения, Subversion
+        автоматически задает свойство <code class="literal">svn:executable</code> 
+        для вновь добавленных или импортированных файлов, у которых
+        этот бит установлен. (Обратитесь к <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.executable" title="Исполнимость файла">«Исполнимость файла»</a> за 
+        дополнительной информации об этом свойстве.)  Во-вторых, 
+        Subversion выполняет очень простую эвристическую процедуру, 
+        чтобы определить, имеет ли файл читаемое содержимое. Если это 
+        не так, Subversion автоматически устанавливает 
+        свойство <code class="literal">svn:mime-type</code> этого файла в значение 
+        <code class="literal">application/octet-stream</code> (это базовый 
+        MIME-тип, обозначающий <span class="quote">«<span class="quote">набор байтов</span>»</span>).  Конечно,
+        если Subversion угадает тип файла неправильно, или если вы 
+        пожелаете присвоить свойству <code class="literal">svn:mime-type</code> 
+        более точное значение — например, <code class="literal">image/png</code>
+        или <code class="literal">application/x-shockwave-flash</code> — 
+        вы всегда можете удалить или отредактировать это свойство. 
+        (За дополнительной информацией об использовании MIME-типов 
+        в Subversion обратитесь к 
+        <a class="xref" href="svn.advanced.props.file-portability.html#svn.advanced.props.special.mime-type" title="Тип содержимого файла">«Тип содержимого файла»</a>.)</p>
+        <p>Через собственную систему конфигурирования среды исполнения 
+        (см. <a class="xref" href="svn.advanced.confarea.html" title="Параметры времени выполнения">«Параметры времени выполнения»</a>) Subversion
+        также поддерживает более гибкую возможность автоматической 
+        установки свойств, которая позволяет задавать соответствия
+        между масками имен файлов и именами и значениями свойств.
+        Еще раз: эти соответствия воздействуют на добавление и импорт,
+        и могут не только переопределять решение о MIME-типе по 
+        умолчанию, принимаемое Subversion в ходе этих операций,
+        но и устанавливать другие стандартные или пользовательские
+        свойства. Например, вы могли бы задать соответствие, чтобы 
+        при каждом добавлении JPEG-файла — то есть
+        элемента, соответствующего маске <code class="literal">*.jpg</code> —
+        Subversion автоматически присваивал бы свойству
+        <code class="literal">svn:mime-type</code> значение 
+        <code class="literal">image/jpeg</code>. Или, к примеру, для всех файлов,
+        соответствующих маске <code class="literal">*.cpp</code>, свойство 
+        <code class="literal">svn:eol-style</code> устанавливалось бы в 
+        <code class="literal">native</code>, а <code class="literal">svn:keywords</code>
+        — в <code class="literal">Id</code>.  Поддержка автоматических свойств
+        — это, пожалуй, наиболее удобный инструмент Subversion
+        в части работы со свойствами среди всего набора доступных средств. 
+        См. <a class="xref" href="svn.advanced.confarea.html#svn.advanced.confarea.opts.config" title="Config">«Config»</a> для
+        дополнительной информации о настройке такой поддержки.</p>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm1681" class="footnote">
+          <p><a href="#idm1681" class="para"><sup class="para">[13] </sup></a>Если вы знакомы с XML, то синтаксис XML "Name" допускает
+            практически то же подмножество символов ASCII.</p>
+        </div>
+        <div id="ftn.idm1714" class="footnote">
+          <p><a href="#idm1714" class="para"><sup class="para">[14] </sup></a>Исправление в лог-сообщениях орфографических, грамматических
+        ошибок, <span class="quote">«<span class="quote">просто ошибочных</span>»</span> записей — наверное,
+        самый распространенный случай использования параметра
+        <code class="option">--revprop</code>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.tour.revs.specifiers.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.advanced.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.advanced.props.file-portability.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Способы обозначения правок </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Переносимость файлов</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

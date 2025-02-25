@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Subversion в действии</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.basic.html" title="Глава 1. Фундаментальные понятия" />
+    <link rel="prev" href="svn.basic.vsn-models.html" title="Модели версионирования" />
+    <link rel="next" href="svn.basic.summary.html" title="Подводя итоги" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Subversion в действии</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.basic.vsn-models.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 1. Фундаментальные понятия</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.basic.summary.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.basic.in-action"></a>Subversion в действии</h2>
+          </div>
+        </div>
+      </div>
+      <p>Настало время перейти от абстракций к конкретике. В этом разделе мы покажем
+      реальные примеры использования Subversion.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.advanced.reposurls"></a>URL хранилища в Subversion</h3>
+            </div>
+          </div>
+        </div>
+        <p>В книге для идентификации файлов и директорий в хранилище 
+        Subversion применяются URL. В основном, в этих URL используются
+        стандартные правила записи, позволяющие указывать имя сервера и
+        номер порта как часть URL:</p>
+        <pre class="screen">
+$ svn checkout http://svn.example.com:9834/repos
+…
+</pre>
+        <p>Однако, в обработке URL системой Subversion есть некоторые нюансы, о 
+        которых нужно помнить. Например, в соответствии с принятыми 
+        соглашениями, URL, использующий метод доступа
+        <code class="literal">file:</code> (этот метод доступа используется для 
+        локальных хранилищ), должен либо включать имя сервера
+        <code class="literal">localhost</code>, либо вообще не содержать имени 
+        сервера:</p>
+        <pre class="screen">
+$ svn checkout file:///path/to/repos
+…
+$ svn checkout file://localhost/path/to/repos
+…
+</pre>
+        <p>Кроме того, тем, кто применяет схему <code class="literal">file:</code> на 
+        платформе Windows, необходимо использовать неофициальные
+        <span class="quote">«<span class="quote">стандартные</span>»</span> правила записи при обращении к 
+        хранилищу, которое находится на одном компьютере, но на разных 
+        дисках с клиентом. Обе приведенные ниже записи будут 
+        работать; здесь <code class="literal">X</code> — это имя диска, на котором 
+        находится хранилище:</p>
+        <pre class="screen">
+C:\&gt; svn checkout file:///X:/path/to/repos
+…
+C:\&gt; svn checkout "file:///X|/path/to/repos"
+…
+</pre>
+        <p>При второй форме записи для того, чтобы вертикальная черта 
+        не расценивалась как канал, необходимо взять URL в кавычки. 
+        Также обратите внимание на использование в URL прямого слеша,
+        несмотря на то, что родная (не-URL) форма записи пути в 
+        Windows использует обратный слеш.</p>
+        <p>Ну и наконец, нужно сказать о том, что клиент Subversion 
+        при необходимости автоматически кодирует URL точно так же, как 
+        это делает веб-браузер. Например, если URL будет содержать пробел или 
+        ASCII-символы в верхнем регистре:</p>
+        <pre class="screen">
+$ svn checkout "http://host/path with space/project/españa"
+</pre>
+        <p>…то Subversion скроет небезопасные символы и будет 
+        вести себя так, как будто вы напечатали:</p>
+        <pre class="screen">
+$ svn checkout http://host/path%20with%20space/project/espa%C3%B1a
+</pre>
+        <p>Если в URL есть пробелы, возьмите его в кавычки, и тогда 
+        командная оболочка обработает это все как один аргумент 
+        программы <span class="command"><strong>svn</strong></span>.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.basic.in-action.wc"></a>Рабочие копии</h3>
+            </div>
+          </div>
+        </div>
+        <p>Вы уже читали о рабочих копиях; теперь мы покажем как
+        клиент Subversion создает и использует их.</p>
+        <p>Рабочая копия Subversion представляет собой обычное дерево
+        каталогов на вашем компьютере, содержащее набор файлов. Вы можете
+        по своему усмотрению редактировать эти файлы и, если это исходные коды,
+        вы можете обычным способом скомпилировать из них программу. Ваша рабочая
+        копия — это ваше личное рабочее пространство. Subversion как не
+        смешивает с вашими изменения, вносимые другими, так и не делает
+        доступными для других изменения, сделанные вами, пока вы сами не
+        прикажете сделать это. Вы даже можете иметь несколько рабочих копий
+        одного и того же проекта.</p>
+        <p>После того, как вы внесли изменения в файлы вашей рабочей копии и
+        убедились в том, что они корректно работают, Subversion предлагает вам
+        команды <span class="quote">«<span class="quote">публикации</span>»</span> (записи в хранилище) ваших
+        изменений, в результате чего они станут доступными для всех участников
+        проекта. Если другие участники проекта опубликовали свои изменения,
+        Subversion предлагает вам команды для объединения (путем чтения
+        информации из хранилища) этих изменений с вашей рабочей
+        копией.</p>
+        <p>Рабочая копия содержит несколько дополнительных файлов, созданных
+        и обслуживаемых Subversion, которые помогают ей при выполнении этих
+        команд. В частности, каждый каталог в вашей рабочей копии содержит
+        подкаталог с именем <code class="filename">.svn</code> который называется
+        <em class="firstterm">служебным каталогом</em> рабочей копии.
+        Файлы в служебном каталоге помогают Subversion определить
+        какие файлы рабочей копии содержат неопубликованные изменения, и какие
+        файлы устарели по отношению к файлам других участников.</p>
+        <p>Как правило, хранилище Subversion содержит файлы (или исходный
+        код) нескольких проектов; обычно каждый проект представляется в виде
+        подкаталога файловой системы хранилища. При таком подходе,
+        пользовательская рабочая копия обычно соответствует отдельному
+        подкаталогу хранилища.</p>
+        <p>Например, предположим, что у вас есть хранилище, содержащее два
+        программных проекта: <code class="literal">paint</code> и
+        <code class="literal">calc</code>. Каждый проект располагается в своем
+        собственном каталоге как показано на
+        <a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.wc.dia-1" title="Рисунок 1.6. Файловая система хранилища">Рисунок 1.6, «Файловая система хранилища»</a>.</p>
+        <div class="figure">
+          <a id="svn.basic.in-action.wc.dia-1"></a>
+          <p class="title">
+            <strong>Рисунок 1.6. Файловая система хранилища</strong>
+          </p>
+          <div class="figure-contents">
+            <div>
+              <img src="images/ch02dia6.png" alt="Файловая система хранилища" />
+            </div>
+          </div>
+        </div>
+        <br class="figure-break" />
+        <p>Для того, чтобы создать рабочую копию, вам нужно
+        <em class="firstterm">получить</em> какой-либо из подкаталогов
+        хранилища. (Возможно, термин <em class="firstterm">получить</em>
+        звучит как что-то, связанное с блокированием или резервированием
+        ресурсов, но это не так; данная команда просто создает для вас личную
+        копию проекта.) Например, если вы получите
+        <code class="filename">/calc</code>, у вас будет рабочая копия наподобие
+        этой:</p>
+        <pre class="screen">
+$ svn checkout http://svn.example.com/repos/calc
+A    calc/Makefile
+A    calc/integer.c
+A    calc/button.c
+Checked out revision 56.
+
+$ ls -A calc
+Makefile  integer.c  button.c  .svn/
+</pre>
+        <p>Буквы А говорят о том, что Subversion добавил этот элемент в
+        вашу рабочую копию. Теперь у вас есть личная копия каталога
+        <code class="filename">/calc</code> хранилища, с одним небольшим добавлением
+        — каталогом <code class="filename">.svn</code>, содержащим, как было
+        указано выше, дополнительную информацию, необходимую Subversion.</p>
+        <div class="sidebar">
+          <a id="svn.basic.in-action.wc.sb-1"></a>
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>URL хранилища</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Получить доступ к хранилищу Subversion можно различными
+          способами — на локальном диске или через ряд сетевых протоколов.
+          Местоположение хранилища всегда определяется при помощи URL.
+          <a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.wc.tbl-1" title="Таблица 1.1. URL для доступа к хранилищу.">Таблица 1.1, «URL для доступа к хранилищу.»</a>
+          показывает соответствие разных URL-схем возможным
+          методам доступа.</p>
+          <div class="table">
+            <a id="svn.basic.in-action.wc.tbl-1"></a>
+            <p class="title">
+              <strong>Таблица 1.1. URL для доступа к хранилищу.</strong>
+            </p>
+            <div class="table-contents">
+              <table class="table" summary="URL для доступа к хранилищу." border="1">
+                <colgroup>
+                  <col />
+                  <col />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>Схема</th>
+                    <th>Метод доступа</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <code class="literal">file:///</code>
+                    </td>
+                    <td>прямой доступ к хранилищу
+                  (на локальном диске)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code class="literal">http://</code>
+                    </td>
+                    <td>доступ через протокол WebDAV (если Subversion-сервер
+                работает через Apache)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code class="literal">https://</code>
+                    </td>
+                    <td>то же, что и <code class="literal">http://</code>, но с
+                  SSL-шифрованием</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code class="literal">svn://</code>
+                    </td>
+                    <td>доступ через собственный протокол к серверу
+                  <code class="literal">svnserve</code></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <code class="literal">svn+ssh://</code>
+                    </td>
+                    <td>то же, что и <code class="literal">svn://</code>, но через
+                  SSH-соединение</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <br class="table-break" />
+          <p>Подробнее о том, как Subversion обрабатывает URL, см. в
+          <a class="xref" href="svn.basic.in-action.html#svn.advanced.reposurls" title="URL хранилища в Subversion">«URL хранилища в Subversion»</a>.  Подробнее о различных типах
+          сетевых серверов, доступных для использования совместно с Subversion,
+          см. <a class="xref" href="svn.serverconfig.html" title="Глава 6. Настройка сервера">Глава 6, <em>Настройка сервера</em></a>.
+        </p>
+        </div>
+        <p>Предположим, вы внесли изменения в <code class="filename">button.c</code>.
+        Так как каталог <code class="filename">.svn</code> помнит дату изменения
+        файла и его оригинальное содержимое, Subversion может сказать о том,
+        что вы изменили файл. Subversion не публикует ваших изменений, пока
+        вы не прикажете это сделать. Публикация ваших изменений более известна
+        как <em class="firstterm">фиксация</em> (или <em class="firstterm">checking
+        in</em>) изменений в хранилище.</p>
+        <p>Для того, чтобы опубликовать ваши изменения, вы можете
+        воспользоваться командой <span class="command"><strong>commit</strong></span>.</p>
+        <pre class="screen">
+$ svn commit button.c -m "Fixed a typo in button.c."
+Sending        button.c
+Transmitting file data .
+Committed revision 57.
+</pre>
+        <p>Теперь ваши изменения в <code class="filename">button.c</code>, вместе
+        с примечанием, описывающим эти изменения (а именно: исправление
+        опечатки), зафиксированы в хранилище; если другой пользователь
+        создаст рабочую копию <code class="filename">/calc</code>, он увидит
+        ваши изменения в последней версии файла.</p>
+        <p>Предположим, у вас есть партнер, Салли, которая
+        создала рабочую копию <code class="filename">/calc</code> одновременно
+        с вами. Когда вы зафиксировали изменения в
+        <code class="filename">button.c</code>, рабочая копия Салли осталась 
+        неизмененной, так как Subversion модифицирует рабочие копии только
+        по запросу пользователей.</p>
+        <p>Для приведения рабочей копии в актуальное состояние Салли
+        может попросить Subversion <em class="firstterm">обновить</em> её
+        рабочую копию, используя команду Subversion
+        <span class="command"><strong>update</strong></span>. Это включит ваши изменения в ее рабочую
+        копию, так же как и все другие изменения, зафиксированные после того,
+        как она создавала рабочую копию.</p>
+        <pre class="screen">
+$ pwd
+/home/sally/calc
+
+$ ls -A
+.svn/ Makefile integer.c button.c
+
+$ svn update
+U    button.c
+Updated to revision 57.
+</pre>
+        <p>Вывод команды <span class="command"><strong>svn update</strong></span> говорит, что
+        Subversion обновила содержимое <code class="filename">button.c</code>.
+        Обратите внимание, что Салли не должна указывать, какой файл обновить;
+        для определения файлов, которые необходимо привести в актуальное
+        состояние, Subversion использует информацию в каталоге
+        <code class="filename">.svn</code>, а также информацию из хранилища.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.basic.in-action.revs"></a>Правки</h3>
+            </div>
+          </div>
+        </div>
+        <p>Операция <span class="command"><strong>svn commit</strong></span> публикует
+        изменения любого количества файлов и каталогов за одну
+        атомарную операцию. В своей рабочей копии вы можете менять
+        содержимое файлов, создавать, удалять, переименовывать и
+        копировать файлы и каталоги, а затем зафиксировать все
+        изменения за одну атомарную транзакцию.</p>
+        <p>Под <span class="quote">«<span class="quote">атомарной транзакцией</span>»</span> понимается следующее:
+        либо в хранилище вносятся все изменения полностью, либо они не вносятся
+        вообще. Subversion ведёт себя так, принимая в расчет возможные
+        программные сбои, системные сбои, проблемы с сетью, а также
+        неверные действия пользователя.</p>
+        <p>Каждый раз, когда происходит фиксация, создаётся
+        новое состояние файловой системы, которое называется
+        <em class="firstterm">правкой</em>. Каждая правка получает
+        уникальный номер, на единицу больший номера
+        предыдущей правки. Начальная правка только что созданного
+        хранилища получает номер 0 и не содержит ничего, кроме
+        пустого корневого каталога.</p>
+        <p><a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.revs.dia-1" title="Рисунок 1.7. Хранилище">Рисунок 1.7, «Хранилище»</a> отлично
+        иллюстрирует хранилище. Представьте массив номеров правок,
+        начинающийся с 0, с направлением слева направо. Каждый номер
+        правки имеет соответствующее дерево файлов, а каждое дерево
+        представляет собой <span class="quote">«<span class="quote">снимок</span>»</span> того, как хранилище
+        выглядело после фиксации.</p>
+        <div class="figure">
+          <a id="svn.basic.in-action.revs.dia-1"></a>
+          <p class="title">
+            <strong>Рисунок 1.7. Хранилище</strong>
+          </p>
+          <div class="figure-contents">
+            <div>
+              <img src="images/ch02dia7.png" alt="Хранилище" />
+            </div>
+          </div>
+        </div>
+        <br class="figure-break" />
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Глобальные номера правок</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>В отличие от большинства систем управления версиями, номера
+          правок в Subversion относятся <span class="emphasis"><em>ко всем</em></span>,
+          а не только к отдельно взятым файлам. Каждый номер правки
+          соответствует целому дереву, отдельному состоянию хранилища после
+          зафиксированного изменения. Иначе говоря, правка N
+          представляет состояние файловой системы хранилища после выполнения
+          N-ой фиксации. Когда пользователи Subversion говорят о
+          <span class="quote">«<span class="quote">правке 5 <code class="filename">foo.c</code></span>»</span>, на самом деле
+          речь идет о <span class="quote">«<span class="quote"><code class="filename">foo.c</code> входящем в правку
+          5</span>»</span>. Заметьте, что правки N и M файла
+          <span class="emphasis"><em>не обязательно</em></span> будут отличаться! Многие
+          системы управления версиями исполюзуют пофайловую нумерацию правок,
+          так что этот подход на первых порах может показаться непривычным.
+          (Бывшие пользователи CVS могут обратиться за более подробной
+          информацией к <a class="xref" href="svn.forcvs.html" title="Приложение B. Subversion для пользователей CVS">Приложение B, <em>Subversion для пользователей CVS</em></a>.)</p>
+        </div>
+        <p>Важно помнить, что рабочие копии не всегда соответствуют
+        какой-то одной правке в хранилище; они могут содержать файлы из
+        разных правок. Например, вы получили рабочую копию из хранилища,
+        у которого самая последняя правка — 4:</p>
+        <pre class="screen">
+calc/Makefile:4
+     integer.c:4
+     button.c:4
+</pre>
+        <p>На данный момент рабочий каталог полностью соответствует
+        правке 4 в хранилище. Допустим, что вы внесли изменения в
+        <code class="filename">button.c</code> и зафиксировали эти изменения.
+        При отсутствии других фиксаций ваша фиксация создаст правку
+        под номером 5, и теперь ваша рабочая копия выглядит следующим
+        образом:</p>
+        <pre class="screen">
+calc/Makefile:4
+     integer.c:4
+     button.c:5
+</pre>
+        <p>Предположим, что после этого Салли фиксирует изменения <code class="filename">
+        integer.c</code>, создавая правку 6. Если вы воспользуетесь
+        <span class="command"><strong>svn update</strong></span> для приведения своей рабочей копии
+        в актуальное состояние, то она станет выглядеть так:</p>
+        <pre class="screen">
+calc/Makefile:6
+     integer.c:6
+     button.c:6
+</pre>
+        <p>Изменения, внесенные Салли в <code class="filename">integer.c</code> будут
+        отражены в вашей рабочей копии, и ваши изменения в
+        <code class="filename">button.c</code> также будут присутствовать. В этом
+        примере текст <code class="filename">Makefile</code> в правках 4, 5 и 6
+        идентичен, однако Subversion проставляет номер правки 6 для вашей
+        рабочей копии <code class="filename">Makefile</code>, чтобы показать что файл
+        не устарел. Таким образом, после того как вы выполните полное
+        обновление вашей рабочей копии, она будет полностью соответствовать
+        текущему состоянию хранилища.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.basic.in-action.track-repos"></a>Как рабочие копии отслеживают хранилище</h3>
+            </div>
+          </div>
+        </div>
+        <p>В служебном каталоге <code class="filename">.svn/</code> для каждого
+      файла рабочего каталога Subversion записывает информацию о двух
+        важнейших свойствах:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>на какой правке основан ваш рабочий файл (это
+            называется <em class="firstterm">рабочая правка</em> файла),
+            и</p>
+            </li>
+            <li class="listitem">
+              <p>временной (ударение на последний слог) метке, определяющей,
+          когда рабочая копия последний раз обновлялась из хранилища.</p>
+            </li>
+          </ul>
+        </div>
+        <p>Используя эту информацию при соединении с хранилищем, Subversion
+        может сказать, в каком из следующих четырех состояний находится рабочий
+        файл:</p>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">Не изменялся и не устарел</span>
+            </dt>
+            <dd>
+              <p>Файл не изменялся в рабочем каталоге, а в хранилище также не
+              фиксировались изменения этого файла со времени создания его
+              рабочей правки. Команды <span class="command"><strong>svn commit</strong></span> и
+              <span class="command"><strong>svn update</strong></span> никаких операций делать не
+              будут.</p>
+            </dd>
+            <dt>
+              <span class="term">Изменялся локально и не устарел</span>
+            </dt>
+            <dd>
+              <p>Файл был изменен в рабочей копии, но в хранилище не
+              фиксировались изменения этого файла последнего обновления
+              рабочей копии. Есть локальные изменения, которые не были
+              зафиксированы в хранилище, поэтому <span class="command"><strong>svn commit</strong></span>
+              выполнит фиксацию ваших изменений, а
+              <span class="command"><strong>svn update</strong></span> не сделает ничего.</p>
+            </dd>
+            <dt>
+              <span class="term">Не изменялся и устарел</span>
+            </dt>
+            <dd>
+              <p>В рабочем каталоге файл не изменялся, но был изменен в
+              хранилище. Необходимо выполнить обновление файла для того,
+              чтобы он соответствовал текущей опубликованной правке.
+              Команда <span class="command"><strong>svn commit</strong></span> не сделает ничего, а
+              <span class="command"><strong>svn update</strong></span> обновит вашу рабочую копию файла в
+              соответствии с последними изменениями.</p>
+            </dd>
+            <dt>
+              <span class="term">Изменялся локально и устарел</span>
+            </dt>
+            <dd>
+              <p>Файл был изменен как в рабочем каталоге, так и в
+              хранилище. <span class="command"><strong>svn commit</strong></span> потерпит неудачу, выдав
+              ошибку <span class="quote">«<span class="quote">out-of-date</span>»</span>. Файл необходимо сначала
+              обновить; <span class="command"><strong>svn update</strong></span> попытается объединить
+              локальные изменения с опубликованными. Если Subversion не сможет
+              выполнить объединение самостоятельно, она предложит пользователю
+              разрешить конфликт вручную.</p>
+            </dd>
+          </dl>
+        </div>
+        <p>Может показаться, что следить за актуальным состоянием рабочей
+        копии сложно. Это не так. Для того, чтобы узнать состояние любого
+        элемента в вашей рабочей копии, существует команда <span class="command"><strong>svn
+        status</strong></span>. За более подробной информацией об этой команде
+        обратитесь к <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.examine.status" title="svn status">«<span class="command"><strong>svn status</strong></span>»</a>.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.basic.in-action.mixedrevs"></a>Смешивание правок в рабочих копиях</h3>
+            </div>
+          </div>
+        </div>
+        <p>Subversion старается быть гибкой настолько, насколько это возможно.
+        Например, существует возможность иметь рабочую копию, содержащую
+        файлы и каталоги, имеющие смешанные номера рабочих правок. Но, к
+        сожалению, эта гибкость иногда смущает некоторых новых
+        пользователей. Если раньше примеры, показывающие смешанные правки,
+        вызывали у вас чувство растерянности, то это руководство, которое
+        рассказывает, для чего такая возможность существует и как ее
+        использовать, предназначена для вас.</p>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.basic.in-action.mixedrevs.update-commit"></a>Обновления и фиксации отделены друг от друга</h4>
+              </div>
+            </div>
+          </div>
+          <p>Одно из фундаментальных правил Subversion заключается в том,
+          что <span class="quote">«<span class="quote">передающее</span>»</span> действие не приводит к
+          <span class="quote">«<span class="quote">принимаемому</span>»</span>, и наоборот. То, что вы готовы
+          внести изменения в хранилище, не означает, что вы готовы принять
+          изменения от других. А если вы все еще работаете над новыми изменениями,
+          то <span class="command"><strong>svn update</strong></span> изящно объединит изменения из
+          хранилища с вашими собственными, вместо того, чтобы заставлять вас
+          опубликовать их.</p>
+          <p>Главным побочным эффектом этого правила является то, что
+          рабочая копия должна вести дополнительный учет при смешивании
+          правок и быть аккуратной при любом смешивании. И то, что каталоги
+          попадают под контроль версий, делает это еще более сложным
+          для понимания.</p>
+          <p>Допустим, у вас есть рабочая копия, полностью соответствующая
+          правке 10. После изменения файла <code class="filename">foo.html</code>,
+          вы выполняете команду <span class="command"><strong>svn commit</strong></span>,
+          которая создает в хранилище правку 15. После выполнения
+          фиксации большая часть новичков ожидают, что вся
+          рабочая копия будет иметь правку 15, однако это не так.
+          Между правками 10 и 15 в хранилище могло быть внесено любое
+          количество изменений. Так как команда <span class="command"><strong>svn update</strong></span>
+          не выполнялась, а <span class="command"><strong>svn commit</strong></span>
+          не загружает изменений, клиент ничего не знает о находящихся в
+          хранилище изменениях. С другой стороны, если бы команда <span class="command"><strong>svn
+          commit</strong></span> автоматически загружала последние изменения,
+          то всей рабочей копии можно было бы назначить соответствующий номер
+          правки - 15. Однако это нарушило бы фундаментальное правило,
+          согласно которому <span class="quote">«<span class="quote">передача</span>»</span> и
+          <span class="quote">«<span class="quote">получение</span>»</span> являются независимыми операциями.
+          Следовательно, все, что может сделать клиент Subversion, это
+          пометить один файл — <code class="filename">foo.html</code> —
+          как соответствующий правке 15. Остальная рабочая копия
+          продолжает соответствовать правке 10. Только при выполнении
+          <span class="command"><strong>svn update</strong></span> будут загружены последние
+          изменения, и вся рабочая копия будет помечена как соответствующая
+          правке 15.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.basic.in-action.mixedrevs.normal"></a>Смешивание правок — это нормально</h4>
+              </div>
+            </div>
+          </div>
+          <p>Фактически, <span class="emphasis"><em>каждый раз</em></span> при
+            выполнении <span class="command"><strong>svn commit</strong></span> правки рабочей
+            копии смешиваются. Только что зафиксированные элементы
+            отмечаются как имеющие больший номер рабочей правки, чем все
+            остальные. После нескольких фиксаций (без выполнения
+            обновлений между ними) правки рабочей копии будут полностью
+            перемешаны. Даже если вы являетесь единственным пользователем
+            хранилища, вы все равно с этим столкнетесь. Для просмотра
+            этой смеси рабочих правок воспользуйтесь командой
+            <span class="command"><strong>svn status --verbose</strong></span> (см.
+            <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.examine.status" title="svn status">«<span class="command"><strong>svn status</strong></span>»</a>).</p>
+          <p>Часто новые пользователи даже не подозревают о том,
+            что их рабочая копия содержит смешанные правки. Это может
+            сбить с толку, так как многие команды клиента чувствительны
+            к рабочей правке элемента, с которым он работает. Например,
+            команда <span class="command"><strong>svn log</strong></span> используется для вывода
+            истории изменения файла или каталога (см. <a class="xref" href="svn.tour.history.html#svn.tour.history.log" title="svn log">«<span class="command"><strong>svn log</strong></span>»</a>). Когда пользователь
+            вызывает эту команду применительно к объекту рабочей копии,
+            он ожидает увидеть полную историю этого объекта. Однако
+            если рабочая правка объекта очень старая (из-за того, что
+            команда <span class="command"><strong>svn update</strong></span> долго не выполнялась)
+            будет показана история для <span class="emphasis"><em>более старой</em></span>
+            версии этого объекта.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.basic.in-action.mixedrevs.useful"></a>Смешивание правок — это полезно</h4>
+              </div>
+            </div>
+          </div>
+          <p>Если у вас очень большой проект, вы можете найти
+            полезным время от времени принудительно
+            <span class="quote">«<span class="quote">возвращать</span>»</span> части рабочей копии к более
+            ранним правкам; как это делается, вы узнаете в <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a>. Возможно, вы захотите протестировать
+            более раннюю версию модуля, находящегося в подкаталоге
+            или точно узнать, когда в конкретном файле появилась
+            ошибка. Это — <span class="quote">«<span class="quote">машина времени</span>»</span>,
+            тот аспект системы управления версиями, который
+            позволяет перемещать в истории любую часть рабочей копии
+            вперед и назад.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.basic.in-action.mixedrevs.limits"></a>Смешивание правок имеет ограничения</h4>
+              </div>
+            </div>
+          </div>
+          <p>Несмотря на то, что в рабочей копии можно использовать
+            смешивание правок, у этой гибкости существуют
+            ограничения.</p>
+          <p>Во-первых, нельзя зафиксировать удаление устаревшего
+            файла или каталога. Если в хранилище существует более новая
+            версия элемента, попытка удаления будет отклонена для
+            предотвращения возможности непреднамеренного уничтожения
+            изменений о которых вы не в курсе.</p>
+          <p>Во-вторых, нельзя зафиксировать изменение метаданных
+            для необновленного каталога. О присвоении
+            <span class="quote">«<span class="quote">свойств</span>»</span> элементам вы узнаете в <a class="xref" href="svn.advanced.html" title="Глава 3. Профессиональное использование Subversion">Глава 3, <em>Профессиональное использование Subversion</em></a>. Рабочая правка каталога
+            определяет конкретный набор входящих в нее элементов и
+            свойств, поэтому фиксация изменений свойств для устаревшего
+            каталога может привести к уничтожению свойств, о которых
+            вы не знаете.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.basic.vsn-models.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.basic.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.basic.summary.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Модели версионирования </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Подводя итоги</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

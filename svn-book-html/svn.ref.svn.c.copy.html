@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>svn copy</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.svn.html#svn.ref.svn.c" title="Подкоманды svn" />
+    <link rel="prev" href="svn.ref.svn.c.commit.html" title="svn commit" />
+    <link rel="next" href="svn.ref.svn.c.delete.html" title="svn delete" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">svn copy</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.svn.c.commit.html">Пред.</a> </td>
+          <th width="60%" align="center">Подкоманды <span class="command"><strong>svn</strong></span></th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.ref.svn.c.delete.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svn.c.copy"></a>
+      <div class="titlepage"></div>
+      <a id="idm6420" class="indexterm"></a>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>svn copy — Копирует файл или каталог в рабочей копии или
+            хранилище.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6427"></a>
+        <h2>Формат</h2>
+        <pre class="programlisting">svn copy SRC DST</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6430"></a>
+        <h2>Описание</h2>
+        <p>Копирует файл в рабочей копии или в хранилище.
+            <em class="replaceable"><code>SRC</code></em> и
+            <em class="replaceable"><code>DST</code></em> могут быть путями как внутри
+            рабочей копии, так и URL внутри хранилища:</p>
+        <div class="variablelist">
+          <dl class="variablelist">
+            <dt>
+              <span class="term">WC  -&gt; WC</span>
+            </dt>
+            <dd>
+              <p>Планирует копирование объекта
+                    (вместе с историей).</p>
+            </dd>
+            <dt>
+              <span class="term">WC  -&gt; URL</span>
+            </dt>
+            <dd>
+              <p>Создает копию объекта из рабочей копии
+                    непосредственно в хранилище.</p>
+            </dd>
+            <dt>
+              <span class="term">URL -&gt; WC</span>
+            </dt>
+            <dd>
+              <p>Выгружает копию объекта из хранилища в рабочую копию
+                    и планирует ее добавление.</p>
+            </dd>
+            <dt>
+              <span class="term">URL -&gt; URL</span>
+            </dt>
+            <dd>
+              <p>Выполняет копирование объектов непосредственно в
+                    хранилище. Обычно используется для создания ветки.
+                  </p>
+            </dd>
+          </dl>
+        </div>
+        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Note">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Примечание]" src="images/note.png" />
+              </td>
+              <th align="left">Примечание</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Вы можете копировать файлы только внутри одного хранилища.
+              Subversion не поддерживает межхранилищного копирования.</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="refsect1">
+        <a id="idm6454"></a>
+        <h2>Альтернативные имена</h2>
+        <p>cp</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6457"></a>
+        <h2>Изменяет</h2>
+        <p>Хранилище, если копия задается через URL</p>
+        <p>Рабочая копия, если копия создается внутри неё.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6461"></a>
+        <h2>Требует доступа к хранилищу</h2>
+        <p>Да, если копируемый объект или место назначения расположены в
+            хранилище, а так же если необходимо найти номер
+            <a class="link" href="svn.glossary.ru.html#revision" title="revision">правки</a>.
+          </p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6465"></a>
+        <h2>Параметры</h2>
+        <pre class="screen">
+--message (-m) TEXT
+--file (-F) FILE
+--revision (-r) REV
+--quiet (-q)
+--username USER
+--password PASS
+--no-auth-cache
+--non-interactive
+--force-log
+--editor-cmd EDITOR
+--encoding ENC
+--config-dir DIR
+</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6468"></a>
+        <h2>Примеры</h2>
+        <p>Создание копии объекта внутри рабочей копии (физическое
+            копирование происходит после выполнения команды фиксации
+            изменений):
+          </p>
+        <pre class="screen">
+$ svn copy foo.txt bar.txt
+A         bar.txt
+$ svn status
+A  +   bar.txt
+</pre>
+        <p>Создание копии объекта из рабочей копии в хранилище по
+            заданному URL (изменения в хранилище вносятся незамедлительно, так
+            что требуется задать пояснения изменений):
+          </p>
+        <pre class="screen">
+$ svn copy near.txt file:///tmp/repos/test/far-away.txt -m "Remote copy."
+
+Committed revision 8.
+</pre>
+        <p>Создание копии объекта из хранилища в рабочую копию
+            (полученная копия планируется на добавление и в хранилище появится
+            только после команды фиксации изменений:
+          </p>
+        <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Подсказка]" src="images/tip.png" />
+              </td>
+              <th align="left">Подсказка</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Это рекомендованный способ воскрешать случайно удаленные
+              из хранилища файлы!</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <pre class="screen">
+$ svn copy file:///tmp/repos/test/far-away near-here
+A         near-here
+</pre>
+        <p>И наконец, копирование внутри хранилища:</p>
+        <pre class="screen">
+$ svn copy file:///tmp/repos/test/far-away file:///tmp/repos/test/over-there -m "remote copy."
+
+Committed revision 9.
+</pre>
+        <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Подсказка]" src="images/tip.png" />
+              </td>
+              <th align="left">Подсказка</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Это простейший способ <span class="quote">«<span class="quote">установить метку</span>»</span> на
+              версию в хранилище—просто выполните <span class="command"><strong>svn
+              copy</strong></span> желаемой <a class="link" href="svn.glossary.ru.html#revision" title="revision">версии</a>
+              (хотя обычно это <code class="literal">HEAD</code>) в желаемый каталог.
+            </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <pre class="screen">
+$ svn copy file:///tmp/repos/test/trunk file:///tmp/repos/test/tags/0.6.32-prerelease -m "tag tree"
+
+Committed revision 12.
+</pre>
+        <p>Да, и не волнуйтесь, если забыли вовремя пометить
+            <a class="link" href="svn.glossary.ru.html#revision" title="revision">версию</a>—вы всегда можете
+            сделать это сославшись на старую версию:</p>
+        <pre class="screen">
+$ svn copy -r 11 file:///tmp/repos/test/trunk file:///tmp/repos/test/tags/0.6.32-prerelease -m "Forgot to tag at rev 11"
+
+Committed revision 13.
+</pre>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.svn.c.commit.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.svn.html#svn.ref.svn.c">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.ref.svn.c.delete.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">svn commit </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> svn delete</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

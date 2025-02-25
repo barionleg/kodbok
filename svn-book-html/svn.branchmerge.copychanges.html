@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Копирование изменений между ветками</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние" />
+    <link rel="prev" href="svn.branchmerge.using.html" title="Использование веток" />
+    <link rel="next" href="svn.branchmerge.commonuses.html" title="Типовые примеры" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Копирование изменений между ветками</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.branchmerge.using.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 4. Ветвление и слияние</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.branchmerge.commonuses.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.branchmerge.copychanges"></a>Копирование изменений между ветками</h2>
+          </div>
+        </div>
+      </div>
+      <p>Теперь вы и Салли работаете над параллельными ветками проекта:
+      вы — над своей собственной веткой, а Салли — над
+      главной линией разработки 
+      (каталог <em class="firstterm">trunk</em>).</p>
+      <p>В проектах со значительным числом участников, как правило,
+      большинство работает в главной линии разработки.
+      Когда кому-то необходимо сделать изменения, которые займут
+      много времени и могут нарушить главную линию, стандартной практикой
+      является создание отдельной ветки и фиксация всех изменений в ней
+      — до тех пор, пока работа не будет полностью завершена.</p>
+      <p>Положительным моментом здесь является то, что вы и Салли не
+      пересекаетесь друг с другом. Но есть и минус — 
+      вы можете разойтись <span class="emphasis"><em>слишком</em></span> далеко друг
+      относительно друга. Помните, что одна из проблем такой
+      стратегии <span class="quote">«<span class="quote">временной изоляции</span>»</span> заключается в том,
+      что к моменту, когда вы завершите работу со своей веткой,
+      может оказаться практически невозможным объединить ее 
+      с главной линией без огромного количества конфликтов.</p>
+      <p>Вместо этого вы и Салли можете продолжать делиться изменениями
+      по ходу работы. Вы можете решать вплоть до отдельного изменения,
+      стоит ли им делиться — Subversion предоставляет возможность
+      выборочного <span class="quote">«<span class="quote">копирования</span>»</span> изменений между ветками.
+      А тогда, когда вы полностью закончите работу со своей веткой, 
+      вы можете скопировать обратно в основную ветку все изменения 
+      полностью.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.copychanges.specific"></a>Копирование отдельных изменений</h3>
+            </div>
+          </div>
+        </div>
+        <p>В предыдущем разделе мы отметили, что и вы, и Салли, 
+        одновременно, в разных ветках вносите изменения в файл
+        <code class="filename">integer.c</code>.
+        Если посмотреть на лог-сообщение Салли для правки 344, вы увидите,
+        что она исправила несколько орфографических ошибок. Конечно же,
+        в вашей копии этого файла эти ошибки остались. Не исключено, что
+        ваши будущие изменения этого файла коснутся областей, 
+        содержащих эти орфографические ошибки, и таким образом вы получите 
+        несколько потенциальных конфликтов при последующем объединении 
+        вашей ветки. Поэтому лучше получить изменения от Салли сейчас,
+        <span class="emphasis"><em>до</em></span> того, как вы начнете вплотную работать с
+        этой частью файла.</p>
+        <p>Настал момент воспользоваться командой <span class="command"><strong>svn
+        merge</strong></span>. Эта команда, оказывается, является очень близким
+        родственником команды <span class="command"><strong>svn diff</strong></span> (о которой вы
+        читали в <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a>). Обе команды способны
+        сравнивать любые два объекта в хранилище и показывать различия.
+        Например, вы можете попросить <span class="command"><strong>svn diff</strong></span> показать
+        все изменения, сделанные Салли в правке 344:</p>
+        <pre class="screen">
+$ svn diff -r 343:344 http://svn.example.com/repos/calc/trunk
+
+Index: integer.c
+===================================================================
+--- integer.c (revision 343)
++++ integer.c (revision 344)
+@@ -147,7 +147,7 @@
+     case 6:  sprintf(info-&gt;operating_system, "HPFS (OS/2 or NT)"); break;
+     case 7:  sprintf(info-&gt;operating_system, "Macintosh"); break;
+     case 8:  sprintf(info-&gt;operating_system, "Z-System"); break;
+-    case 9:  sprintf(info-&gt;operating_system, "CPM"); break;
++    case 9:  sprintf(info-&gt;operating_system, "CP/M"); break;
+     case 10:  sprintf(info-&gt;operating_system, "TOPS-20"); break;
+     case 11:  sprintf(info-&gt;operating_system, "NTFS (Windows NT)"); break;
+     case 12:  sprintf(info-&gt;operating_system, "QDOS"); break;
+@@ -164,7 +164,7 @@
+     low = (unsigned short) read_byte(gzfile);  /* read LSB */
+     high = (unsigned short) read_byte(gzfile); /* read MSB */
+     high = high &lt;&lt; 8;  /* interpret MSB correctly */
+-    total = low + high; /* add them togethe for correct total */
++    total = low + high; /* add them together for correct total */
+
+     info-&gt;extra_header = (unsigned char *) my_malloc(total);
+     fread(info-&gt;extra_header, total, 1, gzfile);
+@@ -241,7 +241,7 @@
+      Store the offset with ftell() ! */
+
+   if ((info-&gt;data_offset = ftell(gzfile))== -1) {
+-    printf("error: ftell() retturned -1.\n");
++    printf("error: ftell() returned -1.\n");
+     exit(1);
+   }
+
+@@ -249,7 +249,7 @@
+   printf("I believe start of compressed data is %u\n", info-&gt;data_offset);
+   #endif
+
+-  /* Set postion eight bytes from the end of the file. */
++  /* Set position eight bytes from the end of the file. */
+
+   if (fseek(gzfile, -8, SEEK_END)) {
+     printf("error: fseek() returned non-zero\n");
+</pre>
+        <p>Команда <span class="command"><strong>svn merge</strong></span> ведет себя 
+        практически идентично. Но вместо вывода различий на терминал
+        она применяет их к рабочей копии в виде <span class="emphasis"><em>локальных
+        изменений</em></span>:</p>
+        <pre class="screen">
+$ svn merge -r 343:344 http://svn.example.com/repos/calc/trunk
+U  integer.c
+
+$ svn status
+M  integer.c
+</pre>
+        <p>Вывод команды <span class="command"><strong>svn merge</strong></span> показывает, что
+        к вашей копии <code class="filename">integer.c</code> был применен патч.
+        Теперь она содержит изменения Салли — они были
+        <span class="quote">«<span class="quote">скопированы</span>»</span> из главной линии разработки в вашу
+        рабочую копию, вашу собственную ветку, и теперь существуют в виде
+        локальных изменений. С этого момента вы можете просмотреть локальные
+        изменения и убедиться в том, что они корректны.</p>
+        <p>Возможна ситуация, когда не все будет так хорошо
+        и <code class="filename">integer.c</code> окажется в состоянии
+        конфликта. Тогда вам будет необходимо разрешить конфликт
+        обычным путем (см. <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a>), либо, если вы
+        придете к мнению, что объединение было плохой идеей, просто
+        отказаться от него, отменив локальные изменения командой
+        <span class="command"><strong>svn revert</strong></span>.</p>
+        <p>Просмотрев результат объединения исправлений, его можно
+        зафиксировать как обычно (<span class="command"><strong>svn commit</strong></span>).
+        После этого изменения будут внесены в вашу ветку хранилища.
+        В терминологии управления версиями такую процедуру копирования
+        изменений между ветками обычно называют
+        <em class="firstterm">портированием</em> изменений.</p>
+        <p>При фиксации локальных изменений убедитесь, что в 
+        лог-сообщении упоминается о портировании отдельных изменений
+        из одной ветки в другую. Например:</p>
+        <pre class="screen">
+$ svn commit -m "integer.c: ported r344 (spelling fixes) from trunk."
+Sending        integer.c
+Transmitting file data .
+Committed revision 360.
+</pre>
+        <p>Как вы увидите в последующих разделах, очень важно следовать
+        этой <span class="quote">«<span class="quote">хорошей практике</span>»</span>.</p>
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Почему бы не использовать вместо этого патчи?</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Зачем вообще связываться с <span class="command"><strong>svn merge</strong></span>? 
+          Этот вопрос может крутиться у вас в голове, особенно
+          если вы пользователь Unix:  Почему бы не использовать
+          команду операционной системы <span class="command"><strong>patch</strong></span> для
+          выполнения той же работы? Например:</p>
+          <pre class="screen">
+$ svn diff -r 343:344 http://svn.example.com/repos/calc/trunk &gt; patchfile
+$ patch -p0  &lt; patchfile
+Patching file integer.c using Plan A...
+Hunk #1 succeeded at 147.
+Hunk #2 succeeded at 164.
+Hunk #3 succeeded at 241.
+Hunk #4 succeeded at 249.
+done
+</pre>
+          <p>Для этого конкретного случая, действительно, разницы
+          нет. Однако, <span class="command"><strong>svn merge</strong></span> имеет 
+          специфические возможности, благодаря которым превосходит 
+          программу <span class="command"><strong>patch</strong></span>.
+          Формат файлов, используемый программой <span class="command"><strong>patch</strong></span>,
+          является довольно ограниченным; он способен передавать только 
+          изменения содержимого файлов. Он не позволяет описать изменения
+          <span class="emphasis"><em>дерева</em></span> файлов, такие как добавление, 
+          удаление или переименование файлов и каталогов. Если, скажем, 
+          в результате исправлений Салли добавился новый каталог, в 
+          выводе <span class="command"><strong>svn diff</strong></span> это упоминаться не будет.
+          Вывод <span class="command"><strong>svn diff</strong></span> представляет собой только
+          ограниченный патч-формат, он просто не может передать 
+          некоторые вещи. <a href="#ftn.idm2594" class="footnote" id="idm2594"><sup class="footnote">[25]</sup></a> Команда
+          <span class="command"><strong>svn merge</strong></span>, напротив, может передавать
+          изменения в структуре файлов и свойств, непосредственно 
+          применяя их к рабочей копии.</p>
+        </div>
+        <p>Небольшое предупреждение: несмотря на то, что <span class="command"><strong>svn
+        diff</strong></span> и <span class="command"><strong>svn merge</strong></span> по сути очень 
+        похожи, во многих случаях они используют разный синтаксис.
+        Обязательно прочтите об этом в <a class="xref" href="svn.ref.html" title="Глава 9. Полное справочное руководство по Subversion">Глава 9, <em>Полное справочное руководство по Subversion</em></a>, или
+        спросите у <span class="command"><strong>svn help</strong></span>. Например, <span class="command"><strong>svn
+        merge</strong></span> требует в качестве целевого объекта путь в
+        рабочей копии, то есть место, где ей нужно применить изменения
+        структуры файлов. Если целевой объект не указан, предполагается,
+        что делается попытка выполнить одну из следующих операций:</p>
+        <div class="orderedlist">
+          <ol class="orderedlist" type="1">
+            <li class="listitem">
+              <p>объединение изменений каталога с вашим текущим
+            рабочим каталогом;</p>
+            </li>
+            <li class="listitem">
+              <p>объединение изменений в конкретном файле с
+            файлом, имеющим то же имя в текущем рабочем каталоге.</p>
+            </li>
+          </ol>
+        </div>
+        <p>Если вы объединяете каталог и не указываете целевой путь,
+        <span class="command"><strong>svn merge</strong></span> предполагает первый из приведенных выше
+        вариантов и пытается применить изменения к текущему каталогу.
+        Если вы объединяете файл, и при этом файл с таким именем
+        есть в текущем рабочем каталоге, <span class="command"><strong>svn merge</strong></span>
+        подразумевает второй случай и пытается применить изменения
+        к локальному файлу с таким же именем.</p>
+        <p>Если вы хотите применить изменения к чему-то другому, вам
+        нужно это указать. Например, если вы находитесь в родительском
+        каталоге рабочей копии, то вам нужно указать целевой каталог,
+        получающий изменения:</p>
+        <pre class="screen">
+$ svn merge -r 343:344 http://svn.example.com/repos/calc/trunk my-calc-branch
+U   my-calc-branch/integer.c
+</pre>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.copychanges.keyconcept"></a>Ключевые идеи, стоящие за слиянием</h3>
+            </div>
+          </div>
+        </div>
+        <p>Теперь, после знакомства с примерами использования <span class="command"><strong>svn
+        merge</strong></span>, настала пора разобраться в них поглубже. 
+        Если вы чувствуете неуверенность в том как, собственно, 
+        работает слияние, то вы в этом
+        вы не одиноки. Многие пользователи (особенно те, для которых
+        управление версиями в новинку) поначалу путаются в правильности
+        записи этой команды и в том, как и когда эту функцию следует
+        использовать. Отбросьте страх — на самом деле эта команда 
+        намного проще, чем вы думаете! Понять, как именно ведет себя 
+        <span class="command"><strong>svn merge</strong></span>, очень просто.</p>
+        <p>В ступор вводит, главным образом,
+        <span class="emphasis"><em>название</em></span> команды. Термин <span class="quote">«<span class="quote">слияние</span>»</span>
+        как бы указывает на то, что ветки соединяются вместе, или
+        происходит какое-то волшебное смешивание данных. На самом деле это
+        не так. Пожалуй, этой команде лучше бы подощло название <span class="command"><strong>svn
+        diff-and-apply</strong></span>, поскольку это всё, что в результате 
+        происходит: сравниваются два файловых дерева хранилища, а 
+        различия переносятся в рабочую копию.</p>
+        <p>Команда принимает три аргумента:</p>
+        <div class="orderedlist">
+          <ol class="orderedlist" type="1">
+            <li class="listitem">
+              <p>Начальное дерево хранилища (как правило,
+          называемое <em class="firstterm">левой частью</em>
+          при сравнении),</p>
+            </li>
+            <li class="listitem">
+              <p>Конечное дерево хранилища (как правило
+          называемое <em class="firstterm">правой частью</em> при
+          сравнении),</p>
+            </li>
+            <li class="listitem">
+              <p>Рабочую копию, к которой отличия применяются
+          в виде локальных изменений (как правило, называемую
+          <em class="firstterm">целью</em> слияния).</p>
+            </li>
+          </ol>
+        </div>
+        <p>Когда эти три аргумента указаны, производится сравнение 
+        двух деревьев, а полученные различия применяются к целевой 
+        рабочей копии в виде локальных изменений. После выполнения 
+        этой команды результат будет так же, как в случае, если бы вы 
+        вручную редактировали файлы или многократно выполняли команды
+        <span class="command"><strong>svn add</strong></span> или <span class="command"><strong>svn delete</strong></span>. 
+        Если результат вас устраивает, его можно
+        зафиксировать. Если результат вас не устраивает, просто
+        отмените (<span class="command"><strong>svn revert</strong></span>) все сделанные
+        изменения.</p>
+        <p>Синтаксис <span class="command"><strong>svn merge</strong></span> позволяет
+        указывать эти три аргумента довольно гибко. Вот
+        несколько примеров:</p>
+        <pre class="screen">      
+$ svn merge http://svn.example.com/repos/branch1@150 \
+            http://svn.example.com/repos/branch2@212 \
+            my-working-copy
+
+$ svn merge -r 100:200 http://svn.example.com/repos/trunk my-working-copy
+
+$ svn merge -r 100:200 http://svn.example.com/repos/trunk
+</pre>
+        <p>В первом варианте все три аргумента указаны явно —
+        каждое дерево задано в форме <span class="emphasis"><em>URL@REV</em></span> и
+        указана целевая рабочая копия. Второй вариант может
+        использоваться для краткости записи в ситуациях, когда
+        сравниваются две разных правки по одному и тому же URL.
+        Последний вариант демонстрирует возможность не указывать целевую
+        рабочую копию, при этом по умолчанию используется текущий
+        каталог.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.copychanges.bestprac"></a>Как правильнее всего использовать слияние</h3>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.branchmerge.copychanges.bestprac.track"></a>Ручной контроль слияния</h4>
+              </div>
+            </div>
+          </div>
+          <p>На первый взгляд объединить изменения просто, однако
+          на практике могут возникнуть трудности. Проблема заключается
+          в том, что при многократном объединении изменений одной
+          ветки с другой можно непреднамеренно сделать объединение одних
+          и тех же изменений <span class="emphasis"><em>дважды</em></span>. Иногда
+          это не вызывает проблем. При применении изменений к файлу 
+          Subversion, как правило, предупреждает о том, что файл 
+          уже содержит изменения и в этом случае не
+          выполняет никаких действий. Однако, если уже присутствующие
+          изменения были модифицированы, возникнет конфликт.</p>
+          <p>В идеале система управления версиями должна предотвращать
+          повторное применение изменений к ветке. Она должна автоматически
+          фиксировать, какие изменения уже были получены и иметь возможность
+          перечислить их вам. Она должна использовать эту информацию 
+          для того, чтобы, насколько возможно, помочь автоматизировать
+          слияние.</p>
+          <p>К сожалению, Subversion не такая система. Как и
+          CVS, Subversion пока не сохраняет никакой информации об
+          операциях слияния. При фиксации локальных изменений хранилище
+          понятия не имеет, являются ли эти изменения результатом
+          выполнения команды <span class="command"><strong>svn merge</strong></span> или результатом
+          обычного ручного редактирования файлов.</p>
+          <p>Что это означает для вас как пользователя? Это означает,
+          что до того момента, пока у Subversion не появится этой функции,
+          вам придется контролировать слияние информации самостоятельно.
+          Лучшим местом для этого является лог-сообщение. Как было
+          показано в предыдущих примерах, рекомендуется, чтобы в
+          лог-сообщении был указан конкретный номер правки (или диапазон
+          правок), которые были слиты в вашу ветку. В этом случае вы 
+          сможете впоследствии просмотреть, какие изменения уже содержит
+          ваша ветка, запусти команду <span class="command"><strong>svn log</strong></span>. Это
+          позволит быть осторожнее при последующих запусках команды 
+          <span class="command"><strong>svn merge</strong></span> и избежать пересечения с уже 
+          портированными изменениями.</p>
+          <p>В следующем разделе мы на примерах рассмотрим эту методику
+          в действии.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.branchmerge.copychanges.bestprac.preview"></a>Предварительный просмотр результатов слияния</h4>
+              </div>
+            </div>
+          </div>
+          <p>Поскольку результатом слияния являются локальные
+          изменения, такая операция не является опасной. Допустив
+          при слиянии ошибку, можно просто
+          отменить изменения (<span class="command"><strong>svn revert</strong></span>) и
+          попробовать еще раз.</p>
+          <p>Однако, возможна ситуация, когда рабочая копия уже
+          содержит локальные изменения. Изменения, примененные при
+          слиянии, будут смешаны с уже существующими, и запуск
+          <span class="command"><strong>svn revert</strong></span> нас больше не устроит.
+          Разделить два множества изменений будет невозможно.</p>
+          <p>В такой ситуации лучше попробовать спрогнозировать
+          или проверить результат слияния до того, как оно произойдет.
+          Проще всего запустить для этого <span class="command"><strong>svn diff</strong></span>
+          с теми же аргументами, что и для <span class="command"><strong>svn merge</strong></span>.
+          Мы уже показывали это в первом примере объединения. Другим 
+          способом предварительного просмотра может служить вызов 
+          команды слияния с опцией <code class="option">--dry-run</code>:</p>
+          <pre class="screen">
+$ svn merge --dry-run -r 343:344 http://svn.example.com/repos/calc/trunk
+U  integer.c
+
+$ svn status
+#  nothing printed, working copy is still unchanged.
+</pre>
+          <p>Опция <code class="option">--dry-run</code> позволяет не применять 
+          локальные изменения к рабочей копии. Она только показывает
+          статусы, которые <span class="emphasis"><em>имели бы</em></span> файлы
+          при реальном объединении. Это полезно для получения
+          <span class="quote">«<span class="quote">сводной</span>»</span> информации о потенциальном слиянии
+          в тех случаях, когда запуск <span class="command"><strong>svn diff</strong></span>
+          выдает слишком много подробностей.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.branchmerge.copychanges.bestprac.merge"></a>Конфликты при слиянии</h4>
+              </div>
+            </div>
+          </div>
+          <p>Так же как и <span class="command"><strong>svn update</strong></span>, команда
+          <span class="command"><strong>svn merge</strong></span> внедряет изменения в
+          рабочую копию. Следовательно, она тоже может создавать
+          конфликты. Однако конфликты, порождаемые <span class="command"><strong>svn
+          merge</strong></span>, имеют определенные отличия, и поэтому 
+          мы их сейчас рассмотрим подробнее.</p>
+          <p>Вначале предположим, что рабочая копия не имеет
+          локальных изменений. При обновлении (<span class="command"><strong>svn
+          update</strong></span>) рабочей копии до конкретной правки 
+          отправляемые сервером изменения будут всегда <span class="quote">«<span class="quote">без 
+          проблем</span>»</span> внедряться
+          в рабочую копию. Сервер создает дельту, сравнивая два дерева:
+          виртуальный снимок рабочей копии и дерево файлов, которое
+          вас интересует. Учитывая то, что левая часть сравнения
+          полностью эквивалентна тому, что вы уже имеете, дельта
+          гарантированно правильно конвертирует рабочую копию в правую
+          часть сравнения.</p>
+          <p>Однако <span class="command"><strong>svn merge</strong></span> не дает такой
+          гарантии, и может вести себя более непредсказуемо:
+          пользователь может запросить сервер сравнить
+          <span class="emphasis"><em>любые</em></span> два дерева файлов, даже такие,
+          которые не имеют отношения к рабочей копии! Из этого
+          следует множество потенциальных человеческих
+          ошибок. Иногда пользователи будут сравнивать два
+          ошибочных дерева, создавая дельту, которая не
+          сможет правильно внедриться. <span class="command"><strong>svn
+          merge</strong></span> будет пытаться внедрить различия
+          по максимуму, но иногда это будет невозможно.
+          Так же как команда <span class="command"><strong>patch</strong></span> в Unix
+          иногда жалуется на <span class="quote">«<span class="quote">неудачные попытки</span>»</span>
+          объединения, <span class="command"><strong>svn merge</strong></span> будет
+          жаловаться на <span class="quote">«<span class="quote">пропущенные цели</span>»</span>:</p>
+          <pre class="screen">
+$ svn merge -r 1288:1351 http://svn.example.com/repos/branch
+U  foo.c
+U  bar.c
+Skipped missing target: 'baz.c'
+U  glub.c
+C  glorb.h
+
+$
+</pre>
+          <p>Возможно, что в предыдущем примере файл
+          <code class="filename">baz.c</code> существует в обоих сравниваемых
+          снимках ветки и Subversion пытается применить результирующую
+          дельту для того, чтобы изменить содержимое файла, однако в
+          рабочей копии файл отсутствует. В любом случае сообщение
+          <span class="quote">«<span class="quote">skipped</span>»</span> означает, что скорее всего пользователь
+          ошибся при указании деревьев для сравнения — то есть это 
+          классическая ошибка оператора. Если это так, проще 
+          всего рекурсивно отменить все изменения, сделанные при слиянии 
+          (<span class="command"><strong>svn revert --recursive</strong></span>), сразу же после 
+          этого удалить все неверсионированные файлы и каталоги и 
+          повторно запустить <span class="command"><strong>svn merge</strong></span> с 
+          другими параметрами.</p>
+          <p>Обратите внимание на то, что в предыдущем примере
+          в файле <code class="filename">glorb.h</code> возник конфликт.
+          Откуда же он мог взяться, если ранее мы договорились, 
+          что рабочая копия не имеет локальных изменений?
+          Опять же, пользователь мог запустить <span class="command"><strong>svn
+          merge</strong></span> для выделения и применения к рабочей копии
+          какой то старой дельты. В результате такая дельта может
+          содержать изменения, которые нельзя внедрить в рабочий
+          файл без появления проблем, даже если он не имеет локальных
+          изменений.</p>
+          <p>Еще одно небольшое отличие между <span class="command"><strong>svn
+          update</strong></span> и <span class="command"><strong>svn merge</strong></span> заключается
+          в названиях файлов, создаваемых при конфликтах.
+          В разделе <a class="xref" href="svn.tour.cycle.html#svn.tour.cycle.resolve" title="Разрешение конфликтов (при слиянии с чужими изменениями)">«Разрешение конфликтов (при слиянии с чужими 
+        изменениями)»</a> мы
+          говорили о том, что при обновлении создаются файлы с
+          названиями <code class="filename">filename.mine</code>,
+          <code class="filename">filename.rOLDREV</code> и
+          <code class="filename">filename.rNEWREV</code>. А <span class="command"><strong>svn
+          merge</strong></span> в конфликтной ситуации создает три файла
+          с названиями <code class="filename">filename.working</code>,
+          <code class="filename">filename.left</code> и
+          <code class="filename">filename.right</code>. Термины 
+          <span class="quote">«<span class="quote">left</span>»</span> и <span class="quote">«<span class="quote">right</span>»</span> указывают здесь
+          на две стороны сравнения, то есть на используемые при
+          сравнении деревья. Это разделение используемых названий
+          поможет вам отличать конфликты, возникшие в результате
+          обновления, от конфликтов, возникших в результате
+          слияния.</p>
+        </div>
+        <div class="sect3">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="svn.branchmerge.copychanges.bestprac.ancestry"></a>Учитывать или игнорировать происхождение</h4>
+              </div>
+            </div>
+          </div>
+          <p>Общаясь с разработчиками, использующими Subversion,
+          очень часто можно услышать термин
+          <em class="firstterm">происхождение</em>. Это слово используется
+          для описания отношений между двумя объектами хранилища:
+          если между ними есть связь, то говорят, что один объект
+          происходит от другого.</p>
+          <p>Предположим, что фиксируется правка 100,
+          в которой изменяется файл <code class="filename">foo.c</code>.
+          В этом случае файл <code class="filename">foo.c@99</code> является предком
+          файла <code class="filename">foo.c@100</code>. С другой стороны, можно
+          допустить, что в правке 101 вы фиксируете удаление
+          <code class="filename">foo.c</code>, а затем в правке 102 добавляете
+          новый файл с таким же именем. В таком случае может показаться,
+          что файлы <code class="filename">foo.c@99</code> и <code class="filename">foo.c@102</code>
+          имеют отношение друг к другу (у них одинаковый путь), 
+          однако на самом деле они являются
+          полностью независимыми объектами хранилища. Они не имеют
+          ни общей истории, ни общих <span class="quote">«<span class="quote">предков</span>»</span>.</p>
+          <p>Мы обращаем на это ваше внимание, чтобы
+          указать на важные различия между <span class="command"><strong>svn diff</strong></span>
+          и <span class="command"><strong>svn merge</strong></span>. Первая команда игнорирует
+          происхождение, в то время как вторая его учитывает.
+          Например, если попросить <span class="command"><strong>svn diff</strong></span> сравнить
+          правки 99 и 102 файла <code class="filename">foo.c</code> вы увидите
+          построчное сравнение; команда <code class="literal">diff</code> слепо сравнивает
+          два пути. А вот если вы попросите <span class="command"><strong>svn merge</strong></span>
+          сравнить те же объекты, то Subversion предупредит вас о том, что
+          они не связаны друг с другом и сначала попытается удалить
+          старый файл, а затем добавить новый; вывод команды покажет
+          удаление с последующим добавлением:</p>
+          <pre class="screen">
+D  foo.c
+A  foo.c
+</pre>
+          <p>В большинстве случаев при слиянии сравниваются
+          деревья, имеющие родственную связь и по умолчанию
+          <span class="command"><strong>svn merge</strong></span> рассчитывает на это. Однако
+          иногда вам будет нужно, чтобы команда <code class="literal">merge</code>
+          сравнила два независимых дерева файлов. Например, вы могли 
+          импортировать два дерева, содержащие исходный код
+          релизов программных проектов сторонних поставщиков
+          (см. <a class="xref" href="svn.advanced.vendorbr.html" title="Vendor branches">«Vendor branches»</a>). Если попросить
+          <span class="command"><strong>svn merge</strong></span> сравнить два эти дерева,
+          вы увидите, что первое дерево будет полностью удалено,
+          а затем будет полностью добавлено второе!</p>
+          <p>В подобных ситуациях нужно, чтобы команда
+          <span class="command"><strong>svn merge</strong></span> выполняла сравнение, учитывая только 
+          пути, и не обращала внимание на отношения между файлами
+          и каталогами. Добавьте опцию <code class="option">--ignore-ancestry</code>
+          при запуске команды слияния, после чего она будет
+          вести себя аналогично <span class="command"><strong>svn diff</strong></span>. (И наоборот,
+          опция <code class="option">--notice-ancestry</code> заставит
+          <span class="command"><strong>svn diff</strong></span> работать подобно команде
+          <code class="literal">merge</code>.)</p>
+        </div>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm2594" class="footnote">
+          <p><a href="#idm2594" class="para"><sup class="para">[25] </sup></a>В будущем проект Subversion
+          планирует использовать (или изобрести) расширенный формат
+          представления различий, который будет передавать изменения в
+          структуре дерева файлов и свойств.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.branchmerge.using.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.branchmerge.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.branchmerge.commonuses.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Использование веток </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Типовые примеры</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

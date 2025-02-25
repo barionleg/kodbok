@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>svn commit</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.ref.svn.html#svn.ref.svn.c" title="Подкоманды svn" />
+    <link rel="prev" href="svn.ref.svn.c.cleanup.html" title="svn cleanup" />
+    <link rel="next" href="svn.ref.svn.c.copy.html" title="svn copy" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">svn commit</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.ref.svn.c.cleanup.html">Пред.</a> </td>
+          <th width="60%" align="center">Подкоманды <span class="command"><strong>svn</strong></span></th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.ref.svn.c.copy.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="refentry">
+      <a id="svn.ref.svn.c.commit"></a>
+      <div class="titlepage"></div>
+      <a id="idm6364" class="indexterm"></a>
+      <div class="refnamediv">
+        <h2>Название</h2>
+        <p>svn commit — Фиксирует сделанные вами изменения рабочей копии в
+            хранилище.</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6371"></a>
+        <h2>Формат</h2>
+        <pre class="programlisting">svn commit [PATH...]</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6374"></a>
+        <h2>Описание</h2>
+        <p>Фиксирует сделанные вами изменения рабочей копии в
+            хранилище. Если вы не 
+            воспользовались ни <code class="option">--file</code>, ни
+            <code class="option">--message</code> параметром, <span class="command"><strong>svn</strong></span>
+            запустит внешний редактор для составления комментария. Обращайтесь
+            за подробностями к описанию
+            параметра <code class="literal">editor-cmd</code> в
+            <a class="xref" href="svn.advanced.confarea.html#svn.advanced.confarea.opts.config" title="Config">«Config»</a>.</p>
+        <p><span class="command"><strong>svn commit</strong></span> отправит хранилищу все рекурсивно
+            найденные метки блокировок и разблокирует соответствующие этим
+            меткам ресурсы, если не был указан параметр
+            <code class="option">--no-unlock</code>. Место поиска задается указанием
+            <em class="replaceable"><code>PATH</code></em>.</p>
+        <div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;">
+          <table border="0" summary="Tip">
+            <tr>
+              <td rowspan="2" align="center" valign="top" width="25">
+                <img alt="[Подсказка]" src="images/tip.png" />
+              </td>
+              <th align="left">Подсказка</th>
+            </tr>
+            <tr>
+              <td align="left" valign="top">
+                <p>Если вы начали фиксацию изменений и Subversion запустила ваш
+              внешний редактор для составления комментария, вы все еще можете
+              прервать операцию фиксации изменений. Если вы хотите отменить
+              фиксации, просто выйдете из редактора без сохранения изменений.
+              Subversion заинтересуется - хотите ли вы прервать операцию,
+              продолжить без описания изменений или же редактировать описания
+              изменений снова.
+            </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="refsect1">
+        <a id="idm6388"></a>
+        <h2>Альтернативные имена</h2>
+        <p>ci (сокращение от <span class="quote">«<span class="quote">check in</span>»</span>; a не
+            <span class="quote">«<span class="quote">co</span>»</span>, что есть сокращение для
+            <span class="quote">«<span class="quote">checkout</span>»</span>)</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6394"></a>
+        <h2>Изменяет</h2>
+        <p>Как рабочую копию, так и хранилище</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6397"></a>
+        <h2>Требует доступа к хранилищу</h2>
+        <p>Да</p>
+      </div>
+      <div class="refsect1">
+        <a id="idm6400"></a>
+        <h2>Параметры</h2>
+        <pre class="screen">
+--message (-m) TEXT
+--file (-F) FILE
+--quiet (-q)
+--no-unlock
+--non-recursive (-N)
+--targets FILENAME
+--force-log
+--username USER
+--password PASS
+--no-auth-cache
+--non-interactive
+--encoding ENC
+--config-dir DIR
+</pre>
+      </div>
+      <div class="refsect1">
+        <a id="idm6403"></a>
+        <h2>Примеры</h2>
+        <p>Зафиксировать изменения файлов в хранилище из текущего
+            каталога (<span class="quote">«<span class="quote"><code class="filename">.</code></span>»</span>) и его
+            подкаталогов, задав пояснение изменений в командной строке:
+          </p>
+        <pre class="screen">
+$ svn commit -m "added howto section."
+Sending        a
+Transmitting file data .
+Committed revision 3.
+</pre>
+        <p>Зафиксировать изменения файла <code class="filename">foo.c</code>
+            (явно заданного в командной строке)задав пояснение изменений
+            содержимым файла <code class="literal">msg</code>:</p>
+        <pre class="screen">
+$ svn commit -F msg foo.c
+Sending        foo.c
+Transmitting file data .
+Committed revision 5.
+</pre>
+        <p>Если вы хотите использовать содержимое файла находящегося
+            под контролем версий в качестве комментария
+            (используя параметр <code class="option">--file</code>), вы должны задать
+            параметр <code class="option">--force-log</code> для явного выражения своих
+            намерений:</p>
+        <pre class="screen">
+$ svn commit --file file_under_vc.txt foo.c
+svn: The log message file is under version control
+svn: Log message file is a versioned file; use '--force-log' to override
+
+$ svn commit --force-log --file file_under_vc.txt foo.c
+Sending        foo.c
+Transmitting file data .
+Committed revision 6.
+</pre>
+        <p>Зафиксировать факт удаления файла:</p>
+        <pre class="screen">
+$ svn commit -m "removed file 'c'."
+Deleting       c
+
+Committed revision 7.
+</pre>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.ref.svn.c.cleanup.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.ref.svn.html#svn.ref.svn.c">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.ref.svn.c.copy.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">svn cleanup </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> svn copy</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

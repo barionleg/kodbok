@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Быстрый старт в Subversion</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.intro.html" title="Приложение A. Быстрый старт в Subversion" />
+    <link rel="prev" href="svn.intro.install.html" title="Установка Subversion" />
+    <link rel="next" href="svn.forcvs.html" title="Приложение B. Subversion для пользователей CVS" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Быстрый старт в Subversion</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.intro.install.html">Пред.</a> </td>
+          <th width="60%" align="center">Приложение A. Быстрый старт в Subversion</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.forcvs.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.intro.quickstart"></a>Быстрый старт в Subversion</h2>
+          </div>
+        </div>
+      </div>
+      <div class="blockquote">
+        <blockquote class="blockquote">
+          <p>
+            <span class="quote">«<span class="quote">Пожалуйста, удостоверьтесь что ваши посадочные места 
+        находятся в верткальном положении, а ваши столики закреплены.
+        Бортпроводникам приготовиться к взлету.….</span>»</span>
+          </p>
+        </blockquote>
+      </div>
+      <p>Это очень поверхностное руководство, которое покажет вам основы 
+      конфигурации и работы с Subversion. К тому времени как вы закончите 
+      читать это руководство, у вас должно быть понимание типичного использования 
+      Subversion.</p>
+      <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+        <table border="0" summary="Note">
+          <tr>
+            <td rowspan="2" align="center" valign="top" width="25">
+              <img alt="[Примечание]" src="images/note.png" />
+            </td>
+            <th align="left">Примечание</th>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <p>Примеры, используемые в этом приложении предполагают наличие у
+        вас работающих Subversion клиента для командной строки
+        <span class="command"><strong>svn</strong></span> и инструмента администрирования
+        <span class="command"><strong>svnadmin</strong></span>. Кроме этого он рассчитан на то, что вы
+        используете Subversion версии 1.2 или более поздней (для того, чтобы
+        это проверить, выполните <span class="command"><strong>svn --version</strong></span>).</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <p>Subversion хранит всю версионированную информацию в
+      центральном хранилище. Для начала, создадим новое
+      хранилище:</p>
+      <pre class="screen">
+$ svnadmin create /path/to/repos
+$ ls /path/to/repos
+conf/  dav/  db/  format  hooks/  locks/  README.txt
+</pre>
+      <p>Эта команда создает новую директорию
+      <code class="filename">/path/to/repos</code> содержащую Subversion
+      хранилище. Убедитесь, что эта директория находится на локальном
+      диске, <span class="emphasis"><em>не</em></span> на сетевой шаре. Преимущественно в
+      эта новая директория (кроме прочего) содержит набор файлов базы данных.
+      Вы не увидите своих версионированных файлов если вы загляните внутрь.
+      Больше информации о создании и поддержке хранилища ищите в
+      <a class="xref" href="svn.reposadmin.html" title="Глава 5. Администрирование хранилища">Глава 5, <em>Администрирование хранилища</em></a>.</p>
+      <p>У Subversion нет понятия <span class="quote">«<span class="quote">проект</span>»</span>. Хранилище
+      является просто виртуальной версионированной файловой системой,
+      большое дерево файлов, которое может содержать все, что угодно.
+      Одни администраторы предпочитают держать в хранилище только
+      один проект, другие держать в хранилище множество проектов,
+      размещая их в отдельных директориях. Достоинства каждого из
+      подходов рассмотрены в  <a class="xref" href="svn.reposadmin.projects.html#svn.reposadmin.projects.chooselayout" title="Choosing a Repository Layout">«Choosing a Repository Layout»</a>. В любом случае,
+      хранилище управляет только файлами и директориями, оставляя
+      за человеком право интерпретировать отдельные директории
+      как <span class="quote">«<span class="quote">проекты</span>»</span>. Поэтому, если в тексте книги вы
+      встретите упоминание проекта, помните, что имеется в виду
+      просто директория (или несколько директорий) хранилища.</p>
+      <p>В этом примере мы подразумеваем наличие у вас какого то проекта
+      (набора файлов или директорий), который вы хотите импортировать в
+      только что созданное Subversion хранилище. Начните с объединения их
+      в отдельной директории названой <code class="filename">myproject</code>
+      (или как-то иначе). По причинам, которые будут ясны позже (см.
+      <a class="xref" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние">Глава 4, <em>Ветвление и слияние</em></a>), ваше дерево проекта должно содержать
+      три директории верхнего уровня с названиями
+      <code class="filename">branches</code>, <code class="filename">tags</code> и
+      <code class="filename">trunk</code>. Вся ваша информация должна находиться в
+       директории <code class="filename">trunk</code>, а директории
+      <code class="filename">branches</code> и <code class="filename">tags</code> должны быть
+      пустыми:</p>
+      <pre class="screen">
+/tmp/myproject/branches/
+/tmp/myproject/tags/
+/tmp/myproject/trunk/
+                     foo.c
+                     bar.c
+                     Makefile
+                     …
+</pre>
+      <p>Использовать поддиректории <code class="filename">branches</code>,
+      <code class="filename">tags</code> и <code class="filename">trunk</code> не 
+      обязательно. Просто такой подход чаще всего используется и
+      вероятнее всего в дальнейшем вы будете использовать именно
+      его.</p>
+      <p>Как только вы получите готовое дерево данных, импортируйте его
+      в хранилище при помощи команды <span class="command"><strong>svn import</strong></span>
+      (см. <a class="xref" href="svn.tour.other.html#svn.tour.other.import" title="svn import">«<span class="command"><strong>svn import</strong></span>»</a>):</p>
+      <pre class="screen">
+$ svn import /tmp/myproject file:///path/to/repos/myproject -m "initial import"
+Adding         /tmp/myproject/branches
+Adding         /tmp/myproject/tags
+Adding         /tmp/myproject/trunk
+Adding         /tmp/myproject/trunk/foo.c
+Adding         /tmp/myproject/trunk/bar.c
+Adding         /tmp/myproject/trunk/Makefile
+…
+Committed revision 1.
+$
+</pre>
+      <p>Теперь в хранилище находится это дерево данных. Как было
+      отмечено ранее, вы не увидите своих файлов если загляните в
+      хранилище напрямую; все хранится в базе данных. Однако сейчас
+      воображаемая файловая системы хранилища имеет директорию верхнего
+      уровня с названием <code class="filename">myproject</code> которая
+      содержит вашу информацию.</p>
+      <p>Обратите внимание на то, что первоначальная директория
+      <code class="filename">/tmp/project</code> остается без изменений;
+      Subversion о ней не знает. (Фактически, при желании, вы можете даже
+      удалить этот каталог.) Чтобы начать работать с информацией хранилища
+      вам нужно создать новую <span class="quote">«<span class="quote">рабочую копию</span>»</span> информации,
+      своего рода частное рабочее пространство. Попросите Subversion
+      создать рабочую копию директории <code class="filename">myproject/trunk</code>
+      хранилища:</p>
+      <pre class="screen">
+$ svn checkout file:///path/to/repos/myproject/trunk myproject
+A  myproject/foo.c
+A  myproject/bar.c
+A  myproject/Makefile
+…
+Checked out revision 1.
+</pre>
+      <p>Сейчас у вас в новой директории <code class="filename">myproject</code>
+      есть личная копия части хранилища. В рабочей копии вы можете
+      редактировать файлы, а затем зафиксировать внесенные изменения
+      в хранилище.</p>
+      <div class="itemizedlist">
+        <ul class="itemizedlist" style="list-style-type: disc; ">
+          <li class="listitem">
+            <p>Откройте свою рабочую копию и отредактируйте
+          содержимое файлов.</p>
+          </li>
+          <li class="listitem">
+            <p>Выполните <span class="command"><strong>svn diff</strong></span> чтобы увидеть
+          объединенный diff внесенных изменений.</p>
+          </li>
+          <li class="listitem">
+            <p>Выполните <span class="command"><strong>svn commit</strong></span> для фиксации
+          новой версии ваших файлов в хранилище.</p>
+          </li>
+          <li class="listitem">
+            <p>Выполните <span class="command"><strong>svn update</strong></span> для приведения
+          рабочей копии в <span class="quote">«<span class="quote">актуальное</span>»</span> состояние по
+          отношению к хранилищу.</p>
+          </li>
+        </ul>
+      </div>
+      <p>Для получения полного списка возможных действий с рабочей копией
+      прочтите <a class="xref" href="svn.tour.html" title="Глава 2. Экскурсия по Subversion">Глава 2, <em>Экскурсия по Subversion</em></a>.</p>
+      <p>После этого вы можете сделать ваше хранилище доступным
+      для других через сеть. См. <a class="xref" href="svn.serverconfig.html" title="Глава 6. Настройка сервера">Глава 6, <em>Настройка сервера</em></a> для
+      знакомства с различными типами доступных серверных процессов
+      и методами их настройки.</p>
+      <p>### TODO:  Let's make this into a full tutorial, rather than 
+      simply referring off to other sections. ###</p>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.intro.install.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.intro.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.forcvs.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Установка Subversion </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Приложение B. Subversion для пользователей CVS</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

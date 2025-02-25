@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Использование веток</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние" />
+    <link rel="prev" href="svn.branchmerge.whatis.html" title="Что такое ветка?" />
+    <link rel="next" href="svn.branchmerge.copychanges.html" title="Копирование изменений между ветками" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Использование веток</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.branchmerge.whatis.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 4. Ветвление и слияние</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.branchmerge.copychanges.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.branchmerge.using"></a>Использование веток</h2>
+          </div>
+        </div>
+      </div>
+      <p>К этому моменту вы должны понимать, что в хранилище при каждой
+      фиксации создается полностью новое дерево файлов (называемое
+      <span class="quote">«<span class="quote">правка</span>»</span>). Если нет, то вернитесь назад и прочитайте
+      о правках в разделе <a class="xref" href="svn.basic.in-action.html#svn.basic.in-action.revs" title="Правки">«Правки»</a>.</p>
+      <p>В этой главе мы воспользуемся тем же примером, что и
+      в <a class="xref" href="svn.basic.html" title="Глава 1. Фундаментальные понятия">Глава 1, <em>Фундаментальные понятия</em></a>. Как вы помните, вы и ваш соразработчик
+      Салли совместно используете хранилище, содержащее два проекта,
+      <code class="filename">paint</code> и <code class="filename">calc</code>. Как
+      отмечалось в <a class="xref" href="svn.branchmerge.using.html#svn.branchmerge.using.dia-1" title="Рисунок 4.2. Начальная структура хранилища">Рисунок 4.2, «Начальная структура хранилища»</a>, каждый
+      каталог проекта содержит подкаталоги с именами
+      <code class="filename">trunk</code> и <code class="filename">branches</code>.
+      Назначение этих каталогов вскоре станет понятно.</p>
+      <div class="figure">
+        <a id="svn.branchmerge.using.dia-1"></a>
+        <p class="title">
+          <strong>Рисунок 4.2. Начальная структура хранилища</strong>
+        </p>
+        <div class="figure-contents">
+          <div>
+            <img src="images/ch04dia2.png" alt="Начальная структура хранилища" />
+          </div>
+        </div>
+      </div>
+      <br class="figure-break" />
+      <p>Как и раньше, предположим, что и Салли, и вы имеете
+      рабочие копии проекта <span class="quote">«<span class="quote">calc</span>»</span>. Точнее, каждый
+      из вас имеет рабочую копию <code class="filename">/calc/trunk</code>.
+      Все файлы, относящиеся к проекту, находятся в этом подкаталоге,
+      а не прямо в <code class="filename">/calc</code>, потому что ваша команда
+      решила размещать <span class="quote">«<span class="quote">главную линию</span>»</span> разработки в
+      <code class="filename">/calc/trunk</code>.</p>
+      <p>Допустим, перед вами была поставлена задача коренной реорганизации
+      проекта. Это займет много времени и затронет все файлы проекта.
+      Проблема заключается в том, что вы не хотите мешать Салли, которая
+      прямо сейчас занимается исправлением небольших ошибок. Ее работа
+      зависит от постоянной доступности последней версии проекта (каталога
+      <code class="filename">/calc/trunk</code>). Если вы начнете пошагово фиксировать
+      свои изменения, вы конечно же смешаете Салли все карты.</p>
+      <p>Одним из вариантов является временная изоляция:
+      вы и Салли перестаете делиться информацией на неделю или две.
+      В это время вы начинаете перелопачивать и реорганизовывать файлы
+      рабочей копии, но не фиксируете и не обновляете ее до завершения 
+      работы над задачей. Однако, в этом случае появляется несколько
+      проблем. Во-первых, это не очень надежно. Большинство людей
+      предпочитают часто сохранять свою работу в хранилище на случай, если
+      с рабочей копией вдруг случится что-то плохое. Во-вторых, это не
+      достаточно гибко. Если вы работаете на разных компьютерах
+      (к примеру, если рабочая копия <code class="filename">/calc/trunk</code>
+      есть у вас на двух разных машинах), вам придется вручную копировать
+      изменения туда и обратно, либо делать всю работу на одном
+      компьютере. С другой стороны, вам трудно делиться вносимыми
+      изменениями с кем-то еще. А предоставление возможности 
+      знакомиться с проделанной вами работой по мере ее продвижения
+      считается <span class="quote">«<span class="quote">наилучшей практикой</span>»</span> при разработке 
+      любого программного обеспечения. Если никто не будет видеть 
+      ваших промежуточных фиксаций, вы теряете
+      потенциал обратной связи. Наконец, когда вы закончите свои 
+      изменения, может выясниться, что слить проделанную вами работу
+      с остальным программным кодом компании чрезвычайно трудно.
+      Салли (или кто-то другой) могла внести такие изменения в
+      хранилище, которые трудно совместить с вашей рабочей копией
+      — особенно, если вы выполните <span class="command"><strong>svn update</strong></span>
+      впервые после нескольких недель изоляции.</p>
+      <p>Наилучшим решением будет создание в хранилище вашей собственной 
+      ветки, или направления разработки. Это позволит вам сохранять
+      наполовину поломанную работу сколь угодно часто, не пересекаясь 
+      с другими, и кроме того, вы сможете выборочно делиться
+      информацией с другими коллегами.
+      Дальше вы увидите, как всё это работает.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.using.create"></a>Создание ветки</h3>
+            </div>
+          </div>
+        </div>
+        <p>Создать ветку очень просто — при помощи команды
+        <span class="command"><strong>svn copy</strong></span> в хранилище создается копия проекта.
+        Subversion может копировать не только отдельные файлы, но и
+        целые каталоги. Итак, вам нужно сделать копию каталога
+        <code class="filename">/calc/trunk</code>. Где должна лежать эта
+        новая копия? Где угодно — этот вопрос определяется
+        правилами проекта. Допустим, что по правилам вашей команды 
+        ветки создаются в каталоге <code class="filename">/calc/branches</code>
+        хранилища, и вы хотите назвать свою ветку
+        <code class="literal">my-calc-branch</code>. Тогда вам следует создать новый
+        каталог <code class="filename">/calc/branches/my-calc-branch</code>,
+        который будет копией <code class="filename">/calc/trunk</code>.</p>
+        <p>Копию можно создать двумя различными способами. Сперва мы покажем
+        более длинный способ, просто для того, что бы пояснить суть идеи.
+        Для начала создадим рабочую копию корневого каталога проекта
+        <code class="filename">/calc</code>:</p>
+        <pre class="screen">
+$ svn checkout http://svn.example.com/repos/calc bigwc
+A  bigwc/trunk/
+A  bigwc/trunk/Makefile
+A  bigwc/trunk/integer.c
+A  bigwc/trunk/button.c
+A  bigwc/branches/
+Checked out revision 340.
+</pre>
+        <p>Теперь, чтобы создать копию, достаточно просто передать
+        два пути в пределах рабочей копии команде
+        <span class="command"><strong>svn copy</strong></span>:</p>
+        <pre class="screen">
+$ cd bigwc
+$ svn copy trunk branches/my-calc-branch
+$ svn status
+A  +   branches/my-calc-branch
+</pre>
+        <p>В результате команда <span class="command"><strong>svn copy</strong></span>
+        рекурсивно копирует рабочий каталог <code class="filename">trunk</code>
+        в новый рабочий каталог
+        <code class="filename">branches/my-calc-branch</code>. Теперь команда
+        <span class="command"><strong>svn status</strong></span> покажет, что новый каталог
+        запланирован для добавления в хранилище. Обратите внимание
+        на знак <span class="quote">«<span class="quote">+</span>»</span> после буквы А. Он означает, что
+        запланированное для добавления представляет собой какую-то
+        <span class="emphasis"><em>копию</em></span>, а не что-то новое.
+        При следующей фиксации Subversion создаст в хранилище 
+        каталог <code class="filename">/calc/branches/my-calc-branch</code>,
+        скопировав его из <code class="filename">/calc/trunk</code>
+        вместо того, чтобы повторно отправлять по сети
+        всю информацию рабочей копии:</p>
+        <pre class="screen">
+$ svn commit -m "Creating a private branch of /calc/trunk."
+Adding         branches/my-calc-branch
+Committed revision 341.
+</pre>
+        <p>А теперь покажем простой способ создания ветки, о котором мы 
+        упоминали раньше: команда <span class="command"><strong>svn copy</strong></span> может 
+        оперировать двумя URL-адресами напрямую.</p>
+        <pre class="screen">
+$ svn copy http://svn.example.com/repos/calc/trunk \
+           http://svn.example.com/repos/calc/branches/my-calc-branch \
+      -m "Creating a private branch of /calc/trunk."
+
+Committed revision 341.
+</pre>
+        <p>В сущности, между этими двумя методами нет разницы. Оба варианта
+        создают в правке 341 новый каталог, и этой новый каталог является
+        копией <code class="filename">/calc/trunk</code>. Это показывает <a class="xref" href="svn.branchmerge.using.html#svn.branchmerge.using.create.dia-1" title="Рисунок 4.3. Хранилище, содержащее новую копию">Рисунок 4.3, «Хранилище, содержащее новую копию»</a>. Обратите 
+        внимание на то, что второй метод, кроме всего прочего, выполняет
+        <span class="emphasis"><em>немедленную</em></span> фиксацию. <a href="#ftn.idm2478" class="footnote" id="idm2478"><sup class="footnote">[24]</sup></a>Эта процедура более проста в использовании, так как нет
+        необходимости в выгрузке в рабочую копию значительного объема данных
+        из хранилища. По сути, в этом случае можно вовсе не иметь рабочей
+        копии.</p>
+        <div class="figure">
+          <a id="svn.branchmerge.using.create.dia-1"></a>
+          <p class="title">
+            <strong>Рисунок 4.3. Хранилище, содержащее новую копию</strong>
+          </p>
+          <div class="figure-contents">
+            <div>
+              <img src="images/ch04dia3.png" alt="Хранилище, содержащее новую копию" />
+            </div>
+          </div>
+        </div>
+        <br class="figure-break" />
+        <div class="sidebar">
+          <div class="titlepage">
+            <div>
+              <div>
+                <p class="title">
+                  <strong>Легкие копии</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>Хранилище Subversion устроено особым образом.
+          При копировании каталога нет необходимости задумываться о
+          большом увеличении размера хранилища — на самом деле
+          Subversion никогда не дублирует информацию. Вместо этого
+          создается новая точка входа в каталог, которая указывает на
+          <span class="emphasis"><em>существующее</em></span> дерево файлов. Если вы
+          пользователь Unix, это тот же подход, что используется
+          для жестких ссылок. То есть копия, так сказать, стала
+          <span class="quote">«<span class="quote">ленивой</span>»</span>. Если в скопированном каталоге
+          вы измените только один файл, при фиксации изменится только
+          он — остальные файлы продолжат существовать как 
+          ссылки на исходные файлы в исходном каталоге.</p>
+          <p>Вот почему в разговорах пользователей Subversion часто можно
+          услышать о <span class="quote">«<span class="quote">легких копиях</span>»</span>. Не имеет значения,
+          насколько велик каталог — создание копии займет
+          очень небольшой фиксированный промежуток времени. Фактически,
+          на этом подходе основана работа фиксаций в Subversion: каждая
+          правка является <span class="quote">«<span class="quote">легкой копией</span>»</span> предыдущей правки,
+          с несколькими элементами, лениво измененными в ней. (Чтобы узнать
+          подробности, посетите веб-сайт Subversion и прочитайте в
+          документации по архитектуре Subversion о методе <span class="quote">«<span class="quote">всплывающих
+          пузырьков</span>»</span>.)</p>
+          <p>Конечно, эти внутренние механизмы копирования и совместного 
+          использования информации скрыты от пользователя, который видит 
+          просто копии файлов. Главное здесь то, что копии — легкие
+          как по времени, так и по размеру. Делайте ветки так часто, как
+          вам необходимо.</p>
+        </div>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.using.work"></a>Работа с веткой</h3>
+            </div>
+          </div>
+        </div>
+        <p>После создания ветки проекта можно загрузить новую рабочую копию
+        и приступить к работе с ней:</p>
+        <pre class="screen">
+$ svn checkout http://svn.example.com/repos/calc/branches/my-calc-branch
+A  my-calc-branch/Makefile
+A  my-calc-branch/integer.c
+A  my-calc-branch/button.c
+Checked out revision 341.
+</pre>
+        <p>В этой рабочей копии нет ничего особенного; это 
+        просто зеркало другого каталога хранилища. Однако, если Салли 
+        обновит свою рабочую копию, она не увидит там ваших изменений.
+        Рабочая копия Салли создана из каталога 
+        <code class="filename">/calc/trunk</code>. (Смотрите далее в этой главе
+        раздел <a class="xref" href="svn.branchmerge.switchwc.html" title="Переключение рабочей копии">«Переключение рабочей копии»</a>: команда
+        <span class="command"><strong>svn switch</strong></span> является альтернативным способом
+        создания рабочей копии ветки.)</p>
+        <p>Предположим, что за неделю были сделаны следующие
+        фиксации:</p>
+        <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: disc; ">
+            <li class="listitem">
+              <p>Вы внесли изменения в
+          <code class="filename">/calc/branches/my-calc-branch/button.c</code>,
+          создав таким образом правку 342.</p>
+            </li>
+            <li class="listitem">
+              <p>Вы внесли изменения в
+          <code class="filename">/calc/branches/my-calc-branch/integer.c</code>,
+          создав правку 343.</p>
+            </li>
+            <li class="listitem">
+              <p>Салли внесла изменения в
+          <code class="filename">/calc/trunk/integer.c</code>, создав
+          правку 344.</p>
+            </li>
+          </ul>
+        </div>
+        <p>Теперь у файла <code class="filename">integer.c</code>
+        есть два независимых направления разработки, что демонстрирует 
+        <a class="xref" href="svn.branchmerge.using.html#svn.branchmerge.using.work.dia-1" title="Рисунок 4.4. История ветвления для одного файла">Рисунок 4.4, «История ветвления для одного файла»</a>.</p>
+        <div class="figure">
+          <a id="svn.branchmerge.using.work.dia-1"></a>
+          <p class="title">
+            <strong>Рисунок 4.4. История ветвления для одного файла</strong>
+          </p>
+          <div class="figure-contents">
+            <div>
+              <img src="images/ch04dia4.png" alt="История ветвления для одного файла" />
+            </div>
+          </div>
+        </div>
+        <br class="figure-break" />
+        <p>Если посмотреть историю изменений, сделанных в вашей копии
+        <code class="filename">integer.c</code>, можно увидеть интересные
+        вещи:</p>
+        <pre class="screen">
+$ pwd
+/home/user/my-calc-branch
+
+$ svn log --verbose integer.c
+------------------------------------------------------------------------
+r343 | user | 2002-11-07 15:27:56 -0600 (Thu, 07 Nov 2002) | 2 lines
+Changed paths:
+   M /calc/branches/my-calc-branch/integer.c
+
+* integer.c:  frozzled the wazjub.
+
+------------------------------------------------------------------------
+r341 | user | 2002-11-03 15:27:56 -0600 (Thu, 07 Nov 2002) | 2 lines
+Changed paths:
+   A /calc/branches/my-calc-branch (from /calc/trunk:340)
+
+Creating a private branch of /calc/trunk.
+
+------------------------------------------------------------------------
+r303 | sally | 2002-10-29 21:14:35 -0600 (Tue, 29 Oct 2002) | 2 lines
+Changed paths:
+   M /calc/trunk/integer.c
+
+* integer.c:  changed a docstring.
+
+------------------------------------------------------------------------
+r98 | sally | 2002-02-22 15:35:29 -0600 (Fri, 22 Feb 2002) | 2 lines
+Changed paths:
+   M /calc/trunk/integer.c
+
+* integer.c:  adding this file to the project.
+
+------------------------------------------------------------------------
+</pre>
+        <p>Обратите внимание на то, что Subversion полностью прослеживает
+        всю историю ветки <code class="filename">integer.c</code> во времени,
+        в том числе пересекая точку создания копии. Создание ветки
+        показано как событие в истории, потому что файл
+        <code class="filename">integer.c</code> был неявно скопирован при
+        копировании всего каталога <code class="filename">/calc/trunk/</code>.
+        Теперь давайте посмотрим, какой результат выдаст такая же
+        команда для Салли:</p>
+        <pre class="screen">
+$ pwd
+/home/sally/calc
+
+$ svn log --verbose integer.c
+------------------------------------------------------------------------
+r344 | sally | 2002-11-07 15:27:56 -0600 (Thu, 07 Nov 2002) | 2 lines
+Changed paths:
+   M /calc/trunk/integer.c
+
+* integer.c:  fix a bunch of spelling errors.
+
+------------------------------------------------------------------------
+r303 | sally | 2002-10-29 21:14:35 -0600 (Tue, 29 Oct 2002) | 2 lines
+Changed paths:
+   M /calc/trunk/integer.c
+
+* integer.c:  changed a docstring.
+
+------------------------------------------------------------------------
+r98 | sally | 2002-02-22 15:35:29 -0600 (Fri, 22 Feb 2002) | 2 lines
+Changed paths:
+   M /calc/trunk/integer.c
+
+* integer.c:  adding this file to the project.
+
+------------------------------------------------------------------------
+</pre>
+        <p>Салли увидит свои собственные изменения в правке 344, 
+        а ваши, сделанные в правке 343 — нет. Subversion 
+        позаботилась о том, чтобы эти две фиксации затронули разные 
+        файлы, имеющие разное расположение в хранилище. Тем не менее, 
+        Subversion <span class="emphasis"><em>будет</em></span> показывать то, что два файла 
+        имеют общую историю. До создания ветки-копии в правке 341 это был 
+        один файл. Поэтому и вы, и Салли видите изменения, сделанные в 
+        правках 303 и 98.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.using.concepts"></a>Ключевые идеи, стоящие за ветками</h3>
+            </div>
+          </div>
+        </div>
+        <p>Из этого раздела вы должны запомнить две вещи.</p>
+        <div class="orderedlist">
+          <ol class="orderedlist" type="1">
+            <li class="listitem">
+              <p>В отличие от многих других систем управления версиями,
+          в хранилище Subversion ветки существуют не в отдельном измерении,
+          а как <span class="emphasis"><em>обычные каталоги файловой системы</em></span>. 
+          Эти каталоги отличаются только тем, что несут дополнительную
+          информацию о своей истории.</p>
+            </li>
+            <li class="listitem">
+              <p>Subversion не имеет такого понятия как ветка —
+            есть только копии. Копия каталога
+            становится <span class="quote">«<span class="quote">веткой</span>»</span> только потому, что
+            <span class="emphasis"><em>вы</em></span> рассматриваете ее таким образом.
+            Вы можете по-разному думать о каталоге, по разному его 
+            трактовать, но для Subversion это не более чем обычный каталог,
+            созданный в результате копирования.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <div class="footnotes">
+        <br />
+        <hr style="width:100; text-align:left;margin-left: 0" />
+        <div id="ftn.idm2478" class="footnote">
+          <p><a href="#idm2478" class="para"><sup class="para">[24] </sup></a>Subversion не поддерживает возможность копирования между 
+        хранилищами. При использовании  в командах <span class="command"><strong>svn copy</strong></span> 
+        или <span class="command"><strong>svn move</strong></span> URL-адресов можно копировать только 
+        элементы из одного и того же хранилища.</p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.branchmerge.whatis.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.branchmerge.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.branchmerge.copychanges.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Что такое ветка? </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Копирование изменений между ветками</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

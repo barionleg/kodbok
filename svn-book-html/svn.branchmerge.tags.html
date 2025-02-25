@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Метки</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" />
+    <link rel="home" href="index.html" title="Управление версиями в Subversion" />
+    <link rel="up" href="svn.branchmerge.html" title="Глава 4. Ветвление и слияние" />
+    <link rel="prev" href="svn.branchmerge.switchwc.html" title="Переключение рабочей копии" />
+    <link rel="next" href="svn.branchmerge.maint.html" title="Поддержка веток" />
+  </head>
+  <body>
+    <div class="navheader">
+      <table width="100%" summary="Navigation header">
+        <tr>
+          <th colspan="3" align="center">Метки</th>
+        </tr>
+        <tr>
+          <td width="20%" align="left"><a accesskey="p" href="svn.branchmerge.switchwc.html">Пред.</a> </td>
+          <th width="60%" align="center">Глава 4. Ветвление и слияние</th>
+          <td width="20%" align="right"> <a accesskey="n" href="svn.branchmerge.maint.html">След.</a></td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <div class="sect1">
+      <div class="titlepage">
+        <div>
+          <div>
+            <h2 class="title" style="clear: both"><a id="svn.branchmerge.tags"></a>Метки</h2>
+          </div>
+        </div>
+      </div>
+      <p>Еще одним понятием, свойственным управлению версиями является
+      <em class="firstterm">метка</em>. Метка является просто
+      <span class="quote">«<span class="quote">снимком</span>»</span> проекта в определенный момент времени.
+      В Subversion эта идея уже, кажется, повсюду. Каждая правка хранилища
+      является именно этим — снимком файловой системы после каждой
+      фиксации.</p>
+      <p>Как правило, люди предпочитают давать меткам удобочитаемые имена,
+      наподобие <code class="literal">release-1.0</code>. И делать снимки небольших
+      поддиректорий файловой системы. Проще говоря, не просто запомнить, что
+      версия 1.0 программы соответствует поддиректории в правке 4822.</p>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.tags.mksimple"></a>Создание простой метки</h3>
+            </div>
+          </div>
+        </div>
+        <p>И снова приходит на помощь <span class="command"><strong>svn copy</strong></span>.
+        Если вам нужно сделать снимок <code class="filename">/calc/trunk</code>
+        в точно таком виде как в правке <code class="literal">HEAD</code>,
+        сделайте копию этой директории:</p>
+        <pre class="screen">
+$ svn copy http://svn.example.com/repos/calc/trunk \
+           http://svn.example.com/repos/calc/tags/release-1.0 \
+      -m "Tagging the 1.0 release of the 'calc' project."
+
+Committed revision 351.
+</pre>
+        <p>В этом примере предполагается, что директория
+        <code class="filename">/calc/tags</code> существует. (Если нет,
+        обратитесь к <a class="xref" href="svn.ref.svn.c.mkdir.html" title="svn mkdir">svn mkdir</a>).
+        После того как сделана копия, новая директория
+        <code class="filename">release-1.0</code> навсегда сохранит состояние
+        проекта в таком виде в каком он существовал в правке
+        <code class="literal">HEAD</code> на момент создания копии. Конечно,
+        можно более точно указать какую именно правку копировать,
+        возможна ситуация, когда кто-то другой зафиксировал изменения в
+        проекте с которыми вы еще не успели познакомиться. Поэтому,
+        если вы знаете, что правка 350 <code class="filename">/calc/trunk</code>
+        это именно тот снимок который вам нужен, можете указать ее
+        передав <code class="option">-r 350</code> команде <span class="command"><strong>svn
+        copy</strong></span>.</p>
+        <p>Постойте: ведь процедура создания метки такая же как процедура
+        использованная нами при создании ветки? Да, фактически, это так.
+        Subversion не разделяет ветки и метки. И то и другое является
+        обычными директориями, созданными копированием. Как и в случае с
+        ветками, скопированная директория становиться <span class="quote">«<span class="quote">меткой</span>»</span>
+        только потому, что <span class="emphasis"><em>человек</em></span> считает
+        ее таковой: если никто не делает фиксаций в эту директорию она
+        будет оставаться снимком. Если в эту директорию начнут делать
+        фиксации она превратится в ветку.</p>
+        <p>Если вы администрируете хранилище, есть два возможных подхода
+        управления метками. Первый подход <span class="quote">«<span class="quote">ручной</span>»</span>: в
+        соответствии с правилами проекта решите, где будут находиться
+        метки и убедитесь в том, что все пользователи знают как рассматривать
+        директории скопированные сюда. (То есть убедитесь, что они знают о
+        том что в них нельзя выполнять фиксации.) Второй подход более
+        параноидальный: вы можете воспользоваться одним из скриптов для
+        контроля доступа, поставляемым с Subversion для того, что бы никто
+        ничего другого кроме создания копий в области для создания меток
+        сделать не мог. (См. <a class="xref" href="svn.serverconfig.html" title="Глава 6. Настройка сервера">Глава 6, <em>Настройка сервера</em></a>.) Однако
+        обычно в параноидальном подходе необходимости нет. Если пользователь
+        непреднамеренно зафиксирует изменения в директорию с меткой,
+        вы можете просто отменить изменения, как это было рассмотрено в
+        предыдущем разделе. Как ни как, это управление версиями.</p>
+      </div>
+      <div class="sect2">
+        <div class="titlepage">
+          <div>
+            <div>
+              <h3 class="title"><a id="svn.branchmerge.tags.mkcomplex"></a>Создание комплексной метки</h3>
+            </div>
+          </div>
+        </div>
+        <p>Иногда вам будет необходим более сложный <span class="quote">«<span class="quote">снимок</span>»</span>,
+        чем одна единственная директория в одной правке.</p>
+        <p>Например, представим, что ваш проект гораздо больше, чем
+        наш пример <code class="filename">calc</code>: допустим он содержит
+        несколько поддиректорий и намного больше файлов. В процессе
+        работы вам может понадобиться создать рабочую копию, содержащую
+        конкретную функциональность и исправленные ошибки. Добиться этого
+        вы можете выборочно возвращая файлы или директории к конкретной
+        правке (используя <span class="command"><strong>svn update -r</strong></span> по мере
+        необходимости) или переключая файлы или директории на отдельные
+        ветки (применяя <span class="command"><strong>svn switch</strong></span>). По завершении
+        рабочаяя копия будет представлять собой мешанину различных
+        директорий и правок хранилища. После проверки вы поймете, что
+        вам нужна именно такая комбинация.</p>
+        <p>Время создавать снимок. Копирование одного URL в другой
+        здесь не пройдет. Здесь нужно сделать и сохранить в хранилище снимок
+        именно такой структуры которую имеет рабочая копия. К счастью,
+        <span class="command"><strong>svn copy</strong></span> имеет четыре способа использования
+        (о которых вы можете прочитать в <a class="xref" href="svn.ref.html" title="Глава 9. Полное справочное руководство по Subversion">Глава 9, <em>Полное справочное руководство по Subversion</em></a>),
+        включая возможность копировать в хранилище дерево рабочей копии:</p>
+        <pre class="screen">
+$ ls
+my-working-copy/
+
+$ svn copy my-working-copy http://svn.example.com/repos/calc/tags/mytag
+
+Committed revision 352.
+</pre>
+        <p>Теперь в хранилище есть новая директория
+      <code class="filename">/calc/tags/mytag</code> которая является полным отражением
+        рабочей копии — смешанные правки, URL, и тому подобное.</p>
+        <p>Некоторые пользователи находят интересное применение этой
+        возможности. Иногда возникают ситуации, когда в вашей рабочей копии
+        содержится некоторый набор локальных изменений, которые вы хотели бы
+        показать соразработчику. Вместо запуска <span class="command"><strong>svn diff</strong></span>
+        и отправки патч-файла (который не сможет отразить изменения в
+        структуре файлов, измененные символьные ссылки или свойства),
+        можно воспользоваться <span class="command"><strong>svn copy</strong></span> для
+        <span class="quote">«<span class="quote">загрузки</span>»</span> рабочей копии в отдельную область хранилища.
+        После чего ваш соразработчик сможет либо воссоздать у себя вашу
+        рабочую копию, либо, воспользовавшись <span class="command"><strong>svn
+        merge</strong></span>, получить только внесенные вами изменения.</p>
+      </div>
+    </div>
+    <div class="navfooter">
+      <hr />
+      <table width="100%" summary="Navigation footer">
+        <tr>
+          <td width="40%" align="left"><a accesskey="p" href="svn.branchmerge.switchwc.html">Пред.</a> </td>
+          <td width="20%" align="center">
+            <a accesskey="u" href="svn.branchmerge.html">Наверх</a>
+          </td>
+          <td width="40%" align="right"> <a accesskey="n" href="svn.branchmerge.maint.html">След.</a></td>
+        </tr>
+        <tr>
+          <td width="40%" align="left" valign="top">Переключение рабочей копии </td>
+          <td width="20%" align="center">
+            <a accesskey="h" href="index.html">Начало</a>
+          </td>
+          <td width="40%" align="right" valign="top"> Поддержка веток</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
