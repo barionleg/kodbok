@@ -268,7 +268,7 @@ a    { outline:none; }
    <g class="rot_hub"><use xlink:href="#satellite" transform="translate(0,-69.4)"/></g>
    <switch>
     <a systemLanguage="en" target="info" xlink:href="https://en.wikipedia.org/wiki/Hubble_Space_Telescope">
-     <switch><text x="80" y="-69.4" id="trsvg162-ko" systemLanguage="ko"><tspan id="trsvg61-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg162"><tspan id="trsvg61">HØВЭЛ</tspan></text></switch>
+     <switch><text x="80" y="-69.4" id="trsvg162-ko" systemLanguage="ko"><tspan id="trsvg61-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg162"><tspan id="trsvg61">Hubble</tspan></text></switch>
     </a>
     <a systemLanguage="es" target="info" xlink:href="https://es.wikipedia.org/wiki/Telescopio_espacial_Hubble">
      <switch><text x="80" y="-69.4" id="trsvg163-ko" systemLanguage="ko"><tspan id="trsvg62-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg163"><tspan id="trsvg62">Hubble</tspan></text></switch>
@@ -321,9 +321,9 @@ a    { outline:none; }
      <switch><text x="150" y="55" id="trsvg179"><tspan id="trsvg82">10000</tspan></text></switch>
      <switch><text x="300" y="55" id="trsvg180"><tspan id="trsvg83">20000 mi</tspan></text></switch>
      <switch>
-      <text systemLanguage="en" x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg181"><tspan id="trsvg84">Height above</tspan><tspan x="345" y="-70" id="trsvg85">sea level</tspan></text>
-      <text systemLanguage="es" x="345" y="-95" font-weight="bold" text-anchor="end" id="trsvg182"><tspan id="trsvg86">Altura sobre el</tspan><tspan x="345" y="-70" id="trsvg87">nivel del mar</tspan></text>
-      <text systemLanguage="fr" x="345" y="-70" font-weight="bold" text-anchor="end" id="trsvg183"><tspan id="trsvg88">Altitude</tspan></text>
+      <text systemLanguage="en" x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg181"><tspan id="trsvg84">Radius from </tspan><tspan x="345" y="-70" id="trsvg85">Polar (Planet) Center</tspan></text>
+      <text systemLanguage="es" x="345" y="-95" font-weight="bold" text-anchor="end" id="trsvg182"><tspan id="trsvg86">Radio desde el </tspan><tspan x="345" y="-70" id="trsvg87">Centro Polar (Planeta)</tspan></text>
+      <text systemLanguage="fr" x="345" y="-70" font-weight="bold" text-anchor="end" id="trsvg183"><tspan id="trsvg88">Rayon du Centre </tspan><tspan x="345" y="-70" id="trsvg87">Polaire (Planétaire)</tspan></text>
       
      <text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184-ko" systemLanguage="ko"><tspan id="trsvg89-ko">해발</tspan><tspan x="345" y="-70" id="trsvg90-ko">고도</tspan></text><text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184"><tspan id="trsvg89">Height above</tspan><tspan x="345" y="-70" id="trsvg90">sea level</tspan></text></switch>
     </g>
