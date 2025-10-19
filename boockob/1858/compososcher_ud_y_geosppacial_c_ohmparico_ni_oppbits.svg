@@ -268,7 +268,7 @@ a    { outline:none; }
    <g class="rot_hub"><use xlink:href="#satellite" transform="translate(0,-69.4)"/></g>
    <switch>
     <a systemLanguage="en" target="info" xlink:href="https://en.wikipedia.org/wiki/Hubble_Space_Telescope">
-     <switch><text x="80" y="-69.4" id="trsvg162-ko" systemLanguage="ko"><tspan id="trsvg61-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg162"><tspan id="trsvg61">Hubble</tspan></text></switch>
+     <switch><text x="80" y="-69.4" id="trsvg162-ko" systemLanguage="ko"><tspan id="trsvg61-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg162"><tspan id="trsvg61">HØВЭЛ</tspan></text></switch>
     </a>
     <a systemLanguage="es" target="info" xlink:href="https://es.wikipedia.org/wiki/Telescopio_espacial_Hubble">
      <switch><text x="80" y="-69.4" id="trsvg163-ko" systemLanguage="ko"><tspan id="trsvg62-ko">허블</tspan></text><text x="80" y="-69.4" id="trsvg163"><tspan id="trsvg62">Hubble</tspan></text></switch>
