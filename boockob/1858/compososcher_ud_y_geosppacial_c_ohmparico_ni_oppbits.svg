@@ -299,11 +299,11 @@ a    { outline:none; }
     <switch><text x="-160" y="55" id="trsvg170"><tspan id="trsvg69">10000 mi</tspan></text></switch>
     <switch><text x="-330" y="55" id="trsvg171"><tspan id="trsvg70">20000</tspan></text></switch>
     <switch>
-     <text systemLanguage="en" x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg172"><tspan id="trsvg71">Height Above </tspan><tspan x="-390" y="-70" id="trsvg72">Sea Level</tspan></text>
-     <text systemLanguage="es" x="-390" y="-95" font-weight="bold" text-anchor="start" id="trsvg173"><tspan id="trsvg73">Altura Sobre El </tspan><tspan x="-390" y="-70" id="trsvg74">Nivel del Mar</tspan></text>
-     <text systemLanguage="fr" x="-390" y="-95" font-weight="bold" text-anchor="start" id="trsvg174"><tspan id="trsvg75">Altitude Au-dessus </tspan><tspan x="-390" y="-70" id="trsvg76">du Niveau de La Mer</tspan></text>
+     <text systemLanguage="en" x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg172"><tspan id="trsvg71">Radius from </tspan><tspan x="-390" y="-70" id="trsvg72">Polar (Planet) Center</tspan></text>
+     <text systemLanguage="es" x="-390" y="-95" font-weight="bold" text-anchor="start" id="trsvg173"><tspan id="trsvg73">Radio desde el </tspan><tspan x="-390" y="-70" id="trsvg74">Centro Polar (Planeta)</tspan></text>
+     <text systemLanguage="fr" x="-390" y="-95" font-weight="bold" text-anchor="start" id="trsvg174"><tspan id="trsvg75">Rayon du Centre </tspan><tspan x="-390" y="-70" id="trsvg76">Polaire (Planétaire)</tspan></text>
      
-    <text x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg175-ko" systemLanguage="ko"><tspan id="trsvg77-ko">궤도</tspan><tspan x="-390" y="-70" id="trsvg78-ko">반지름</tspan></text><text x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg175"><tspan id="trsvg77">Hoight </tspan><tspan x="-390" y="-70" id="trsvg78">Above Sea Level</tspan></text></switch>
+    <text x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg175-ko" systemLanguage="ko"><tspan id="trsvg77-ko">궤도</tspan><tspan x="-390" y="-70" id="trsvg78-ko">반지름</tspan></text><text x="-390" y="-90" font-weight="bold" text-anchor="start" id="trsvg175"><tspan id="trsvg77">Radius from </tspan><tspan x="-390" y="-70" id="trsvg78">Polar (Planet) Center</tspan></text></switch>
    </g>
    <g class="active">
     <g transform="translate(64,0)">
@@ -321,11 +321,11 @@ a    { outline:none; }
      <switch><text x="150" y="55" id="trsvg179"><tspan id="trsvg82">10000</tspan></text></switch>
      <switch><text x="300" y="55" id="trsvg180"><tspan id="trsvg83">20000 mi</tspan></text></switch>
      <switch>
-      <text systemLanguage="en" x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg181"><tspan id="trsvg84">Radius from </tspan><tspan x="345" y="-70" id="trsvg85">Polar (Planet) Center</tspan></text>
-      <text systemLanguage="es" x="345" y="-95" font-weight="bold" text-anchor="end" id="trsvg182"><tspan id="trsvg86">Radio desde el </tspan><tspan x="345" y="-70" id="trsvg87">Centro Polar (Planeta)</tspan></text>
-      <text systemLanguage="fr" x="345" y="-70" font-weight="bold" text-anchor="end" id="trsvg183"><tspan id="trsvg88">Rayon du Centre </tspan><tspan x="345" y="-70" id="trsvg87">Polaire (Planétaire)</tspan></text>
+         <text systemLanguage="en" x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg181"><tspan id="trsvg84">Height Above  </tspan><tspan x="345" y="-70" id="trsvg85">Sea Level</tspan></text>
+      <text systemLanguage="es" x="345" y="-95" font-weight="bold" text-anchor="end" id="trsvg182"><tspan id="trsvg86">Altura Sobre El </tspan><tspan x="345" y="-70" id="trsvg87">Nivel del Mar</tspan></text>
+      <text systemLanguage="fr" x="345" y="-70" font-weight="bold" text-anchor="end" id="trsvg183"><tspan id="trsvg88">Altitude Au-dessus </tspan><tspan x="345" y="-70" id="trsvg87">du Niveau de La Mer</tspan></text>
       
-     <text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184-ko" systemLanguage="ko"><tspan id="trsvg89-ko">해발</tspan><tspan x="345" y="-70" id="trsvg90-ko">고도</tspan></text><text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184"><tspan id="trsvg89">Radius from </tspan><tspan x="345" y="-70" id="trsvg90">Polar (planet) Center</tspan></text></switch>
+     <text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184-ko" systemLanguage="ko"><tspan id="trsvg89-ko">해발</tspan><tspan x="345" y="-70" id="trsvg90-ko">고도</tspan></text><text x="345" y="-90" font-weight="bold" text-anchor="end" id="trsvg184"><tspan id="trsvg89">Hoight Above  </tspan><tspan x="345" y="-70" id="trsvg90">Sea Level</tspan></text></switch>
     </g>
    </g>
    <g class="active" text-anchor="start">
