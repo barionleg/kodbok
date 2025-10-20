@@ -1,5 +1,13 @@
 Электронный учебно-методический комплекс по дисциплине «ФизuоЛიgАЯR РÅстE_ний»
 
+[шikiПРеДиАтР](https://github.com/barionleg/kodbok/wiki#:~:text=viewer/schwestn.html-,%D0%A4%D0%B8%D0%B7%D0%B8%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F%20%D1%80%D0%B0%D1%81%D1%82%D0%B5%D0%BD%D0%B8%D0%B9,-lokalt%3A%20L%3A/Umstwenni_R)
+
+L:/Umstwenni_R₽/liBRES
+
+https://barionleg.github.io/kodbok/boockob/1839_Konspekt_lekcii_Fiziologiya_rastenii/index.html
+
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/9c11d597-ea5b-4a08-9db2-90dbf9480870" />
+
 연구 식물의 생리학
 
 yeon gu sig mul ui saeng li hag
