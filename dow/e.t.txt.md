@@ -1538,6 +1538,8 @@ http://eqvtimeghvtiskaci.blogspot.com/p/blog-page_1749.html
 
 *М.Броссе ВРОЗЕ 
 
+[მარი-ფელისიტე ბროსე (ფრანგ. Marie-Félicité Brosset; დ. 5 თებერვალი, 1802, პარიზი — გ. 3 სექტემბერი, 1880, შატელრო, საფრანგეთი) — ფრანგი ორიენტალისტი და ქართველოლოგი.](https://ka.wikipedia.org/wiki/მარი_ბროსე)
+
 The monogram of the French Orientalist Marie-Félicité Brosset in Georgian letters (ბროსეტ)
 
 <img width="134" height="151" alt="image" src="https://github.com/user-attachments/assets/0b8da53f-38f9-4ee0-b2aa-58ec09594f98" />
@@ -1552,3 +1554,27 @@ The monogram of the French Orientalist Marie-Félicité Brosset in Georgian lett
 [<img width="345" height="518" alt="image" src="https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/dow/Presidium_of_Georgia_Constituent_Assembly%2C_1919.jpg"/>](https://commons.wikimedia.org/wiki/File:Presidium_of_Georgia_Constituent_Assembly,_1919.jpg
 )
 
+[<img width="195" height="260" alt="image" src="https://github.com/user-attachments/assets/fee7c347-304d-4fb7-b21e-a28db1587e3c" />](http://www.nplg.gov.ge/emigrants/ka/00001743/)
+
+ნიკოლოზ ბარნოვი
+
+სხვა სახელი:	კოლა  (შემოკლებული ფორმა)
+
+შიკრიკი იკირკიშო ხმლი ბ.ი.  (ფსევდონიმი)
+
+დაბადების თარიღი:	1885
+
+გარდაცვ. თარიღი:	2 აგვისტო, 1958  (73 წლის ასაკში)
+
+დაკრძალვის ადგილი:	ლევილი, საფრანგეთი itegbarpac
+
+კატეგორია:	პო'ლი'ტი'კო'სი  ისო კიტილ ოპ (კიტელიანი ოPpავო)
+
+
+ლაურიატი {ლავრეანტი} [ლისავ_ბარნოვი](https://ka.wikipedia.org/wiki/ვასილ_ბარნოვი)
+
+ㅎბარჼაველიДЗЭ
+
+ღრუბელჸიf®
+
+weli ბ.ი.კოლოზ.ი. ბარათა[ш](https://ka.wikipedia.org/wiki/ნიკოლოზ_ბარათაშვილი)vილი
