@@ -1547,5 +1547,5 @@ The monogram of the French Orientalist Marie-Félicité Brosset in Georgian lett
 [ვიქტორ ბროსე](https://ka.wikipedia.org/wiki/ვიქტორ_ბროსე)
 
 
-<img width="345" height="518" alt="image" src="https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/dow/Kuataisi_1-st_Public_school_(4).jpg"/>
+<img width="345" height="518" alt="image" src="https://raw.githubusercontent.com/barionleg/kodbok/refs/heads/gh-pages/dow/Kuataisi_1-st_Public_school_(II).jpg"/>
 
