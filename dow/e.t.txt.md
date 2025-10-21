@@ -1538,6 +1538,7 @@ http://eqvtimeghvtiskaci.blogspot.com/p/blog-page_1749.html
 
 *М.Броссе ВРОЗЕ 
 
+<img width="134" height="151" alt="image" src="https://github.com/user-attachments/assets/0b8da53f-38f9-4ee0-b2aa-58ec09594f98" />
 
 
 [ვიქტორ ბროსე](https://ka.wikipedia.org/wiki/ვიქტორ_ბროსე)
