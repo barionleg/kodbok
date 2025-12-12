@@ -14,9 +14,13 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 ### Theatrum mundi et temporis 
 
+[horizonte.html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/horizonte.html)
+
 ## [hrvatski](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
-# [uR⛢ Physic Chemie d'вÅРdgiнøЛი© enad Py_C_ckuü = ₽_RussiAИ or ₽_RußiÅჼ by LOMONOSOV && MENdELEEV (Lёв LЭØ; MЭØ; HЭØ; ₾'GeospÅტიal ДвÅRdbiттØㅎ)](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/uR_hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
+Physic Chemie d'вÅРdgiнøЛი© enad Py_C_ckuü = ₽_RussiAИ or ₽_RußiÅჼ by LOMONOSOV && MENdELEEV (Lёв LЭØ; MЭØ; HЭØ; ₾'GeospÅტიal ДвÅRdbiттØㅎ
+
+# [uR⛢ )](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/uR_hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
 #### EARLY PHYSIC. BOOK   1589
 
