@@ -16,9 +16,9 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 ## [hrvatski](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
-# uR⛢ 
+# [uR⛢ Physic Chemie d'вÅРdgiнøЛი© enad Py_C_ckuü = ₽_RussiAИ or ₽_RußiÅჼ by LOMONOSOV && MENdELEEV (Lёв LЭØ; MЭØ; HЭØ; ₾'GeospÅტიal ДвÅRdbiттØㅎ)](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/uR_hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
-#### EARLY PHYSIC BOOK   1589
+#### EARLY PHYSIC. BOOK   1589
 
 
 C:\Users\..\Pictures\Theatrum mundi et temporis GALLUCCI Giovanni Paolo Edité par Giovanni Battista Somasco Venice 1588 ETAT  GOOD COUVERTURE RIGIDE Mettre de côté Vendeur Sokol Books Ltd ABA ILAB London Royaume Uni Vendeur AbeBooks
