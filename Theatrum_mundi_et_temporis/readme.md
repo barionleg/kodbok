@@ -18,6 +18,9 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 ## [hrvatski](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/5165e03e-45f1-4814-b367-b68dec35fea6" />
+
+
 Physic Chemie d'вÅРdgiнøЛი© enad Py_C_ckuü = ₽_RussiAИ or ₽_RußiÅჼ by LOMONOSOV && MENdELEEV (Lёв LЭØ; MЭØ; HЭØ; ₾'GeospÅტიal ДвÅRdbiттØㅎ
 
 # [uR⛢ )](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/uR_hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
