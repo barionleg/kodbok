@@ -14,6 +14,10 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 ### Theatrum mundi et temporis 
 
+## [hrvatski](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
+
+# uR⛢ 
+
 #### EARLY PHYSIC BOOK   1589
 
 
