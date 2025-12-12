@@ -7,9 +7,9 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 #### [.Pdf](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515.pdf)
 
-#### .[html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_hocr.html)
+#### .[html hocr](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_hocr.html)
 
-#### [.text](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_djvu.htm)
+#### [.text djvu](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/ARes52515_djvu.htm)
 
 
 ### Theatrum mundi et temporis 
