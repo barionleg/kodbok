@@ -14,7 +14,7 @@ OBSERVERA @T ALLT SAGT ÄR OM Physic trykt på LATAN reversalt menades ИАТА�
 
 ### Theatrum mundi et temporis 
 
-[horizonte.html](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/horizonte.html)
+[horizonte.html text](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/horizonte.html)
 
 ## [hrvatski](https://barionleg.github.io/kodbok/Theatrum_mundi_et_temporis/hrvatski_06-Martinovic-Grisogono_na_spanjolskom%203.pdf)
 
