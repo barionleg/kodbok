@@ -1,3 +1,8 @@
+
+https://barionleg.github.io/kodbok/anatomy_for_painters/BARCSAYJEN%C5%90_ka-ge.pdf
+
+
+
 # Bookmark Endomembrane in Atom Browser 20261024_nullpunktvektor_.pu 
 
 https://www.youtube.com/watch?v=gIoH33hWxys 
