@@ -5,11 +5,6 @@ https://barionleg.github.io/kodbok/boockob/1858/Endomembrane_system_diagram_ur.s
 <img width="555" height="414" alt="image" src="https://github.com/user-attachments/assets/25e5d2fd-aa76-445f-ab33-eb3bedada651" />
 
 
-
-
-<img width="815" height="426" alt="link" src="https://github.com/user-attachments/assets/0e05917d-d51e-4f75-ab5e-a7e26c3d2a26" />
-
-
 ___
 ___
 
