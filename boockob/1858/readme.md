@@ -1,10 +1,11 @@
 # Bookmark Endomembrane in Atom Browser 20261024_nullpunktvektor_.pu 
 
+https://barionleg.github.io/kodbok/boockob/1858/Endomembrane_system_diagram_ur.svg
 
-https://www.youtube.com/watch?v=gIoH33hWxys
+<img width="555" height="414" alt="image" src="https://github.com/user-attachments/assets/25e5d2fd-aa76-445f-ab33-eb3bedada651" />
 
-[<img width="1920" height="1080" alt="BARCSAY_JENØ" src="https://github.com/user-attachments/assets/19c80b1e-a458-4fe8-9460-bd8bc33ec0d8" />
-](https://www.youtube.com/watch?v=gIoH33hWxys)
+
+
 
 <img width="815" height="426" alt="link" src="https://github.com/user-attachments/assets/0e05917d-d51e-4f75-ab5e-a7e26c3d2a26" />
 
