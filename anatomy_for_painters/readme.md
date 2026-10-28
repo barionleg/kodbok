@@ -1,6 +1,15 @@
 
+lokalt:  H:\Users\**\Documents_A_K\BOOK PS\ЕНЁ БАРЧАИ
+
+# preliminerad maskintålkning till ka-GE georgiska altså. 
+
 https://barionleg.github.io/kodbok/anatomy_for_painters/BARCSAYJEN%C5%90_ka-ge.pdf
 
+<img width="337" height="463" alt="image" src="https://github.com/user-attachments/assets/36ebe1ff-c14f-4d02-b9e7-d475d8d86110" />
+
+<img width="211" height="290" alt="image" src="https://github.com/user-attachments/assets/dbcf63bf-06e9-40f8-bb3d-b05213656786" />
+
+<img width="340" height="435" alt="image" src="https://github.com/user-attachments/assets/a557067d-e9fa-43ff-aa87-c45c788d8aed" />
 
 
 # Bookmark Endomembrane in Atom Browser 20261024_nullpunktvektor_.pu 
