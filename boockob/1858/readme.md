@@ -4,6 +4,7 @@ https://barionleg.github.io/kodbok/boockob/1858/Endomembrane_system_diagram_ur.s
 
 <img width="555" height="414" alt="image" src="https://github.com/user-attachments/assets/25e5d2fd-aa76-445f-ab33-eb3bedada651" />
 
+# to fix Р“СЂР°РЅСѓР»СЏСЂРЅС‹Р№ Р­РџР symbols
 
 ___
 ___
